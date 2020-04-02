@@ -1,0 +1,425 @@
+0000.000 (0) Opened log file at time: Thu, 02 Apr 2020 06:22:41 +0000 on http://localhost/offerus
+0000.006 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.23 WP: 5.3.2 PHP: 7.3.12 (apache2handler, Windows NT DESKTOP-VTCCUIQ 10.0 build 18362 (Windows 10) AMD64) MySQL: 10.4.10-MariaDB WPLANG: en_US Server: Apache/2.4.41 (Win64) PHP/7.3.12 safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 5.3M | 2M) multisite: N openssl: OpenSSL 1.1.1d  10 Sep 2019 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.007 (0) Free space on disk containing Updraft's temporary directory: 109898.5 MB
+0000.009 (0) Tasks: Backup files: 1 (schedule: unset) Backup DB: 1 (schedule: unset)
+0000.011 (0) Semaphore (fd, wp_options) being initialised
+0000.013 (0) Requesting semaphore lock (fd) (apparently not via scheduler)
+0000.014 (0) Set semaphore last lock (fd) time to 2020-04-02 06:22:41
+0000.015 (0) Semaphore lock (fd) complete
+0000.017 (0) Backup run: resumption=0, nonce=b1d6bc83c787, file_nonce=b1d6bc83c787 begun at=1585808561 (0s ago), job type=backup
+0000.019 (0) Scheduling a resumption (1) after 300 seconds (1585808861) in case this run gets aborted
+0000.034 (0) Checking if we have a zip executable available
+0000.035 (0) Creation of backups of directories: beginning
+0000.038 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0003.536 (0) Total entities for the zip file: 1531 directories, 10781 files (0 skipped as non-modified), 114.8 MB
+0003.542 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 2.0 seconds have passed since the last write (0 MB, 1 (1) files added so far); re-opening (prior size: 0 KB)
+0003.889 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 100 files added (on-disk size: 306.9 KB)
+0004.073 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 200 files added (on-disk size: 306.9 KB)
+0004.586 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 300 files added (on-disk size: 306.9 KB)
+0005.158 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 400 files added (on-disk size: 306.9 KB)
+0005.612 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 500 files added (on-disk size: 306.9 KB)
+0005.616 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (2.8 MB, 10781 files batched, 501 (502) added so far); re-opening (prior size: 306.9 KB)
+0006.082 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 600 files added (on-disk size: 1786.2 KB)
+0006.289 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 700 files added (on-disk size: 1786.2 KB)
+0006.451 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 800 files added (on-disk size: 1786.2 KB)
+0006.619 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 900 files added (on-disk size: 1786.2 KB)
+0006.765 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1000 files added (on-disk size: 1786.2 KB)
+0006.768 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (1.7 MB, 10781 files batched, 501 (1003) added so far); re-opening (prior size: 1786.2 KB)
+0007.042 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1100 files added (on-disk size: 3032.6 KB)
+0007.437 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1200 files added (on-disk size: 3032.6 KB)
+0007.758 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1300 files added (on-disk size: 3032.6 KB)
+0008.008 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1400 files added (on-disk size: 3032.6 KB)
+0008.217 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1500 files added (on-disk size: 3032.6 KB)
+0008.221 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (6.3 MB, 10781 files batched, 501 (1504) added so far); re-opening (prior size: 3032.6 KB)
+0008.745 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1600 files added (on-disk size: 8128.3 KB)
+0009.218 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1700 files added (on-disk size: 8128.3 KB)
+0009.366 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1800 files added (on-disk size: 8128.3 KB)
+0009.454 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 1900 files added (on-disk size: 8128.3 KB)
+0009.592 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2000 files added (on-disk size: 8128.3 KB)
+0009.596 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (8 MB, 10781 files batched, 501 (2005) added so far); re-opening (prior size: 8128.3 KB)
+0010.156 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2100 files added (on-disk size: 12411.2 KB)
+0010.346 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2200 files added (on-disk size: 12411.2 KB)
+0010.700 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2300 files added (on-disk size: 12411.2 KB)
+0010.930 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2400 files added (on-disk size: 12411.2 KB)
+0011.110 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2500 files added (on-disk size: 12411.2 KB)
+0011.117 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (5 MB, 10781 files batched, 501 (2506) added so far); re-opening (prior size: 12411.2 KB)
+0011.722 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2600 files added (on-disk size: 13872.5 KB)
+0012.143 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2700 files added (on-disk size: 13872.5 KB)
+0012.421 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2800 files added (on-disk size: 13872.5 KB)
+0012.657 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 2900 files added (on-disk size: 13872.5 KB)
+0012.950 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3000 files added (on-disk size: 13872.5 KB)
+0012.967 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (3.2 MB, 10781 files batched, 501 (3007) added so far); re-opening (prior size: 13872.5 KB)
+0013.463 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3100 files added (on-disk size: 14985.6 KB)
+0013.658 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3200 files added (on-disk size: 14985.6 KB)
+0014.078 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3300 files added (on-disk size: 14985.6 KB)
+0014.535 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3400 files added (on-disk size: 14985.6 KB)
+0014.836 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3500 files added (on-disk size: 14985.6 KB)
+0014.853 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (2.6 MB, 10781 files batched, 501 (3508) added so far); re-opening (prior size: 14985.6 KB)
+0015.375 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3600 files added (on-disk size: 16242.5 KB)
+0015.714 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3700 files added (on-disk size: 16242.5 KB)
+0016.271 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3800 files added (on-disk size: 16242.5 KB)
+0016.553 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 3900 files added (on-disk size: 16242.5 KB)
+0016.773 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4000 files added (on-disk size: 16242.5 KB)
+0016.790 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (9.5 MB, 10781 files batched, 501 (4009) added so far); re-opening (prior size: 16242.5 KB)
+0017.409 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4100 files added (on-disk size: 23095.6 KB)
+0017.644 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4200 files added (on-disk size: 23095.6 KB)
+0017.730 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4300 files added (on-disk size: 23095.6 KB)
+0018.103 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4400 files added (on-disk size: 23095.6 KB)
+0018.196 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4500 files added (on-disk size: 23095.6 KB)
+0018.206 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (7.6 MB, 10781 files batched, 501 (4510) added so far); re-opening (prior size: 23095.6 KB)
+0018.865 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4600 files added (on-disk size: 27247.9 KB)
+0018.936 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4700 files added (on-disk size: 27247.9 KB)
+0019.584 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4800 files added (on-disk size: 27247.9 KB)
+0019.788 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 4900 files added (on-disk size: 27247.9 KB)
+0020.001 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5000 files added (on-disk size: 27247.9 KB)
+0020.029 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (5.1 MB, 10781 files batched, 501 (5011) added so far); re-opening (prior size: 27247.9 KB)
+0020.792 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5100 files added (on-disk size: 28747.2 KB)
+0021.064 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5200 files added (on-disk size: 28747.2 KB)
+0021.383 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5300 files added (on-disk size: 28747.2 KB)
+0021.663 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5400 files added (on-disk size: 28747.2 KB)
+0021.957 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5500 files added (on-disk size: 28747.2 KB)
+0021.993 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (2.1 MB, 10781 files batched, 501 (5512) added so far); re-opening (prior size: 28747.2 KB)
+0022.481 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5600 files added (on-disk size: 29444 KB)
+0022.684 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5700 files added (on-disk size: 29444 KB)
+0022.884 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5800 files added (on-disk size: 29444 KB)
+0023.095 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 5900 files added (on-disk size: 29444 KB)
+0023.558 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6000 files added (on-disk size: 29444 KB)
+0023.625 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (5 MB, 10781 files batched, 501 (6013) added so far); re-opening (prior size: 29444 KB)
+0024.298 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6100 files added (on-disk size: 32287.5 KB)
+0024.567 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6200 files added (on-disk size: 32287.5 KB)
+0025.059 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6300 files added (on-disk size: 32287.5 KB)
+0025.405 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6400 files added (on-disk size: 32287.5 KB)
+0025.558 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6500 files added (on-disk size: 32287.5 KB)
+0025.602 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (7.9 MB, 10781 files batched, 501 (6514) added so far); re-opening (prior size: 32287.5 KB)
+0026.569 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6600 files added (on-disk size: 35287.5 KB)
+0026.759 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6700 files added (on-disk size: 35287.5 KB)
+0026.831 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6800 files added (on-disk size: 35287.5 KB)
+0026.909 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 6900 files added (on-disk size: 35287.5 KB)
+0027.272 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7000 files added (on-disk size: 35287.5 KB)
+0027.317 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (6.6 MB, 10781 files batched, 501 (7015) added so far); re-opening (prior size: 35287.5 KB)
+0028.024 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7100 files added (on-disk size: 38469 KB)
+0028.237 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7200 files added (on-disk size: 38469 KB)
+0028.447 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7300 files added (on-disk size: 38469 KB)
+0028.659 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7400 files added (on-disk size: 38469 KB)
+0028.924 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7500 files added (on-disk size: 38469 KB)
+0028.976 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (1.3 MB, 10781 files batched, 501 (7516) added so far); re-opening (prior size: 38469 KB)
+0029.553 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7600 files added (on-disk size: 38976.5 KB)
+0029.782 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7700 files added (on-disk size: 38976.5 KB)
+0030.046 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7800 files added (on-disk size: 38976.5 KB)
+0030.237 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 7900 files added (on-disk size: 38976.5 KB)
+0030.432 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8000 files added (on-disk size: 38976.5 KB)
+0030.461 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (3 MB, 10781 files batched, 501 (8017) added so far); re-opening (prior size: 38976.5 KB)
+0030.983 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8100 files added (on-disk size: 39715.5 KB)
+0031.091 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8200 files added (on-disk size: 39715.5 KB)
+0031.185 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8300 files added (on-disk size: 39715.5 KB)
+0031.285 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8400 files added (on-disk size: 39715.5 KB)
+0031.469 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8500 files added (on-disk size: 39715.5 KB)
+0031.503 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (6.6 MB, 10781 files batched, 501 (8518) added so far); re-opening (prior size: 39715.5 KB)
+0032.096 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8600 files added (on-disk size: 44692.7 KB)
+0032.183 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8700 files added (on-disk size: 44692.7 KB)
+0032.412 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8800 files added (on-disk size: 44692.7 KB)
+0032.582 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 8900 files added (on-disk size: 44692.7 KB)
+0032.821 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9000 files added (on-disk size: 44692.7 KB)
+0032.882 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (4.5 MB, 10781 files batched, 501 (9019) added so far); re-opening (prior size: 44692.7 KB)
+0033.554 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9100 files added (on-disk size: 46842.6 KB)
+0033.855 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9200 files added (on-disk size: 46842.6 KB)
+0034.137 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9300 files added (on-disk size: 46842.6 KB)
+0034.588 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9400 files added (on-disk size: 46842.6 KB)
+0034.762 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9500 files added (on-disk size: 46842.6 KB)
+0034.780 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (4.8 MB, 10781 files batched, 501 (9520) added so far); re-opening (prior size: 46842.6 KB)
+0035.467 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9600 files added (on-disk size: 48879.4 KB)
+0035.690 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9700 files added (on-disk size: 48879.4 KB)
+0035.919 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9800 files added (on-disk size: 48879.4 KB)
+0036.053 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 9900 files added (on-disk size: 48879.4 KB)
+0036.240 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10000 files added (on-disk size: 48879.4 KB)
+0036.276 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (17.6 MB, 10781 files batched, 501 (10021) added so far); re-opening (prior size: 48879.4 KB)
+0037.840 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10100 files added (on-disk size: 53803.5 KB)
+0038.029 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10200 files added (on-disk size: 53803.5 KB)
+0038.275 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10300 files added (on-disk size: 53803.5 KB)
+0038.507 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10400 files added (on-disk size: 53803.5 KB)
+0038.788 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10500 files added (on-disk size: 53803.5 KB)
+0038.834 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (1.9 MB, 10781 files batched, 501 (10522) added so far); re-opening (prior size: 53803.5 KB)
+0039.581 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10600 files added (on-disk size: 54516.8 KB)
+0039.771 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip.tmp: 10700 files added (on-disk size: 54516.8 KB)
+0040.853 (0) Created plugins zip (0) - 55028.3 KB in 40.8 s (1348.3 KB/s) (sha1: 5978f91f3916707bfc20d30266c02e5b2a061d71, sha256: a32d5455060740850b40bafcb12de0cb480a8014232b7b37e047c72b7f321875)
+0040.856 (0) Beginning creation of dump of themes (split every: 400 MB)
+0040.988 (0) Total entities for the zip file: 126 directories, 467 files (0 skipped as non-modified), 5.6 MB
+0042.274 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip.tmp: 100 files added (on-disk size: 0 KB)
+0042.626 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip.tmp: 200 files added (on-disk size: 0 KB)
+0043.038 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip.tmp: 300 files added (on-disk size: 0 KB)
+0043.328 (0) Zip: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip.tmp: 400 files added (on-disk size: 0 KB)
+0043.794 (0) Created themes zip (0) - 1906.4 KB in 2.9 s (649.4 KB/s) (sha1: 76dc588d4ba924cbc1170422b513f336b46a312e, sha256: 6dd042724aeee0158a3cab01ba52689e4347ae0742dc71515c041c4370447430)
+0043.797 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone,snapshots
+0043.798 (0) Looking for candidates to backup in: J:\Github\www\offerus/wp-content/uploads
+0043.798 (0) finding files: 2020: adding to list (1)
+0043.799 (0) finding files: tve_leads_templates: adding to list (2)
+0043.800 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0043.838 (0) Total entities for the zip file: 15 directories, 17 files (0 skipped as non-modified), 0.1 MB
+0043.997 (0) Created uploads zip (0) - 103.4 KB in 0.2 s (529 KB/s) (sha1: ea0c4c1e779bdae1e03d684624ba40d08968f4a3, sha256: 23fc54fdc3ee9d9b6bf2b2417f8d458450261ff446c88dd996ba48ac7869ee79)
+0044.000 (0) Beginning backup of other directories found in the content directory (index: 0)
+0044.001 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0044.002 (0) Looking for candidates to backup in: J:\Github\www\offerus/wp-content
+0044.002 (0) finding files: index.php: adding to list (1)
+0044.003 (0) finding files: plugins: skipping: this is the plugins directory
+0044.004 (0) finding files: themes: skipping: this is the themes directory
+0044.005 (0) finding files: updraft: skipping: this is the updraft directory
+0044.005 (0) finding files: upgrade: skipping: excluded by options
+0044.006 (0) finding files: uploads: skipping: this is the uploads directory
+0044.009 (0) Total entities for the zip file: 0 directories, 1 files (0 skipped as non-modified), 0 MB
+0044.015 (0) Created others zip (0) - 0.1 KB in 0 s (19.4 KB/s) (sha1: 2662e175e1583586ca1a3e90fdc876b2539707ce, sha256: 451d95ee3142cb6dbd02edc6b9ac6d448b99ca1c4d59528555a7fc9f164ca30c)
+0044.019 (0) Saving backup status to database (elements: 8)
+0044.021 (0) Beginning creation of database dump (WordPress DB)
+0044.499 (0) Table wp_options: Total expected rows (approximate): 257
+0044.541 (0) Table wp_options: Total rows added: 253 in 0.04 seconds
+0044.542 (0) Table wp_options: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_options.table.gz - 214.9 KB)
+0044.546 (0) Table wp_users: Total expected rows (approximate): 1
+0044.552 (0) Table wp_users: Total rows added: 1 in 0.01 seconds
+0044.554 (0) Table wp_users: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_users.table.gz - 0.6 KB)
+0044.557 (0) Table wp_usermeta: Total expected rows (approximate): 25
+0044.564 (0) Table wp_usermeta: Total rows added: 25 in 0.01 seconds
+0044.565 (0) Table wp_usermeta: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_usermeta.table.gz - 1.2 KB)
+0044.568 (0) Table wp_commentmeta: Total expected rows (approximate): 0
+0044.574 (0) Table wp_commentmeta: Total rows added: 0 in 0.01 seconds
+0044.575 (0) Table wp_commentmeta: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_commentmeta.table.gz - 0.4 KB)
+0044.579 (0) Table wp_comments: Total expected rows (approximate): 0
+0044.586 (0) Table wp_comments: Total rows added: 0 in 0.01 seconds
+0044.587 (0) Table wp_comments: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_comments.table.gz - 0.5 KB)
+0044.591 (0) Table wp_links: Total expected rows (approximate): 0
+0044.597 (0) Table wp_links: Total rows added: 0 in 0.01 seconds
+0044.598 (0) Table wp_links: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_links.table.gz - 0.4 KB)
+0044.602 (0) Table wp_postmeta: Total expected rows (approximate): 2274
+0045.430 (0) Table wp_postmeta: Total rows added: 2274 in 0.83 seconds
+0045.431 (0) Table wp_postmeta: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_postmeta.table.gz - 1098 KB)
+0045.435 (0) Table wp_posts: Total expected rows (approximate): 153
+0045.468 (0) Table wp_posts: Total rows added: 153 in 0.03 seconds
+0045.469 (0) Table wp_posts: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_posts.table.gz - 23 KB)
+0045.498 (0) Table wp_term_relationships: Total expected rows (approximate): 14
+0045.523 (0) Table wp_term_relationships: Total rows added: 14 in 0.02 seconds
+0045.526 (0) Table wp_term_relationships: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_term_relationships.table.gz - 0.4 KB)
+0045.534 (0) Table wp_term_taxonomy: Total expected rows (approximate): 14
+0045.542 (0) Table wp_term_taxonomy: Total rows added: 14 in 0.01 seconds
+0045.544 (0) Table wp_term_taxonomy: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_term_taxonomy.table.gz - 1.1 KB)
+0045.568 (0) Table wp_termmeta: Total expected rows (approximate): 36
+0045.575 (0) Table wp_termmeta: Total rows added: 36 in 0.01 seconds
+0045.576 (0) Table wp_termmeta: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_termmeta.table.gz - 0.7 KB)
+0045.580 (0) Table wp_terms: Total expected rows (approximate): 14
+0045.587 (0) Table wp_terms: Total rows added: 14 in 0.01 seconds
+0045.588 (0) Table wp_terms: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_terms.table.gz - 0.6 KB)
+0045.597 (0) Table wp_ib2_conversions: Total expected rows (approximate): 0
+0045.603 (0) Table wp_ib2_conversions: Total rows added: 0 in 0.00 seconds
+0045.604 (0) Table wp_ib2_conversions: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_conversions.table.gz - 0.3 KB)
+0045.617 (0) Table wp_ib2_facebook: Total expected rows (approximate): 0
+0045.624 (0) Table wp_ib2_facebook: Total rows added: 0 in 0.01 seconds
+0045.625 (0) Table wp_ib2_facebook: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_facebook.table.gz - 0.3 KB)
+0045.639 (0) Table wp_ib2_funnel: Total expected rows (approximate): 0
+0045.646 (0) Table wp_ib2_funnel: Total rows added: 0 in 0.01 seconds
+0045.647 (0) Table wp_ib2_funnel: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_funnel.table.gz - 0.3 KB)
+0045.659 (0) Table wp_ib2_groups: Total expected rows (approximate): 0
+0045.666 (0) Table wp_ib2_groups: Total rows added: 0 in 0.01 seconds
+0045.667 (0) Table wp_ib2_groups: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_groups.table.gz - 0.3 KB)
+0045.694 (0) Table wp_ib2_histories: Total expected rows (approximate): 7
+0045.701 (0) Table wp_ib2_histories: Total rows added: 7 in 0.01 seconds
+0045.702 (0) Table wp_ib2_histories: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_histories.table.gz - 6.8 KB)
+0045.720 (0) Table wp_ib2_hits: Total expected rows (approximate): 0
+0045.726 (0) Table wp_ib2_hits: Total rows added: 0 in 0.01 seconds
+0045.728 (0) Table wp_ib2_hits: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_hits.table.gz - 0.4 KB)
+0045.738 (0) Table wp_ib2_pages: Total expected rows (approximate): 1
+0045.745 (0) Table wp_ib2_pages: Total rows added: 1 in 0.01 seconds
+0045.746 (0) Table wp_ib2_pages: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_pages.table.gz - 0.4 KB)
+0045.768 (0) Table wp_ib2_quiz_questions: Total expected rows (approximate): 0
+0045.774 (0) Table wp_ib2_quiz_questions: Total rows added: 0 in 0.01 seconds
+0045.775 (0) Table wp_ib2_quiz_questions: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quiz_questions.table.gz - 0.3 KB)
+0045.785 (0) Table wp_ib2_quiz_stats: Total expected rows (approximate): 0
+0045.791 (0) Table wp_ib2_quiz_stats: Total rows added: 0 in 0.00 seconds
+0045.792 (0) Table wp_ib2_quiz_stats: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quiz_stats.table.gz - 0.3 KB)
+0045.800 (0) Table wp_ib2_quizzes: Total expected rows (approximate): 0
+0045.806 (0) Table wp_ib2_quizzes: Total rows added: 0 in 0.01 seconds
+0045.807 (0) Table wp_ib2_quizzes: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quizzes.table.gz - 0.3 KB)
+0045.832 (0) Table wp_ib2_templates: Total expected rows (approximate): 108
+0045.844 (0) Table wp_ib2_templates: Total rows added: 108 in 0.01 seconds
+0045.846 (0) Table wp_ib2_templates: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_templates.table.gz - 13.2 KB)
+0045.869 (0) Table wp_ib2_templatesets: Total expected rows (approximate): 7
+0045.875 (0) Table wp_ib2_templatesets: Total rows added: 7 in 0.01 seconds
+0045.876 (0) Table wp_ib2_templatesets: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_templatesets.table.gz - 0.5 KB)
+0045.887 (0) Table wp_ib2_variants: Total expected rows (approximate): 1
+0045.893 (0) Table wp_ib2_variants: Total rows added: 1 in 0.01 seconds
+0045.894 (0) Table wp_ib2_variants: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_variants.table.gz - 0.4 KB)
+0045.928 (0) Table wp_prli_clicks: Total expected rows (approximate): 1
+0045.934 (0) Table wp_prli_clicks: Total rows added: 1 in 0.01 seconds
+0045.935 (0) Table wp_prli_clicks: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_clicks.table.gz - 0.7 KB)
+0045.945 (0) Table wp_prli_link_metas: Total expected rows (approximate): 1
+0045.951 (0) Table wp_prli_link_metas: Total rows added: 1 in 0.00 seconds
+0045.952 (0) Table wp_prli_link_metas: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_link_metas.table.gz - 0.4 KB)
+0045.979 (0) Table wp_prli_links: Total expected rows (approximate): 1
+0045.985 (0) Table wp_prli_links: Total rows added: 1 in 0.01 seconds
+0045.986 (0) Table wp_prli_links: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_links.table.gz - 0.7 KB)
+0046.245 (0) Table wp_simply_static_pages: Total expected rows (approximate): 9941
+0047.108 (0) Table wp_simply_static_pages: Total rows added: 9941 in 0.86 seconds
+0047.110 (0) Table wp_simply_static_pages: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_simply_static_pages.table.gz - 109.2 KB)
+0047.125 (0) Table wp_ta_link_clicks: Total expected rows (approximate): 1
+0047.134 (0) Table wp_ta_link_clicks: Total rows added: 1 in 0.01 seconds
+0047.135 (0) Table wp_ta_link_clicks: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ta_link_clicks.table.gz - 0.4 KB)
+0047.147 (0) Table wp_ta_link_clicks_meta: Total expected rows (approximate): 4
+0047.153 (0) Table wp_ta_link_clicks_meta: Total rows added: 4 in 0.00 seconds
+0047.154 (0) Table wp_ta_link_clicks_meta: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ta_link_clicks_meta.table.gz - 0.5 KB)
+0047.166 (0) Table wp_tab_event_log: Total expected rows (approximate): 0
+0047.171 (0) Table wp_tab_event_log: Total rows added: 0 in 0.00 seconds
+0047.172 (0) Table wp_tab_event_log: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_event_log.table.gz - 0.4 KB)
+0047.177 (0) Table wp_tab_test_items: Total expected rows (approximate): 0
+0047.183 (0) Table wp_tab_test_items: Total rows added: 0 in 0.01 seconds
+0047.184 (0) Table wp_tab_test_items: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_test_items.table.gz - 0.5 KB)
+0047.189 (0) Table wp_tab_tests: Total expected rows (approximate): 0
+0047.195 (0) Table wp_tab_tests: Total rows added: 0 in 0.00 seconds
+0047.196 (0) Table wp_tab_tests: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_tests.table.gz - 0.5 KB)
+0047.213 (0) Table wp_tcb_api_error_log: Total expected rows (approximate): 0
+0047.219 (0) Table wp_tcb_api_error_log: Total rows added: 0 in 0.00 seconds
+0047.220 (0) Table wp_tcb_api_error_log: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tcb_api_error_log.table.gz - 0.3 KB)
+0047.237 (0) Table wp_td_fields: Total expected rows (approximate): 16
+0047.263 (0) Table wp_td_fields: Total rows added: 16 in 0.02 seconds
+0047.267 (0) Table wp_td_fields: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_td_fields.table.gz - 0.7 KB)
+0047.297 (0) Table wp_td_groups: Total expected rows (approximate): 3
+0047.303 (0) Table wp_td_groups: Total rows added: 3 in 0.01 seconds
+0047.304 (0) Table wp_td_groups: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_td_groups.table.gz - 0.4 KB)
+0047.317 (0) Table wp_tge_answers: Total expected rows (approximate): 0
+0047.323 (0) Table wp_tge_answers: Total rows added: 0 in 0.00 seconds
+0047.324 (0) Table wp_tge_answers: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tge_answers.table.gz - 0.4 KB)
+0047.329 (0) Table wp_tge_questions: Total expected rows (approximate): 0
+0047.335 (0) Table wp_tge_questions: Total rows added: 0 in 0.00 seconds
+0047.336 (0) Table wp_tge_questions: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tge_questions.table.gz - 0.4 KB)
+0047.341 (0) Table wp_tqb_event_log: Total expected rows (approximate): 0
+0047.346 (0) Table wp_tqb_event_log: Total rows added: 0 in 0.01 seconds
+0047.347 (0) Table wp_tqb_event_log: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_event_log.table.gz - 0.4 KB)
+0047.352 (0) Table wp_tqb_results: Total expected rows (approximate): 0
+0047.358 (0) Table wp_tqb_results: Total rows added: 0 in 0.00 seconds
+0047.359 (0) Table wp_tqb_results: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_results.table.gz - 0.3 KB)
+0047.364 (0) Table wp_tqb_results_links: Total expected rows (approximate): 0
+0047.370 (0) Table wp_tqb_results_links: Total rows added: 0 in 0.00 seconds
+0047.371 (0) Table wp_tqb_results_links: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_results_links.table.gz - 0.5 KB)
+0047.376 (0) Table wp_tqb_tests: Total expected rows (approximate): 0
+0047.381 (0) Table wp_tqb_tests: Total rows added: 0 in 0.01 seconds
+0047.383 (0) Table wp_tqb_tests: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_tests.table.gz - 0.4 KB)
+0047.388 (0) Table wp_tqb_tests_items: Total expected rows (approximate): 0
+0047.394 (0) Table wp_tqb_tests_items: Total rows added: 0 in 0.00 seconds
+0047.395 (0) Table wp_tqb_tests_items: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_tests_items.table.gz - 0.4 KB)
+0047.400 (0) Table wp_tqb_user_answers: Total expected rows (approximate): 0
+0047.406 (0) Table wp_tqb_user_answers: Total rows added: 0 in 0.01 seconds
+0047.407 (0) Table wp_tqb_user_answers: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_user_answers.table.gz - 0.3 KB)
+0047.412 (0) Table wp_tqb_users: Total expected rows (approximate): 0
+0047.418 (0) Table wp_tqb_users: Total rows added: 0 in 0.01 seconds
+0047.419 (0) Table wp_tqb_users: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_users.table.gz - 0.4 KB)
+0047.424 (0) Table wp_tqb_variations: Total expected rows (approximate): 0
+0047.430 (0) Table wp_tqb_variations: Total rows added: 0 in 0.01 seconds
+0047.432 (0) Table wp_tqb_variations: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_variations.table.gz - 0.4 KB)
+0047.437 (0) Table wp_tve_leads_contact_download: Total expected rows (approximate): 0
+0047.442 (0) Table wp_tve_leads_contact_download: Total rows added: 0 in 0.01 seconds
+0047.444 (0) Table wp_tve_leads_contact_download: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_contact_download.table.gz - 0.3 KB)
+0047.449 (0) Table wp_tve_leads_contacts: Total expected rows (approximate): 0
+0047.455 (0) Table wp_tve_leads_contacts: Total rows added: 0 in 0.00 seconds
+0047.456 (0) Table wp_tve_leads_contacts: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_contacts.table.gz - 0.3 KB)
+0047.461 (0) Table wp_tve_leads_event_log: Total expected rows (approximate): 0
+0047.467 (0) Table wp_tve_leads_event_log: Total rows added: 0 in 0.01 seconds
+0047.468 (0) Table wp_tve_leads_event_log: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_event_log.table.gz - 0.4 KB)
+0047.501 (0) Table wp_tve_leads_form_variations: Total expected rows (approximate): 1
+0047.508 (0) Table wp_tve_leads_form_variations: Total rows added: 1 in 0.01 seconds
+0047.510 (0) Table wp_tve_leads_form_variations: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_form_variations.table.gz - 3.1 KB)
+0047.515 (0) Table wp_tve_leads_group_options: Total expected rows (approximate): 0
+0047.521 (0) Table wp_tve_leads_group_options: Total rows added: 0 in 0.00 seconds
+0047.522 (0) Table wp_tve_leads_group_options: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_group_options.table.gz - 0.3 KB)
+0047.527 (0) Table wp_tve_leads_saved_group_options: Total expected rows (approximate): 0
+0047.532 (0) Table wp_tve_leads_saved_group_options: Total rows added: 0 in 0.00 seconds
+0047.533 (0) Table wp_tve_leads_saved_group_options: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_saved_group_options.table.gz - 0.3 KB)
+0047.537 (0) Table wp_tve_leads_split_test: Total expected rows (approximate): 0
+0047.543 (0) Table wp_tve_leads_split_test: Total rows added: 0 in 0.00 seconds
+0047.544 (0) Table wp_tve_leads_split_test: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_split_test.table.gz - 0.4 KB)
+0047.548 (0) Table wp_tve_leads_split_test_items: Total expected rows (approximate): 0
+0047.554 (0) Table wp_tve_leads_split_test_items: Total rows added: 0 in 0.00 seconds
+0047.555 (0) Table wp_tve_leads_split_test_items: finishing file (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_split_test_items.table.gz - 0.4 KB)
+0047.558 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_options.table.gz (1/55): adding to final database dump
+0047.592 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_users.table.gz (2/55): adding to final database dump
+0047.594 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_usermeta.table.gz (3/55): adding to final database dump
+0047.596 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_commentmeta.table.gz (4/55): adding to final database dump
+0047.598 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_comments.table.gz (5/55): adding to final database dump
+0047.599 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_links.table.gz (6/55): adding to final database dump
+0047.601 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_postmeta.table.gz (7/55): adding to final database dump
+0047.789 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_posts.table.gz (8/55): adding to final database dump
+0047.805 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_term_relationships.table.gz (9/55): adding to final database dump
+0047.807 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_term_taxonomy.table.gz (10/55): adding to final database dump
+0047.809 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_termmeta.table.gz (11/55): adding to final database dump
+0047.810 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_terms.table.gz (12/55): adding to final database dump
+0047.812 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_conversions.table.gz (13/55): adding to final database dump
+0047.813 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_facebook.table.gz (14/55): adding to final database dump
+0047.815 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_funnel.table.gz (15/55): adding to final database dump
+0047.816 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_groups.table.gz (16/55): adding to final database dump
+0047.818 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_histories.table.gz (17/55): adding to final database dump
+0047.820 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_hits.table.gz (18/55): adding to final database dump
+0047.822 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_pages.table.gz (19/55): adding to final database dump
+0047.823 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quiz_questions.table.gz (20/55): adding to final database dump
+0047.825 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quiz_stats.table.gz (21/55): adding to final database dump
+0047.826 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_quizzes.table.gz (22/55): adding to final database dump
+0047.827 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_templates.table.gz (23/55): adding to final database dump
+0047.831 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_templatesets.table.gz (24/55): adding to final database dump
+0047.833 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ib2_variants.table.gz (25/55): adding to final database dump
+0047.834 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_clicks.table.gz (26/55): adding to final database dump
+0047.843 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_link_metas.table.gz (27/55): adding to final database dump
+0047.844 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_prli_links.table.gz (28/55): adding to final database dump
+0047.846 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_simply_static_pages.table.gz (29/55): adding to final database dump
+0047.904 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ta_link_clicks.table.gz (30/55): adding to final database dump
+0047.905 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_ta_link_clicks_meta.table.gz (31/55): adding to final database dump
+0047.907 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_event_log.table.gz (32/55): adding to final database dump
+0047.908 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_test_items.table.gz (33/55): adding to final database dump
+0047.910 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tab_tests.table.gz (34/55): adding to final database dump
+0047.911 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tcb_api_error_log.table.gz (35/55): adding to final database dump
+0047.912 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_td_fields.table.gz (36/55): adding to final database dump
+0047.914 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_td_groups.table.gz (37/55): adding to final database dump
+0047.916 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tge_answers.table.gz (38/55): adding to final database dump
+0047.917 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tge_questions.table.gz (39/55): adding to final database dump
+0047.918 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_event_log.table.gz (40/55): adding to final database dump
+0047.920 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_results.table.gz (41/55): adding to final database dump
+0047.921 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_results_links.table.gz (42/55): adding to final database dump
+0047.922 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_tests.table.gz (43/55): adding to final database dump
+0047.924 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_tests_items.table.gz (44/55): adding to final database dump
+0047.925 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_user_answers.table.gz (45/55): adding to final database dump
+0047.927 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_users.table.gz (46/55): adding to final database dump
+0047.928 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tqb_variations.table.gz (47/55): adding to final database dump
+0047.930 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_contact_download.table.gz (48/55): adding to final database dump
+0047.931 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_contacts.table.gz (49/55): adding to final database dump
+0047.933 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_event_log.table.gz (50/55): adding to final database dump
+0047.934 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_form_variations.table.gz (51/55): adding to final database dump
+0047.936 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_group_options.table.gz (52/55): adding to final database dump
+0047.937 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_saved_group_options.table.gz (53/55): adding to final database dump
+0047.939 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_split_test.table.gz (54/55): adding to final database dump
+0047.940 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db-table-wp_tve_leads_split_test_items.table.gz (55/55): adding to final database dump
+0047.946 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz: finished writing out complete database file (1456 KB)
+0047.968 (0) Total database tables backed up: 55 (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz, size: 1510332, sha1: 440836385df72c543a0267423f60818b97a84185, sha256: b77682c29d361d2acd0613f500121e05fe1460a2b3aa46587866b7b3142c957f)
+0047.972 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0047.973 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip: themes: This file has not yet been successfully uploaded: will queue
+0047.974 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-uploads.zip: uploads: This file has not yet been successfully uploaded: will queue
+0047.974 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-others.zip: others: This file has not yet been successfully uploaded: will queue
+0047.975 (0) backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz: db: This file has not yet been successfully uploaded: will queue
+0047.976 (0) Saving backup history. Total backup size: 57.1 MB
+0047.977 (0) Requesting upload of the files that have not yet been successfully uploaded (5)
+0047.980 (0) Cloud backup selection (1/1): none with instance (1/1) (last)
+0047.980 (0) No remote despatch: user chose no remote backup service
+0047.981 (0) Recording as successfully uploaded: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip
+0047.982 (0) Recording as successfully uploaded: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip
+0047.984 (0) Recording as successfully uploaded: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-uploads.zip
+0047.985 (0) Recording as successfully uploaded: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-others.zip
+0047.987 (0) Recording as successfully uploaded: backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz
+0047.990 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=2, retain_db=2
+0047.991 (0) Number of backup sets in history: 1; groups (db): 1
+0047.992 (0) Examining (for databases) backup set with group_id=0, nonce=b1d6bc83c787, datestamp=1585808561 (Apr 02 2020 06:22:41)
+0047.992 (0) This backup set is the backup set just made, so will not be deleted.
+0047.993 (0) Number of backup sets in history: 1; groups (files): 1
+0047.993 (0) Examining (for files) backup set with nonce=b1d6bc83c787, datestamp=1585808561 (Apr 02 2020 06:22:41)
+0047.993 (0) This backup set is the backup set just made, so will not be deleted.
+0047.994 (0) This backup set is the backup set just made, so will not be deleted.
+0047.994 (0) This backup set is the backup set just made, so will not be deleted.
+0047.994 (0) This backup set is the backup set just made, so will not be deleted.
+0047.994 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0047.995 (0) Retain: saving new backup history (sets now: 1) and finishing retain operation
+0047.997 (0) Resume backup (b1d6bc83c787, 0): finish run
+0047.998 (0) Decremented the semaphore (fd) by 1
+0047.999 (0) Semaphore (fd) unlocked
+0048.000 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0048.002 (0) No email will/can be sent - the user has not configured an email address.
+0048.003 (0) The backup apparently succeeded and is now complete
