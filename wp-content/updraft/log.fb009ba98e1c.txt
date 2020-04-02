@@ -1,0 +1,142 @@
+0000.007 () Opened log file at time: Thu, 02 Apr 2020 06:46:31 +0000 on http://localhost/offerus
+0000.008 () UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.23 WP: 5.3.2 PHP: 7.3.12 (apache2handler, Windows NT DESKTOP-VTCCUIQ 10.0 build 18362 (Windows 10) AMD64) MySQL: 10.4.10-MariaDB WPLANG: en_US Server: Apache/2.4.41 (Win64) PHP/7.3.12 safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 6.3M | 4M) multisite: N openssl: OpenSSL 1.1.1d  10 Sep 2019 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.008 () Free space on disk containing Updraft's temporary directory: 109769.2 MB
+0000.007 () Opened log file at time: Thu, 02 Apr 2020 06:46:31 +0000 on http://localhost/offerus
+0000.007 () UpdraftPlus WordPress backup plugin (https://updraftplus.com): 1.16.23 WP: 5.3.2 PHP: 7.3.12 (apache2handler, Windows NT DESKTOP-VTCCUIQ 10.0 build 18362 (Windows 10) AMD64) MySQL: 10.4.10-MariaDB WPLANG: en_US Server: Apache/2.4.41 (Win64) PHP/7.3.12 safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 5.3M | 2M) multisite: N openssl: OpenSSL 1.1.1d  10 Sep 2019 mcrypt: N LANG:  ZipArchive::addFile: Y
+0000.007 () Free space on disk containing Updraft's temporary directory: 109769.2 MB
+0000.008 () Ensuring WP_Filesystem is setup for a restore
+0000.009 () WP_Filesystem is setup and ready for a restore
+0000.024 () Restore job started. Entities to restore: plugins, themes, uploads, others, db. Restore options: {"updraft_restore_table_options":["wp_options","wp_users","wp_usermeta","wp_commentmeta","wp_comments","wp_links","wp_postmeta","wp_posts","wp_term_relationships","wp_term_taxonomy","wp_termmeta","wp_terms","wp_ib2_conversions","wp_ib2_facebook","wp_ib2_funnel","wp_ib2_groups","wp_ib2_histories","wp_ib2_hits","wp_ib2_pages","wp_ib2_quiz_questions","wp_ib2_quiz_stats","wp_ib2_quizzes","wp_ib2_templates","wp_ib2_templatesets","wp_ib2_variants","wp_prli_clicks","wp_prli_link_metas","wp_prli_links","wp_simply_static_pages","wp_ta_link_clicks","wp_ta_link_clicks_meta","wp_tab_event_log","wp_tab_test_items","wp_tab_tests","wp_tcb_api_error_log","wp_td_fields","wp_td_groups","wp_tge_answers","wp_tge_questions","wp_tqb_event_log","wp_tqb_results","wp_tqb_results_links","wp_tqb_tests","wp_tqb_tests_items","wp_tqb_user_answers","wp_tqb_users","wp_tqb_variations","wp_tve_leads_contact_download","wp_tve_leads_contacts","wp_tve_leads_event_log","wp_tve_leads_form_variations","wp_tve_leads_group_options","wp_tve_leads_saved_group_options","wp_tve_leads_split_test","wp_tve_leads_split_test_items"],"updraft_encryptionphrase":"","updraft_restorer_wpcore_includewpconfig":false,"updraft_incremental_restore_point":-1}
+0000.033 () Will not delete any archives after unpacking them, because there was no cloud storage for this backup
+0000.034 () Entity: db
+0000.034 () restore_backup(backup_file=backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz, type=db, info=a:0:{}, last_one=)
+0000.035 () Unpacking backup... (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-db.gz, 1.4 Mb)
+0000.039 () Database successfully unpacked
+0000.039 () Restoring the database (on a large site this can take a long time - if it times out (which can happen if your web hosting company has configured your hosting to limit resources) then you should use a different method, such as phpMyAdmin)...
+0000.040 () Using direct MySQL access; value of use_mysqli is: 1
+0000.040 () SQL compatibility mode is: NO_AUTO_VALUE_ON_ZERO,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+0000.150 () Max packet size: 32 MB
+0000.150 () Entering maintenance mode
+0000.150 () Enabling Maintenance mode&#8230;
+0000.151 () Backup of: http://localhost/offerus
+0000.153 () Content URL: http://localhost/offerus/wp-content
+0000.153 () Uploads URL: http://localhost/offerus/wp-content/uploads
+0000.153 () Old table prefix: wp_
+0000.153 () Site information: multisite=0
+0000.154 () New table prefix: wp_
+0000.159 () Processing table (MyISAM): wp_options
+0000.217 () Restoring prior UD configuration (table: wp_options; keys: 4)
+0000.226 () Processing table (MyISAM): wp_users
+0000.251 () Processing table (MyISAM): wp_usermeta
+0000.282 () Processing table (MyISAM): wp_commentmeta
+0000.298 () Processing table (MyISAM): wp_comments
+0000.339 () Processing table (MyISAM): wp_links
+0000.382 () Processing table (MyISAM): wp_postmeta
+0000.785 () Processing table (MyISAM): wp_posts
+0000.906 () Database queries processed: 50 in 0.86 seconds
+0000.908 () Processing table (MyISAM): wp_term_relationships
+0000.937 () Processing table (MyISAM): wp_term_taxonomy
+0000.966 () Processing table (MyISAM): wp_termmeta
+0000.989 () Processing table (MyISAM): wp_terms
+0001.021 () Processing table (MyISAM): wp_ib2_conversions
+0001.051 () Processing table (MyISAM): wp_ib2_facebook
+0001.081 () Processing table (MyISAM): wp_ib2_funnel
+0001.112 () Processing table (MyISAM): wp_ib2_groups
+0001.140 () Processing table (MyISAM): wp_ib2_histories
+0001.176 () Processing table (MyISAM): wp_ib2_hits
+0001.298 () Processing table (MyISAM): wp_ib2_pages
+0001.444 () Processing table (MyISAM): wp_ib2_quiz_questions
+0001.486 () Processing table (MyISAM): wp_ib2_quiz_stats
+0001.520 () Processing table (MyISAM): wp_ib2_quizzes
+0001.545 () Processing table (MyISAM): wp_ib2_templates
+0001.569 () Processing table (MyISAM): wp_ib2_templatesets
+0001.599 () Processing table (MyISAM): wp_ib2_variants
+0001.623 () Processing table (MyISAM): wp_prli_clicks
+0001.665 () Processing table (MyISAM): wp_prli_link_metas
+0001.699 () Database queries processed: 100 in 1.66 seconds
+0001.700 () Processing table (MyISAM): wp_prli_links
+0001.743 () Processing table (MyISAM): wp_simply_static_pages
+0002.442 () Processing table (MyISAM): wp_ta_link_clicks
+0002.473 () Processing table (MyISAM): wp_ta_link_clicks_meta
+0002.509 () Processing table (MyISAM): wp_tab_event_log
+0002.549 () Processing table (MyISAM): wp_tab_test_items
+0002.593 () Processing table (MyISAM): wp_tab_tests
+0002.632 () Processing table (MyISAM): wp_tcb_api_error_log
+0002.695 () Processing table (MyISAM): wp_td_fields
+0002.749 () Processing table (MyISAM): wp_td_groups
+0002.791 () Processing table (MyISAM): wp_tge_answers
+0002.824 () Processing table (MyISAM): wp_tge_questions
+0002.855 () Processing table (MyISAM): wp_tqb_event_log
+0002.880 () Processing table (MyISAM): wp_tqb_results
+0002.916 () Processing table (MyISAM): wp_tqb_results_links
+0002.939 () Processing table (MyISAM): wp_tqb_tests
+0002.982 () Processing table (MyISAM): wp_tqb_tests_items
+0003.014 () Processing table (MyISAM): wp_tqb_user_answers
+0003.044 () Database queries processed: 150 in 3.00 seconds
+0003.047 () Processing table (MyISAM): wp_tqb_users
+0003.081 () Processing table (MyISAM): wp_tqb_variations
+0003.116 () Processing table (MyISAM): wp_tve_leads_contact_download
+0003.150 () Processing table (MyISAM): wp_tve_leads_contacts
+0003.180 () Processing table (MyISAM): wp_tve_leads_event_log
+0003.227 () Processing table (MyISAM): wp_tve_leads_form_variations
+0003.268 () Processing table (MyISAM): wp_tve_leads_group_options
+0003.307 () Processing table (MyISAM): wp_tve_leads_saved_group_options
+0003.341 () Processing table (MyISAM): wp_tve_leads_split_test
+0003.378 () Processing table (MyISAM): wp_tve_leads_split_test_items
+0003.553 () Unlocking database and leaving maintenance mode
+0003.553 () Disabling Maintenance mode&#8230;
+0003.553 () Finished: lines processed: 174 in 3.51 seconds
+0003.554 () Cleaning up rubbish...
+0003.560 () Entity: plugins
+0003.560 () restore_backup(backup_file=backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip, type=plugins, info=a:2:{s:4:"path";s:40:"J:\Github\www\offerus/wp-content/plugins";s:11:"description";s:7:"Plugins";}, last_one=)
+0003.560 () Unpacking backup... (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip, 53.7 MB)
+0003.561 () Unzipping backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-plugins.zip to J:/Github/www/offerus/wp-content/upgrade/465ab3e9/ using UpdraftPlus_ZipArchive, starting index 0
+0004.280 () Unzip progress: 1532 out of 12312 files (28 B, plugins/index.php)
+0006.059 () Unzip progress: 2533 out of 12312 files (4.5 MB, plugins/thrive-leads/editor-templates/shortcode/thumbnails/five_set_v2.png)
+0007.515 () Unzip progress: 3534 out of 12312 files (18.8 MB, plugins/thrive-leads/tcb/editor/css/images/ul1_f_black.png)
+0010.454 () Unzip progress: 4535 out of 12312 files (27 MB, plugins/thrive-leads/thrive-dashboard/inc/auto-responder/classes/Connection/ConvertKit.php)
+0014.350 () Unzip progress: 5536 out of 12312 files (39.1 MB, plugins/thrive-quiz-builder/includes/admin/views/templates/reporting/all-source.phtml)
+0016.085 () Unzip progress: 6537 out of 12312 files (51.8 MB, plugins/thrive-quiz-builder/tcb/inc/backbone/notification-box/success.phtml)
+0020.167 () Unzip progress: 7538 out of 12312 files (58.8 MB, plugins/thrive-quiz-builder/thrive-dashboard/inc/auto-responder/views/setup/convertkit.php)
+0022.994 () Unzip progress: 8539 out of 12312 files (73.4 MB, plugins/thrive-visual-editor/inc/backbone/controls/button/global-templates.phtml)
+0025.328 () Unzip progress: 9540 out of 12312 files (77.6 MB, plugins/thrive-visual-editor/landing-page/templates/css/fonts/phonic_universal_podcast/tlp-icon-phonicuniversalpodcast.ttf)
+0027.045 () Unzip progress: 10541 out of 12312 files (88.7 MB, plugins/thrive-visual-editor/thrive-dashboard/inc/auto-responder/lib/vendor/Sendreach/Countries.php)
+0032.500 () Unzip progress: 11542 out of 12312 files (111.2 MB, plugins/updraftplus/vendor/aws/aws-sdk-php/src/Aws/S3/Exception/InvalidDigestException.php)
+0033.276 () Unzip progress: 12312 out of 12312 files (114.8 MB, plugins/updraftplus/vendor/symfony/process/README.md)
+0033.279 () Moving old data: filesystem method / updraft_dir is potentially possible
+0033.279 () Moving old data: can potentially use wp_filesystem method / -old
+0033.279 () Moving old data out of the way...
+0036.158 () Top-level entities being moved: index.php, simply-static, thrive-ab-page-testing, thrive-leads, thrive-quiz-builder, thrive-visual-editor, updraftplus
+0036.179 () Moving unpacked backup into place...
+0037.562 () Top-level entities being moved: index.php, simply-static, thrive-ab-page-testing, thrive-leads, thrive-quiz-builder, thrive-visual-editor, updraftplus
+0037.578 () Cleaning up rubbish...
+0037.581 () Entity: themes
+0037.581 () restore_backup(backup_file=backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip, type=themes, info=a:2:{s:4:"path";s:39:"J:\Github\www\offerus/wp-content/themes";s:11:"description";s:6:"Themes";}, last_one=)
+0037.582 () Unpacking backup... (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip, 1.9 MB)
+0037.582 () Unzipping backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-themes.zip to J:/Github/www/offerus/wp-content/upgrade/59dd1eb5/ using UpdraftPlus_ZipArchive, starting index 0
+0037.952 () Unzip progress: 593 out of 593 files (5.6 MB, themes/twentyseventeen/template-parts/post/content.php)
+0037.953 () Moving old data: filesystem method / updraft_dir is potentially possible
+0037.953 () Moving old data: can potentially use wp_filesystem method / -old
+0037.954 () Moving old data out of the way...
+0038.023 () Top-level entities being moved: astra, index.php, twentyseventeen
+0038.025 () Moving unpacked backup into place...
+0038.102 () Top-level entities being moved: astra, index.php, twentyseventeen
+0038.104 () Cleaning up rubbish...
+0038.107 () Entity: uploads
+0038.107 () restore_backup(backup_file=backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-uploads.zip, type=uploads, info=a:2:{s:4:"path";s:40:"J:\Github\www\offerus/wp-content/uploads";s:11:"description";s:7:"Uploads";}, last_one=)
+0038.107 () Unpacking backup... (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-uploads.zip, 0.1 MB)
+0038.107 () Unzipping backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-uploads.zip to J:/Github/www/offerus/wp-content/upgrade/5e6956a8/ using UpdraftPlus_ZipArchive, starting index 0
+0038.448 () Unzip progress: 32 out of 32 files (110.9 KB, uploads/tve_leads_templates/lightbox/tcb2_icons-v1-2-step_m2/thumbnails/tcb2_icons-v1-2-step_m2.png)
+0038.450 () Moving old data: filesystem method / updraft_dir is potentially possible
+0038.450 () Moving old data: can potentially use wp_filesystem method / -old
+0038.450 () Moving old data out of the way...
+0038.457 () Moving unpacked backup into place...
+0038.464 () Cleaning up rubbish...
+0038.466 () Entity: others
+0038.467 () restore_backup(backup_file=backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-others.zip, type=others, info=a:2:{s:4:"path";s:32:"J:\Github\www\offerus/wp-content";s:11:"description";s:6:"Others";}, last_one=1)
+0038.467 () Unpacking backup... (backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-others.zip, 0 MB)
+0038.467 () Unzipping backup_2020-04-02-0622_Affiliaya_b1d6bc83c787-others.zip to J:/Github/www/offerus/wp-content/upgrade/8c48ad28/ using UpdraftPlus_ZipArchive, starting index 0
+0038.469 () Unzip progress: 1 out of 1 files (28 B, index.php)
+0038.470 () Cleaning up rubbish...
+0038.490 () Restore successful!
+0038.490 () Restore successful
