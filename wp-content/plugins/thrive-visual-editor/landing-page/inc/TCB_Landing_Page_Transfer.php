@@ -88,11 +88,11 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 	 * @throws Exception
 	 */
 	public function get_template_list( $filters = array() ) {
-		$params = array(
+		$params = apply_filters( 'tcb_get_cloud_templates_default_args', array(
 			'route'           => 'getAll',
 			'tar_version'     => TVE_VERSION,
 			'tar_cloud_debug' => defined( 'TCB_CLOUD_DEBUG' ) && TCB_CLOUD_DEBUG ? '1' : '0',
-		);
+		) );
 		if ( ! empty( $filters ) ) {
 			$params['filters'] = $filters; // allow filtering
 		}
@@ -223,11 +223,9 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 			), $url );
 		}
 
-		$response = wp_remote_post( $url, array(
-			'timeout'   => 20,
-			'headers'   => $headers,
-			'body'      => $params,
-			'sslverify' => false,
+		$response = tve_dash_api_remote_post( $url, array(
+			'headers' => $headers,
+			'body'    => $params,
 		) );
 
 		if ( $response instanceof WP_Error ) {

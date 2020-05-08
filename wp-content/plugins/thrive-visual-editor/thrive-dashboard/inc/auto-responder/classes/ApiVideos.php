@@ -132,7 +132,7 @@ class ApiVideos {
 	 */
 	private function _set_urls() {
 
-		$this->_ttw_url = 'https://thrivethemes.com';
+		$this->_ttw_url = esc_url( defined( 'THRV_ENV' ) && is_string( THRV_ENV ) ? THRV_ENV : 'https://thrivethemes.com' );
 	}
 
 	/**

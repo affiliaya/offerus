@@ -24,9 +24,13 @@ class TCB_Lead_Generation_Textarea_Element extends TCB_Element_Abstract {
 	}
 
 	public function own_components() {
-		$prefix_config           = tcb_selection_root();
-		$controls_default_config = array(
-			'css_suffix' => array( ' textarea', ' textarea::placeholder' ),
+		$prefix_config                = tcb_selection_root();
+		$controls_default_config_text = array(
+			'css_suffix' => array( ' textarea', ' ::placeholder', ' input' ),
+			'css_prefix' => $prefix_config . ' ',
+		);
+		$controls_default_config      = array(
+			'css_suffix' => array( ' textarea', ' input' ),
 			'css_prefix' => $prefix_config . ' ',
 		);
 
@@ -38,41 +42,75 @@ class TCB_Lead_Generation_Textarea_Element extends TCB_Element_Abstract {
 							'label' => __( 'Placeholder', 'thrive-cb' ),
 						),
 					),
-					'icon_side'   => array(
-						'css_suffix' => ' .thrv_icon',
-						'css_prefix' => $prefix_config . ' ',
-						'config'     => array(
-							'name'    => __( 'Icon Side', 'thrive-cb' ),
-							'buttons' => array(
-								array(
-									'value' => 'left',
-									'text'  => __( 'Left', 'thrive-cb' ),
-								),
-								array(
-									'value' => 'right',
-									'text'  => __( 'Right', 'thrive-cb' ),
-								),
-							),
+					'ShowLabel'   => array(
+						'config'  => array(
+							'name'    => '',
+							'label'   => __( 'Show Label', 'thrive-cb' ),
+							'default' => true,
 						),
+						'extends' => 'Switch',
 					),
-					'required'    => array(
-						'config' => array(
-							'default' => false,
-							'label'   => __( 'Required field' ),
+					'ShowCounter' => array(
+						'config'  => array(
+							'name'    => '',
+							'label'   => __( 'Show Character Count', 'thrive-cb' ),
+							'default' => true,
 						),
+						'extends' => 'Switch',
+					),
+					'Resizing'    => array(
+						'config'  => array(
+							'name'    => '',
+							'label'   => __( 'Disable User Resizing', 'thrive-cb' ),
+							'default' => true,
+							'info'    => true,
+						),
+						'extends' => 'Switch',
+					),
+					'Rows'        => array(
+						'config'  => array(
+							'name'      => __( 'Rows / Visible Lines', 'thrive-cb' ),
+							'default'   => 3,
+							'min'       => 1,
+							'max'       => 100,
+							'maxlength' => 2,
+						),
+						'extends' => 'Input',
+					),
+					'MinChar'     => array(
+						'config'  => array(
+							'label'   => __( 'Min. Characters', 'thrive-cb' ),
+							'default' => 10,
+							'min'     => 0,
+							'max'     => 350,
+							'info'    => true,
+							'size'    => 'medium',
+						),
+						'extends' => 'Input',
+					),
+					'MaxChar'     => array(
+						'config'  => array(
+							'label'   => __( 'Max. Characters', 'thrive-cb' ),
+							'default' => 350,
+							'min'     => 0,
+							'max'     => 10000,
+							'info'    => true,
+							'size'    => 'medium',
+						),
+						'extends' => 'Input',
 					),
 				),
 			),
 			'typography'               => array(
 				'config' => array(
-					'FontSize'      => $controls_default_config,
-					'FontColor'     => $controls_default_config,
-					'FontFace'      => $controls_default_config,
-					'LetterSpacing' => $controls_default_config,
-					'LineHeight'    => $controls_default_config,
-					'TextAlign'     => $controls_default_config,
-					'TextStyle'     => $controls_default_config,
-					'TextTransform' => $controls_default_config,
+					'FontSize'      => $controls_default_config_text,
+					'FontColor'     => $controls_default_config_text,
+					'FontFace'      => $controls_default_config_text,
+					'LetterSpacing' => $controls_default_config_text,
+					'LineHeight'    => $controls_default_config_text,
+					'TextAlign'     => $controls_default_config_text,
+					'TextStyle'     => $controls_default_config_text,
+					'TextTransform' => $controls_default_config_text,
 				),
 			),
 			'layout'                   => array(
@@ -82,7 +120,9 @@ class TCB_Lead_Generation_Textarea_Element extends TCB_Element_Abstract {
 					'Alignment',
 					'.tve-advanced-controls',
 				),
-				'config'            => array(),
+				'config'            => array(
+					'MarginAndPadding' => $controls_default_config,
+				),
 			),
 			'borders'                  => array(
 				'config' => array(

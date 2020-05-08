@@ -18,9 +18,9 @@
 			setTimeout( function () {
 				if ( $architectNotificationContent.indexOf( 'postbox' ) !== - 1 ) {
 					$gutenberg.find( '.editor-post-title' ).append( $architectDisplay );
-					$gutenberg.find( '.editor-block-list__layout' ).hide();
+					$gutenberg.find( '.editor-block-list__layout,.block-editor-block-list__layout' ).hide();
 					$gutenberg.find( '.editor-post-title__block' ).css( 'margin-bottom', '0' );
-					$gutenberg.find( '.editor-writing-flow__click-redirect' ).hide();
+					$gutenberg.find( '.editor-writing-flow__click-redirect,.block-editor-writing-flow__click-redirect' ).hide();
 					$gutenberg.find( '.edit-post-header-toolbar' ).css( 'visibility', 'hidden' );
 				} else {
 					$gutenberg.find( '.edit-post-header-toolbar' ).append( $architectLauncher );

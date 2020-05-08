@@ -51,7 +51,14 @@ class TCB_Post_List_Author_Image {
 		if ( empty( $post ) ) {
 			$avatar_url = '';
 		} else {
-			$avatar_url = get_avatar_url( $post->post_author, array( 'size' => 256 ) );
+			$avatar = get_avatar( $post->post_author, 256 );
+			preg_match( '/src=\'([^\']*)\'/m', $avatar, $matches );
+
+			if ( empty( $matches[1] ) ) {
+				$avatar_url = get_avatar_url( $post->post_author, array( 'size' => 256 ) );
+			} else {
+				$avatar_url = $matches[1];
+			}
 
 			/* if we're in the editor, append a dynamic flag at the end so we can recognize that the URL is dynamic */
 			if ( TCB_Utils::in_editor_render() ) {

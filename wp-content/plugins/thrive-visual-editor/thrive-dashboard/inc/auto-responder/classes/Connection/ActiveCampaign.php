@@ -252,6 +252,7 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 		// Make another call to update custom mapped fields in order not to break the subscription call,
 		// if custom data doesn't pass API custom fields validation
 		if ( true === $return && ! empty( $arguments['tve_mapping'] ) ) {
+			unset( $prepared_args['tags'] );
 			$this->updateCustomFields( $list_identifier, $arguments, $prepared_args );
 		}
 

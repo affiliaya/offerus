@@ -560,15 +560,17 @@ class TCB_Post_List_Shortcodes {
 	 * @return string
 	 */
 	public static function post_thumbnail( $attr = array() ) {
-		$image = '';
-
 		if ( has_post_thumbnail() ) {
 			$image = static::shortcode_function_content( 'the_post_thumbnail', array( $attr['size'] ) );
+		} else if (
+			TCB_Editor()->is_inner_frame() ||
+			TCB_Utils::is_rest() ||
+			( ! empty( $attr['type-display'] ) && $attr['type-display'] === 'default_image' )
+		) {
+			$image = TCB_Utils::wrap_content( '', 'img', '', '', array( 'src' => TCB_Post_List_Featured_Image::get_default_url(), 'loading' => 'lazy' ) );
 		} else {
-			if ( TCB_Editor()->is_inner_frame() || ( ! empty( $attr['type-display'] ) && $attr['type-display'] === 'default_image' ) || TCB_Utils::is_rest() ) {
-				$image = TCB_Utils::wrap_content( '', 'img', '', '', array( 'src' => TCB_Post_List_Featured_Image::get_default_url() ) );
-			}
 			/* if we're not in the editor or the default display option is not selected, then don't display anything */
+			$image = '';
 		}
 
 		/* add the post url only when the post url option is selected */

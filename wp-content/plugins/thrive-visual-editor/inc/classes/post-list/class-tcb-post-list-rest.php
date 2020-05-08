@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TCB_Post_List_REST {
 
 	public static $namespace = 'tcb/v1';
-	public static $route = '/posts';
+	public static $route     = '/posts';
 
 	public function __construct() {
 		$this->register_routes();
@@ -72,7 +72,7 @@ class TCB_Post_List_REST {
 	 * @return WP_Error|bool
 	 */
 	public function route_permission( $request ) {
-		return TCB_Product::has_access();
+		return TCB_Product::has_external_access();
 	}
 
 	/**
@@ -379,6 +379,13 @@ class TCB_Post_List_REST {
 
 		/* get the first 7 posts (  6 + 1 to take into account excluding current post )*/
 		$first_posts = get_posts( $default_query );
+
+		/* no posts? get pages instead */
+		if ( empty( $first_posts ) ) {
+			$default_query['post_type'] = 'page';
+
+			$first_posts = get_posts( $default_query );
+		}
 
 		if ( ! empty( $post_ids ) ) {
 			$existing_posts_query = array(

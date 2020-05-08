@@ -87,6 +87,13 @@ function tve_dash_get_general_settings() {
 			'type'         => 'text',
 			'multiple'     => false,
 		),
+		array(
+			'name'     => 'tve_google_fonts_disable_api_call',
+			'id'       => 'tve_google_fonts_disable_api_call',
+			'value'    => tve_dash_get_option( 'tve_google_fonts_disable_api_call', '' ),
+			'type'     => 'checkbox',
+			'multiple' => false,
+		),
 	);
 	$settings = apply_filters( 'tve_dash_general_settings_filter', $settings );
 
@@ -128,7 +135,7 @@ function tve_dash_general_settings_section() {
 	$affiliate_links = tve_dash_get_affiliate_links();
 	$settings        = tve_dash_get_general_settings();
 	/* text, radio, checkbox, password */
-	$accepted_settings = array( 'text' );
+	$accepted_settings = array( 'text', 'checkbox' );
 	require_once TVE_DASH_PATH . '/templates/settings/general_settings.phtml';
 }
 
@@ -860,4 +867,16 @@ function tve_filter_intrusive_forms( $product, $forms ) {
 	 * @param string $product - the product from which the items originated
 	 */
 	return apply_filters( 'tve_intrusive_forms', $forms, $product );
+}
+
+/**
+ * Json checker
+ *
+ * @param $string
+ *
+ * @return bool
+ */
+function tve_is_json_encoded( $string ) {
+
+	return is_string( $string ) && is_array( json_decode( $string, true ) ) && ( json_last_error() == JSON_ERROR_NONE ) ? true : false;
 }

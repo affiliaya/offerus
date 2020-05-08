@@ -25,7 +25,7 @@ class Thrive_Dash_Api_EverWebinar {
 	/**
 	 * @var string
 	 */
-	protected $_host = 'https://webinarjam.genndi.com/api/everwebinar/';
+	protected $_host = 'https://api.webinarjam.com/everwebinar/';
 
 	/**
 	 * Thrive_Dash_Api_EverWebinar constructor.
@@ -124,7 +124,7 @@ class Thrive_Dash_Api_EverWebinar {
 			return false;
 		}
 
-		$arguments       = array(
+		$arguments = array(
 			'webinar_id' => $webinar_id,
 		);
 

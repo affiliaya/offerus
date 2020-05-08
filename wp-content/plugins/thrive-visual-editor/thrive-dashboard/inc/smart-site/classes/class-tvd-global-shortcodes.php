@@ -35,11 +35,47 @@ class TVD_Global_Shortcodes {
 	public function add_shortcodes() {
 
 		foreach ( static::$dynamic_shortcodes as $shortcode => $func ) {
-			add_shortcode( $shortcode, array( $this, $func ) );
+			$function = array( $this, $func );
+			add_shortcode( $shortcode, static function ( $attr ) use ( $function ) {
+				$output = call_user_func_array( $function, func_get_args() );
+
+				return TVD_Global_Shortcodes::maybe_link_wrap( $output, $attr );
+			} );
 		}
 
 	}
 
+	/**
+	 * Checks if shortcode content needs to be wrapped in a link (if a custom json-encoded attribute exists in the shortcode)
+	 *
+	 * @param string $shortcode_content
+	 * @param array  $attr
+	 *
+	 * @return string
+	 */
+	public static function maybe_link_wrap( $shortcode_content, $attr ) {
+		/**
+		 * If a static link is detected in config, we need to wrap $content in that link (only if a link doesn't already exist in $shortcode_content ..)
+		 */
+		if ( $shortcode_content && ! empty( $attr['static-link'] ) && strpos( $shortcode_content, '</a>' ) === false ) {
+			$link_attr = json_decode( htmlspecialchars_decode( $attr['static-link'] ), true );
+
+			if ( ! empty( $link_attr ) && ! empty( $link_attr['href'] ) ) {
+				/* replacement for shortcode open "[" */
+				if ( strpos( $link_attr['href'], '((' ) === 0 ) {
+					$link_attr['href'] = str_replace( array( '((', '))' ), array( '[', ']' ), $link_attr['href'] );
+					$link_attr['href'] = do_shortcode( $link_attr['href'] );
+				}
+				$attributes = [];
+				foreach ( $link_attr as $attr_name => $value ) {
+					$attributes[] = ( $attr_name === 'className' ? 'class' : $attr_name ) . '="' . esc_attr( $value ) . '"';
+				}
+				$shortcode_content = '<a ' . implode( ' ', $attributes ) . '>' . $shortcode_content . '</a>';
+			}
+		}
+
+		return $shortcode_content;
+	}
 
 	public function tcb_inline_shortcodes( $shortcodes ) {
 		return array_merge_recursive( TVD_Global_Shortcodes::get_inline_shortcodes(), $shortcodes );

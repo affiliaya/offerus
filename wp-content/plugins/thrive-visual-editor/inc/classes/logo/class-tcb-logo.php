@@ -96,18 +96,24 @@ class TCB_Logo {
 		}
 		$desktop_id = (int) $attr['data-id-d'];
 
-		/* se the desktop source as a fallback; get only the src here, since this is an all-browser compatible version */
+		/* set the desktop source as a fallback; get only the src here, since this is an all-browser compatible version */
 		$fallback_source = static::get_logo_srcset_or_src( $desktop_id, false );
+
+		$img_attr = array(
+			'src'     => $fallback_source,
+			'alt'     => empty( $attr['data-alt'] ) ? '' : $attr['data-alt'],
+			'loading' => 'lazy',
+		);
 
 		/* in the editor or when doing ajax ( when the logo is in a symbol ) or when doing rest ( when you add new headers/footers and start from cloud templates ), return the desktop src only */
 		if ( TCB_Utils::in_editor_render() || wp_doing_ajax() || TCB_Utils::is_rest() ) {
-			$content = TCB_Utils::wrap_content( '', 'img', '', '', array( 'src' => $fallback_source ) );
+			$content = TCB_Utils::wrap_content( '', 'img', '', '', $img_attr );
 		} else {
 			/* if the fallback source is empty and we're outside the editor, return an empty string */
 			if ( empty( $fallback_source ) ) {
 				$content = '';
 			} else {
-				$content = static::get_picture_element( $attr, $fallback_source );
+				$content = static::get_picture_element( $attr, $img_attr );
 			}
 		}
 		$tag      = apply_filters( 'tcb_logo_tag', 'a' );
@@ -129,12 +135,12 @@ class TCB_Logo {
 	/**
 	 * Get the picture element containing the sources. ( For info on how this works, see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture )
 	 *
-	 * @param $attr
-	 * @param $fallback_source
+	 * @param array $attr
+	 * @param array $img_attr
 	 *
 	 * @return string
 	 */
-	public static function get_picture_element( $attr, $fallback_source ) {
+	public static function get_picture_element( $attr, $img_attr ) {
 		$picture_content = '';
 
 		foreach ( static::$all_devices as $device ) {
@@ -166,7 +172,7 @@ class TCB_Logo {
 			}
 		}
 		/* add the fallback img */
-		$picture_content .= TCB_Utils::wrap_content( '', 'img', '', '', array( 'src' => $fallback_source ) );
+		$picture_content .= TCB_Utils::wrap_content( '', 'img', '', '', $img_attr );
 
 		/* wrap it in the <picture> tag and return */
 
@@ -251,6 +257,8 @@ class TCB_Logo {
 
 	/**
 	 * Add the two initial logos and their placeholders ( these exist without having to be added manually and cannot be deleted ).
+	 *
+	 * @return array
 	 */
 	public static function initialize_default_logos() {
 		$logos = array(
@@ -285,7 +293,7 @@ class TCB_Logo {
 
 		/* if the option is empty, then we have to initialize the logo array with the default values */
 		if ( empty( $logos ) ) {
-			/* initialize the default logos - this can't be done earlier because it uses tve_editor_url(), which doesn't exist earlier */
+			/* initialize the default logos */
 			$logos = static::initialize_default_logos();
 		}
 
@@ -321,11 +329,14 @@ class TCB_Logo {
 			}
 		}
 
+		/* we don't need to save this since it's stored in the image */
+		unset( $attr['data-alt'] );
+
 		return $attr;
 	}
 
 	/**
-	 * Add the search shortcode.
+	 * Add the logo shortcode.
 	 */
 	public function init_shortcode() {
 		add_shortcode( static::SHORTCODE_TAG, function ( $attr, $content, $tag ) {

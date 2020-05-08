@@ -17,7 +17,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 	 * Class TCB_Editor_Ajax
 	 */
 	class TCB_Editor_Ajax {
-		const ACTION = 'tcb_editor_ajax';
+		const ACTION    = 'tcb_editor_ajax';
 		const NONCE_KEY = 'tve-le-verify-sender-track129';
 
 		/**
@@ -1029,7 +1029,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 				$this->error( 'Invalid Parameters! A color must contain a name, an id and a color string!' );
 			}
 
-			$post_id = intval( $this->param( 'post_id', 0 ) );
+			$post_id = (int) $this->param( 'post_id', 0 );
 
 			if ( empty( $post_id ) ) {
 				$this->error( 'Something went wrong! Please contact the support team!' );
@@ -1090,14 +1090,11 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 					) );
 				}
 			}
-
-			$terms = get_terms( array( 'slug' => array( 'headers', 'footers' ) ) );
-			$terms = array_map(
-				function ( $term ) {
-					return $term->term_id;
-				},
-				$terms
-			);
+			$data['btn_default_templates'] = tcb_elements()->element_factory( 'button' )->get_default_templates();
+			$terms                         = get_terms( array( 'slug' => array( 'headers', 'footers' ) ) );
+			$terms                         = array_map( function ( $term ) {
+				return $term->term_id;
+			}, $terms );
 
 			$data['symbols']           = tcb_elements()->element_factory( 'symbol' )->get_all( array( 'category__not_in' => $terms ) );
 			$data['content_templates'] = tcb_elements()->element_factory( 'ct' )->get_list();
@@ -1119,7 +1116,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			$dom        = $this->param( 'dom' );
 			$active     = $this->param( 'active' );
 			$ignore_css = $this->param( 'ignore_css', false );
-			$post_id    = intval( $this->param( 'post_id', 0 ) );
+			$post_id    = (int) $this->param( 'post_id', 0 );
 			$delete     = $this->param( 'delete', false );
 
 			if ( empty( $identifier ) ) {
@@ -1179,6 +1176,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 				$default_props = array(
 					'default_css'  => $this->param( 'default_css', '' ),
 					'default_html' => $this->param( 'default_html', '' ),
+					'smart_config' => $this->param( 'smart_config', '' ),
 				);
 
 				foreach ( $default_props as $d_key => $d_value ) {
@@ -1202,6 +1200,11 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 
 				if ( is_numeric( $active ) && 0 === intval( $active ) ) {
 					unset( $global_styles[ $identifier ] );
+				}
+
+				$smart_config = $this->param( 'smart_config', '' );
+				if ( ! empty( $smart_config ) ) {
+					$global_styles[ $identifier ]['smart_config'] = json_decode( stripslashes( $smart_config ), true );;
 				}
 			}
 
@@ -1859,6 +1862,29 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			delete_user_meta( $user_id, 'distraction_free' );
 
 			$this->json( get_user_meta( $user_id, 'froalaMode' ) );
+		}
+
+
+		/**
+		 * Update a post meta
+		 * used on lp-build mostly
+		 */
+		public function action_update_post_meta() {
+			/* Prevent updating unwanted things */
+			$allowed_meta_keys = array( 'tve_tpl_button_data' );
+
+			$meta_key = $this->param( 'meta_key' );
+
+			if ( ! in_array( $meta_key, $allowed_meta_keys, true ) ) {
+				$this->error( __( 'You are not allowed to update this meta', 'thrive-cb' ) );
+			}
+
+			$value   = $this->param( 'meta_value' );
+			$post_id = $this->param( 'post_id', 0 );
+
+			update_post_meta( $post_id, $meta_key, $value );
+
+			$this->json( get_post_meta( $post_id, $meta_key, true ) );
 		}
 
 		/**

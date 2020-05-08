@@ -277,7 +277,12 @@ class Thrive_Dash_Api_Zoom {
 					return json_decode( $response['body'], true );
 					break;
 				case 400:
-					throw new Thrive_Dash_Api_Zoom_Exception( 'Missing a required parameter or calling invalid method' );
+
+					// Add API response message due to webinar restritions from zoom UI that are not matching
+					$resp_message = ! empty( $response['body'] ) && tve_is_json_encoded( $response['body'] ) ? json_decode( $response['body'], true ) : array();
+					$message      = ! empty( $resp_message['message'] ) ? tve_sanitize_data_recursive( $resp_message['message'] ) : 'Missing a required parameter or calling invalid method';
+
+					throw new Thrive_Dash_Api_Zoom_Exception( $message );
 					break;
 				case 401:
 					throw new Thrive_Dash_Api_Zoom_Exception( 'Invalid API key provided!' );

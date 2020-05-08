@@ -20,5 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="tve-control" data-view="ExternalFields"></div>
 		<div class="tve-control" data-key="responsive_video" data-initializer="responsive_video"></div>
 		<div class="tve-control" data-key="style" data-initializer="responsive_video_style"></div>
+		<div class="tve-control" data-key="resize" data-initializer="responsiveVideoResize"></div>
 	</div>
 </div>

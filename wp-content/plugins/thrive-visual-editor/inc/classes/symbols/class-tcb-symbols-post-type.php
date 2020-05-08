@@ -122,7 +122,7 @@ class TCB_Symbols_Post_Type {
 
 		if ( $post_type === self::SYMBOL_POST_TYPE ) {
 			//added here to prevent google indexing
-			if ( ! is_user_logged_in() ) {
+			if ( ! is_user_logged_in() || ! TCB_Product::has_post_access( $post_id ) ) {
 				wp_redirect( home_url() );
 				exit();
 			}

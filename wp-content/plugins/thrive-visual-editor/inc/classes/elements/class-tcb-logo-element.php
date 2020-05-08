@@ -58,17 +58,23 @@ class TCB_Logo_Element extends TCB_Image_Element {
 
 		/* add the logo control */
 		$components[ TCB_Logo::COMPONENT ] = array(
-			'config' => array(
-				'ImageSize' => array(
+			'config'            => array(
+				'ImageSize'    => array(
 					'config'  => array(
 						'default' => '240',
 						'min'     => '20',
 						'max'     => '1024',
-						'label'   => __( 'Logo Size', 'thrive-cb' ),
+						'label'   => __( 'Size', 'thrive-cb' ),
 						'um'      => array( 'px', '%' ),
 						'css'     => 'width',
 					),
 					'extends' => 'ImageSize',
+				),
+				'ImageAltText' => array(
+					'config'  => array(
+						'label' => __( 'Alt Text', 'thrive-cb' ),
+					),
+					'extends' => 'LabelInput',
 				),
 			),
 			'disabled_controls' => array(

@@ -37,7 +37,7 @@ class TCB_Utils {
 			if ( is_null( $value ) ) {
 				$attributes .= ' ' . $key;
 			} else {
-				$attributes .= ' ' . $key . '="' . $value . '"';
+				$attributes .= ' ' . $key . '="' . esc_attr( $value ) . '"';
 			}
 		}
 
@@ -639,7 +639,7 @@ class TCB_Utils {
 
 		$result = parse_url( $import );
 		if ( $result ) {
-			$data['base_url'] = 'https://' . $result['host'] . $result['path'];
+			$data['base_url'] = ( isset( $result['host'] ) ? 'https://' . $result['host'] : '' ) . $result['path'];
 
 			parse_str( $result['query'], $query );
 			list( $family, $weights ) = explode( ':', $query['family'] );

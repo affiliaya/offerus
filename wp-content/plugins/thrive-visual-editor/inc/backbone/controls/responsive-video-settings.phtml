@@ -75,6 +75,45 @@
 	</div>
 </div>
 
+<div class="tcb-floating-video"></div>
+
+<div class="tcb-floating-settings-container video-settings-wrapper mb-5">
+	<div class="control-grid">
+		<label>
+			<?php echo __( 'Float Position', 'thrive-cb' ); ?>
+		</label>
+
+		<select id="tcb-float-position" class="select change white-bg" data-fn="floatChanged">
+			<# this.float.forEach( size => { #>
+			<option value="<#= size #>">
+				<#= size #>
+			</option>
+			<# }) #>
+		</select>
+	</div>
+	<div class="tcb-player-width">
+		<div class="control-grid fluid-input tcb-player-width">
+			<div class="tve-adjust-player-width no-space input-small fill" data-adjust="player-width"></div>
+		</div>
+	</div>
+
+	<div class="tcb-player-padding">
+		<div class="control-grid fluid-input tcb-player-padding1 pb-0">
+			<div class="tve-adjust-player-padding no-space input-small fill" data-adjust="player-padding"></div>
+		</div>
+
+		<div class="control-grid fluid-input tcb-player-padding2 pb-5">
+			<div class="tve-adjust-player-padding no-space input-small fill" data-adjust="player-padding"></div>
+		</div>
+	</div>
+
+	<div class="tcb-float-visibility" data-view="Devices" data-extends="ButtonGroup"></div>
+
+	<div class="tcb-float-close"></div>
+
+	<div class="tcb-float-preview"></div>
+</div>
+
 <div class="tve-advanced-controls extend-grey">
 	<div class="dropdown-header" data-prop="advanced">
 		<span>
@@ -100,6 +139,17 @@
 				<?php echo __( 'Video Thumbnail', 'thrive-cb' ); ?>
 			</label>
 			<div class="tve-video-thumbnail-control full-width"></div>
+
+			<div class="tcb-player-icon-wrapper">
+				<div class="pt-5 pb-5">
+					<?php echo __( 'Configure Play Icon', 'thrive-cb' ) ?>
+				</div>
+				<div class="tcb-player-icon-settings mt-5 mb-5 pl-5 pr-5 pt-5">
+					<div class="tcb-player-icon-picker pb-5"></div>
+					<div class="tcb-player-icon-color pb-5"></div>
+					<div class="tcb-player-icon-size pb-5"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

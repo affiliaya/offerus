@@ -102,9 +102,14 @@ class Thrive_Dash_List_Connection_Wordpress extends Thrive_Dash_List_Connection_
 	protected function _getRoles() {
 
 		$user_roles = get_editable_roles();
-		unset( $user_roles['administrator'] );
 
-		return $user_roles;
+		if ( ! isset( $user_roles['subscriber'] ) ) {
+			return array();
+		}
+
+		return array(
+			'subscriber' => $user_roles['subscriber'],
+		);
 	}
 
 	/**

@@ -50,15 +50,7 @@ class TCB_Post_Read_More_Element extends TCB_Button_Element {
 	 * @return string
 	 */
 	protected function html() {
-		$button = tcb_template( 'elements/button.php', $this, true );
-
-		/* replace some classes and some text */
-		$button = str_replace(
-			array( 'thrv-button', 'tcb-button-link', 'Default Button Text' ),
-			array( 'tcb-post-read-more', 'tcb-button-link tcb-post-read-more-link', 'Read More' ),
-			$button );
-
-		return $button;
+		return  tcb_template( 'elements/read-more.php', $this, true );;
 	}
 
 	/**

@@ -16607,6 +16607,8 @@ if (typeof jQuery !== 'undefined') {
 				if ( value.length === 1 ) {
 					value = value[ 0 ];
 				}
+			} else if ( type === 'checkbox' ) {
+				value = $element.is( ':checked' ) ? $element.val() : '';
 			}
 
 			return value;
@@ -17145,7 +17147,7 @@ if (typeof jQuery !== 'undefined') {
 					ajax.always( function () {
 						TVE_Dash.hideLoader();
 					} );
-				} else{
+				} else {
 					self.close();
 				}
 

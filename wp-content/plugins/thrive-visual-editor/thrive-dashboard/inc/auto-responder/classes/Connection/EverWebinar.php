@@ -105,7 +105,7 @@ class Thrive_Dash_List_Connection_EverWebinar extends Thrive_Dash_List_Connectio
 	 * @return bool|mixed|Thrive_Dash_List_Connection_Abstract
 	 */
 	public function addSubscriber( $list_identifier, $arguments ) {
-		$args = array();
+		$args = array( 'schedule' => 0 );
 		if ( is_array( $arguments ) ) {
 
 			if ( isset( $arguments['everwebinar_schedule'] ) ) {
@@ -134,7 +134,17 @@ class Thrive_Dash_List_Connection_EverWebinar extends Thrive_Dash_List_Connectio
 		}
 
 		try {
-			$this->getApi()->register_to_webinar( $list_identifier, $args );
+
+			$api    = $this->getApi();
+			$webnar = $api->get_webinar_schedules( array( 'webinar_id' => $list_identifier ) );
+
+			if ( isset( $webnar['schedules'] ) ) {
+				$schedules = array_values( $webnar['schedules'] );
+
+				$args['schedule'] = $schedules[0]['schedule_id'];
+			}
+
+			$api->register_to_webinar( $list_identifier, $args );
 		} catch ( Exception $e ) {
 			return $this->error( $e->getMessage() );
 		}

@@ -38,20 +38,30 @@
     <h3 class="tvd-section-title"><?php echo __( "General Settings", TVE_DASH_TRANSLATE_DOMAIN ) ?></h3>
 
     <div id="tve_dash_general_settings">
-		<?php foreach ( $settings as $setting ): ?>
-			<?php if ( ! in_array( $setting['type'], $accepted_settings ) ): continue; endif; ?>
-            <div class="tvd-row-settings" data-setting-name="<?php echo $setting['name']; ?>" data-setting-type="<?php echo $setting['type']; ?>">
-				<?php if ( $setting['multiple'] && is_array( $setting['value'] ) ): ?>
-					<?php foreach ( $setting['value'] as $key => $value ): ?>
-						<?php include dirname( __FILE__ ) . '/text_setting_row.phtml'; ?>
-					<?php endforeach; ?>
-				<?php else: ?>
-					<?php $value = $setting['value']; ?>
-					<?php include dirname( __FILE__ ) . '/text_setting_row.phtml'; ?>
-				<?php endif; ?>
-            </div>
-            <hr>
-		<?php endforeach; ?>
+	    <?php foreach ( $settings as $setting ): ?>
+		    <?php if ( ! in_array( $setting['type'], $accepted_settings ) ): continue; endif; ?>
+
+			<div class="tvd-row-settings" data-setting-name="<?php echo $setting['name']; ?>" data-setting-type="<?php echo $setting['type']; ?>">
+			    <?php if ( $setting['type'] === 'text' ) : ?>
+
+				    <?php if ( $setting['multiple'] && is_array( $setting['value'] ) ): ?>
+					    <?php foreach ( $setting['value'] as $key => $value ): ?>
+						    <?php include dirname( __FILE__ ) . '/text_setting_row.phtml'; ?>
+					    <?php endforeach; ?>
+				    <?php else: ?>
+					    <?php $value = $setting['value']; ?>
+					    <?php include dirname( __FILE__ ) . '/text_setting_row.phtml'; ?>
+				    <?php endif; ?>
+
+			    <?php elseif ( $setting['type'] === 'checkbox' ): ?>
+					<p>
+						<input type="checkbox" id="<?php echo $setting['id'] ?>" <?php echo( ! empty( $setting['value'] ) ? ' checked' : '' ); ?> value="1" class="noUi-target noUi-ltr noUi-horizontal noUi-background tvd-save-option">
+						<label for="<?php echo $setting['id'] ?>"><?php echo __( 'Disable all Google Fonts loaded by Thrive on your website', TVE_DASH_TRANSLATE_DOMAIN ); ?></label>
+					</p>
+			    <?php endif; ?>
+			</div>
+			<hr>
+	    <?php endforeach; ?>
     </div>
 </div>
 

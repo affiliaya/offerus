@@ -10,9 +10,9 @@
 if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 
 	class TCB_Landing_Page extends TCB_Post {
-		const HOOK_HEAD       = 'tcb_landing_head';
-		const HOOK_BODY_OPEN  = 'tcb_landing_body_open';
-		const HOOK_FOOTER     = 'tcb_landing_footer';
+		const HOOK_HEAD = 'tcb_landing_head';
+		const HOOK_BODY_OPEN = 'tcb_landing_body_open';
+		const HOOK_FOOTER = 'tcb_landing_footer';
 		const HOOK_BODY_CLOSE = 'tcb_landing_body_close';
 
 		/**
@@ -121,6 +121,13 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		private $cloud_base_url;
 
 		/**
+		 * Registry holding LP instances
+		 *
+		 * @var array
+		 */
+		private static $instances = array();
+
+		/**
 		 * sent all necessary parameters to avoid extra calls to get_post_meta
 		 *
 		 * @param int    $landing_page_id
@@ -191,20 +198,14 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 					}
 				}
 
-				add_action( 'tcb_get_extra_global_variables', array( $this, 'output_landing_page_variables' ) );
-
-				add_filter( 'tcb_get_extra_global_styles', array( $this, 'add_landing_page_styles' ) );
-
-				add_filter( 'tcb_prepare_global_variables_for_front', array( $this, 'prepare_landing_page_variables_for_front' ), 10, 2 );
 			}
 
 			$this->globals     = empty( $this->globals ) ? array() : $this->globals;
 			$this->page_events = empty( $this->page_events ) ? array() : $this->page_events;
 		}
 
-
 		/**
-		 * Singleton implementation
+		 * Get a LP instance. Makes sure each needed LP is not instantiated more than once
 		 *
 		 * @param $landing_page_id
 		 * @param $landing_page_template
@@ -212,9 +213,12 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 * @return TCB_Landing_Page
 		 */
 		public static function get_instance( $landing_page_id, $landing_page_template = null ) {
-			return new static( $landing_page_id, $landing_page_template );
-		}
+			if ( empty( static::$instances[ $landing_page_id ] ) ) {
+				static::$instances[ $landing_page_id ] = new static( $landing_page_id, $landing_page_template );
+			}
 
+			return static::$instances[ $landing_page_id ];
+		}
 
 		/**
 		 * outputs the HEAD section specific to the landing page
@@ -258,10 +262,22 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 *
 		 * @return array
 		 */
-		public function add_landing_page_styles( $global_styles = array() ) {
+		public static function add_landing_page_styles( $global_styles = array() ) {
+			$post_id = get_the_ID();
 
-			foreach ( $this->template_styles as $element_type => $value ) {
-				$global_styles[] = get_post_meta( $this->id, 'thrv_lp_template_' . $element_type, true );
+			/* make sure we send lp elements style properly while changing other global styles */
+			if ( wp_doing_ajax() && empty( $post_id ) && isset( $_POST['post_id'] ) ) {
+				$post_id = $_POST['post_id'];
+			}
+			if ( tve_post_is_landing_page( $post_id ) ) {
+				$element_type = array(
+					'button',
+					'section',
+					'contentbox',
+				);
+				foreach ( $element_type as $type ) {
+					$global_styles[] = get_post_meta( $post_id, 'thrv_lp_template_' . $type, true );
+				}
 			}
 
 			return $global_styles;
@@ -272,30 +288,32 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 *
 		 * @return array
 		 */
-		public function prepare_landing_page_variables_for_front() {
+		public static function prepare_landing_page_variables_for_front() {
 
 			$search  = array();
 			$replace = array();
+			$post_id = get_the_ID();
+			if ( tve_post_is_landing_page( $post_id ) ) {
+				$set_colors    = get_post_meta( $post_id, 'thrv_lp_template_colours', true );
+				$set_gradients = get_post_meta( $post_id, 'thrv_lp_template_gradients', true );
 
-			$set_colors    = get_post_meta( $this->id, 'thrv_lp_template_colours', true );
-			$set_gradients = get_post_meta( $this->id, 'thrv_lp_template_gradients', true );
+				if ( ! is_array( $set_colors ) ) {
+					$set_colors = array();
+				}
 
-			if ( ! is_array( $set_colors ) ) {
-				$set_colors = array();
-			}
+				if ( ! is_array( $set_gradients ) ) {
+					$set_gradients = array();
+				}
 
-			if ( ! is_array( $set_gradients ) ) {
-				$set_gradients = array();
-			}
+				foreach ( $set_colors as $color ) {
+					$search[]  = 'var(' . TVE_LP_COLOR_VAR_CSS_PREFIX . $color['id'] . ')';
+					$replace[] = $color['color'];
 
-			foreach ( $set_colors as $color ) {
-				$search[]  = 'var(' . TVE_LP_COLOR_VAR_CSS_PREFIX . $color['id'] . ')';
-				$replace[] = $color['color'];
-
-			}
-			foreach ( $set_gradients as $gradient ) {
-				$search[]  = 'var(' . TVE_LP_GRADIENT_VAR_CSS_PREFIX . $gradient['id'] . ')';
-				$replace[] = $gradient['gradient'];
+				}
+				foreach ( $set_gradients as $gradient ) {
+					$search[]  = 'var(' . TVE_LP_GRADIENT_VAR_CSS_PREFIX . $gradient['id'] . ')';
+					$replace[] = $gradient['gradient'];
+				}
 			}
 
 			return array(
@@ -340,25 +358,27 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 *
 		 * This variables comes from
 		 */
-		public function output_landing_page_variables() {
+		public static function output_landing_page_variables() {
+			$post_id = get_the_ID();
+			if ( tve_post_is_landing_page( $post_id ) ) {
+				$tpl_colors    = get_post_meta( $post_id, 'thrv_lp_template_colours', true );
+				$tpl_gradients = get_post_meta( $post_id, 'thrv_lp_template_gradients', true );
 
-			$tpl_colors    = get_post_meta( $this->id, 'thrv_lp_template_colours', true );
-			$tpl_gradients = get_post_meta( $this->id, 'thrv_lp_template_gradients', true );
+				if ( ! is_array( $tpl_colors ) ) {
+					$tpl_colors = array();
+				}
 
-			if ( ! is_array( $tpl_colors ) ) {
-				$tpl_colors = array();
-			}
-
-			if ( ! is_array( $tpl_gradients ) ) {
-				$tpl_gradients = array();
-			}
+				if ( ! is_array( $tpl_gradients ) ) {
+					$tpl_gradients = array();
+				}
 
 
-			foreach ( $tpl_colors as $color ) {
-				echo TVE_LP_COLOR_VAR_CSS_PREFIX . $color['id'] . ':' . $color['color'] . ';';
-			}
-			foreach ( $tpl_gradients as $gradient ) {
-				echo TVE_LP_GRADIENT_VAR_CSS_PREFIX . $gradient['id'] . ':' . $gradient['gradient'] . ';';
+				foreach ( $tpl_colors as $color ) {
+					echo TVE_LP_COLOR_VAR_CSS_PREFIX . $color['id'] . ':' . $color['color'] . ';';
+				}
+				foreach ( $tpl_gradients as $gradient ) {
+					echo TVE_LP_GRADIENT_VAR_CSS_PREFIX . $gradient['id'] . ':' . $gradient['gradient'] . ';';
+				}
 			}
 		}
 
@@ -1676,7 +1696,9 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 				TCB_Landing_Page_Cloud_Templates_Api::getInstance()->download( $cloud_template_id );
 			}
 
-			return tcb_landing_page( $page_id )->set_cloud_template( $cloud_template_id );
+			$landing_page = new static( $page_id, null );
+
+			return $landing_page->set_cloud_template( $cloud_template_id );
 		}
 	}
 
@@ -1737,4 +1759,10 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 */
 		return apply_filters( 'tcb_landing_page_default_content', $content, $is_lightbox, $file_suffix );
 	}
+
+	add_action( 'tcb_get_extra_global_variables', array( 'TCB_Landing_Page', 'output_landing_page_variables' ) );
+
+	add_filter( 'tcb_get_extra_global_styles', array( 'TCB_Landing_Page', 'add_landing_page_styles' ) );
+
+	add_filter( 'tcb_prepare_global_variables_for_front', array( 'TCB_Landing_Page', 'prepare_landing_page_variables_for_front' ), 10, 2 );
 }

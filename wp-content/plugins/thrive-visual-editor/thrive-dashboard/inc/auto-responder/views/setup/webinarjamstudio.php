@@ -4,26 +4,39 @@
 		<input type="hidden" name="api" value="<?php echo $this->getKey() ?>"/>
 		<div class="tvd-input-field">
 			<input id="tvd-wj-api-key" type="text" name="connection[key]"
-			       value="<?php echo $this->param( 'key' ) ?>">
+				   value="<?php echo $this->param( 'key' ) ?>">
 			<label for="tvd-wj-api-key"><?php echo __( "API key", TVE_DASH_TRANSLATE_DOMAIN ) ?></label>
 		</div>
 		<?php $version = $this->param( 'version' ); ?>
 
-        <div class="tvd-col tvd-s12 tvd-m6 tvd-no-padding">
-            <p>
-                <input class="tvd-version-1 tvd-api-show-extra-options" name="connection[version]" type="radio" value="1"
-                       id="tvd-version-1" <?php echo ! empty( $version ) && $version == 1 ? 'checked="checked"' : ''; ?> />
-                <label for="tvd-version-1"><?php echo __( 'New version', TVE_DASH_TRANSLATE_DOMAIN ); ?></label>
-            </p>
-        </div>
+		<?php if ( $this->isConnected() && 4 !== (int) $version ) : ?>
+			<div class="tvd-col tvd-s12 tvd-m6 tvd-no-padding">
+				<p>
+					<input class="tvd-version-1 tvd-api-show-extra-options" name="connection[version]" type="radio" value="1"
+						   id="tvd-version-1" <?php echo ! empty( $version ) && $version == 1 ? 'checked="checked"' : ''; ?> />
+					<label for="tvd-version-1"><?php echo __( 'New version', TVE_DASH_TRANSLATE_DOMAIN ); ?></label>
+				</p>
+			</div>
 
-        <div class="tvd-col tvd-s12 tvd-m6 tvd-no-padding">
-            <p>
-                <input class="tvd-version-0 tvd-api-hide-extra-options" name="connection[version]" type="radio" value="0"
-                       id="tvd-version-0" <?php echo empty( $version ) || $version == 0 ? 'checked="checked"' : ''; ?> />
-                <label for="tvd-version-0"><?php echo __( 'Old version', TVE_DASH_TRANSLATE_DOMAIN ); ?></label>
-            </p>
-        </div>
+			<div class="tvd-col tvd-s12 tvd-m6 tvd-no-padding">
+				<p>
+					<input class="tvd-version-0 tvd-api-hide-extra-options" name="connection[version]" type="radio" value="0"
+						   id="tvd-version-0" <?php echo empty( $version ) || $version == 0 ? 'checked="checked"' : ''; ?> />
+					<label for="tvd-version-0"><?php echo __( 'Old version', TVE_DASH_TRANSLATE_DOMAIN ); ?></label>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<div class="tvd-col tvd-s12 tvd-m12 tvd-no-padding">
+			<p>
+				<input class="tvd-version-4 tvd-api-show-extra-options" name="connection[version]" type="radio" value="<?php echo TD_Inbox::WEBINARJAM_V4 ?>"
+					   id="tvd-version-4" <?php echo empty( $version ) || $version == TD_Inbox::WEBINARJAM_V4 ? 'checked="checked"' : ''; ?> />
+				<label for="tvd-version-4">
+					<?php echo sprintf( __( 'Version %s', TVE_DASH_TRANSLATE_DOMAIN ), TD_Inbox::WEBINARJAM_V4 ); ?>
+				</label>
+			</p>
+		</div>
+
 		<?php $this->display_video_link(); ?>
 	</form>
 </div>

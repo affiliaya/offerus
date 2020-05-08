@@ -15,16 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<i></i>
 	</div>
 	<div class="dropdown-content">
-		<div class="tve-control tcb-icon-side-wrapper" data-key="icon_side" data-icon="true" data-view="ButtonGroup"></div>
-		<div class="tcb-text-center mt-10" data-icon="true">
-			<span class="click tcb-text-uppercase clear-format" data-fn="remove_icon">
-				<?php tcb_icon( 'close2' ) ?>&nbsp;<?php echo __( 'Remove Input Icon', 'thrive-cb' ) ?>
-			</span>
-		</div>
-		<div class="tve-control" data-icon="false"  data-view="ModalPicker"></div>
-		<hr>
+		<div class="tve-control" data-view="ShowLabel"></div>
 		<div class="tve-control" data-key="placeholder" data-view="LabelInput"></div>
-		<hr>
-		<div class="tve-control" data-key="required" data-view="Checkbox"></div>
+		<div class="tve-control" data-view="Rows"></div>
+		<div class="tve-control" data-view="MinChar"></div>
+		<div class="tve-control" data-view="MaxChar"></div>
+		<div class="tve-control" data-view="ShowCounter"></div>
+		<div class="tve-control" data-view="Resizing"></div>
 	</div>
 </div>

@@ -339,6 +339,15 @@ function tve_dash_backbone_templates() {
 }
 
 /**
+ * Returns the disable state of the google fonts
+ *
+ * @return bool
+ */
+function tve_dash_is_google_fonts_blocked() {
+	return (bool) tve_dash_get_option( 'tve_google_fonts_disable_api_call', '' );
+}
+
+/**
  * output script nodes for backbone templates
  *
  * @param array $templates

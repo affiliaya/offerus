@@ -323,6 +323,13 @@ class TCB_Editor {
 	public function main_frame_dequeue() {
 		wp_dequeue_script( 'membermouse-blockUI' );
 		wp_deregister_script( 'membermouse-blockUI' );
+		/* TAR-5246 - floating preview in editor is not working because of the mm scripts */
+		wp_dequeue_script( 'mm-common-core.js' );
+		wp_deregister_script( 'mm-common-core.js' );
+		wp_dequeue_script( 'mm-preview.js' );
+		wp_deregister_script( 'mm-preview.js' );
+		wp_dequeue_script( 'membermouse-socialLogin' );
+		wp_deregister_script( 'membermouse-socialLogin' );
 
 		/* Uncode theme CSS incorrectly loading CSS all over admin and messing up TAr editor page */
 		wp_dequeue_style( 'ot-admin' );
@@ -421,6 +428,7 @@ class TCB_Editor {
 			'dash_url'                     => TVE_DASH_URL,
 			'pinned_category'              => $this->elements->pinned_category,
 			'social_fb_app_id'             => tve_get_social_fb_app_id(),
+			'disable_google_fonts'         => tve_dash_is_google_fonts_blocked(),
 			'api_connections'              => Thrive_Dash_List_Manager::getAvailableAPIs( true, array(
 				'email',
 				'social',
@@ -486,7 +494,7 @@ class TCB_Editor {
 				'mega_desc_tpl'            => TCB_Menu_Walker::$mega_description_template,
 				'mega_image_tpl'           => TCB_Menu_Walker::$mega_image_template,
 			),
-			'froalaMode'                  => get_user_meta( $current_user->ID, 'froalaMode', true ),
+			'froalaMode'                   => get_user_meta( $current_user->ID, 'froalaMode', true ),
 			'default_styles'               => tve_get_default_styles( false ),
 			'post_login_actions'           => TCB_Login_Element_Handler::get_post_login_actions(),
 		);

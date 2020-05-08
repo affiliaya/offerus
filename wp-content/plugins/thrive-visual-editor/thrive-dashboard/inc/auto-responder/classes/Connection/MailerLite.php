@@ -9,6 +9,7 @@
 class Thrive_Dash_List_Connection_MailerLite extends Thrive_Dash_List_Connection_Abstract {
 	/**
 	 * Return the connection type
+	 *
 	 * @return String
 	 */
 	public static function getType() {
@@ -158,6 +159,8 @@ class Thrive_Dash_List_Connection_MailerLite extends Thrive_Dash_List_Connection
 			/** @var Thrive_Dash_Api_MailerLite_Groups $groupsApi */
 			$groupsApi = $api->groups();
 
+			$args['fields'] = array_merge( $args['fields'], $this->_generateCustomFields( $arguments ) );
+
 			$groupsApi->addSubscriber( $list_identifier, $args );
 
 			return true;
@@ -171,10 +174,148 @@ class Thrive_Dash_List_Connection_MailerLite extends Thrive_Dash_List_Connection
 
 	/**
 	 * Return the connection email merge tag
+	 *
 	 * @return String
 	 */
 	public static function getEmailMergeTag() {
 		return '{$email}';
 	}
 
+	/**
+	 * @param      $params
+	 * @param bool $force
+	 * @param bool $get_all
+	 *
+	 * @return array|mixed
+	 */
+	public function get_api_custom_fields( $params, $force = false, $get_all = false ) {
+		// Serve from cache if exists and requested
+		$cached_data = $this->_get_cached_custom_fields();
+		if ( false === $force && ! empty( $cached_data ) ) {
+			return $cached_data;
+		}
+
+		$custom_data   = array();
+		$allowed_types = array(
+			'TEXT',
+		);
+
+		try {
+			/** @var Thrive_Dash_Api_MailerLite $api */
+			$custom_fields = $this->getApi()->fields()->get();
+
+			if ( is_array( $custom_fields ) ) {
+				foreach ( $custom_fields as $field ) {
+					if ( ! empty( $field->type ) && in_array( $field->type, $allowed_types, true ) ) {
+						$custom_data[] = $this->_normalize_custom_field( $field );
+					}
+				}
+			}
+		} catch ( Exception $e ) {
+		}
+
+		$this->_save_custom_fields( $custom_data );
+
+		return $custom_data;
+	}
+
+	/**
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public function _normalize_custom_field( $field ) {
+		return array(
+			'id'    => $field->id,
+			'name'  => $field->title,
+			'type'  => $field->type,
+			'label' => $field->title,
+		);
+	}
+
+	/**
+	 * Generate custom fields array
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	private function _generateCustomFields( $args ) {
+		$custom_fields = $this->get_api_custom_fields( array() );
+		$ids           = $this->buildMappedCustomFields( $args );
+		$result        = array();
+
+		foreach ( $ids as $key => $id ) {
+			$field = array_filter(
+				$custom_fields,
+				function ( $item ) use ( $id ) {
+					return (int) $item['id'] === (int) $id['value'];
+				}
+			);
+
+			$field = array_values( $field );
+
+			if ( ! isset( $field[0] ) ) {
+				continue;
+			}
+
+			$chunks    = explode( ' ', $field[0]['name'] );
+			$chunks    = array_map( 'strtolower', $chunks );
+			$field_key = implode( '_', $chunks );
+
+			$result[ $field_key ] = $args[ $id['type'] . '_' . $key ];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Build mapped custom fields array based on form params
+	 *
+	 * @param $args
+	 *
+	 * @return array
+	 */
+	public function buildMappedCustomFields( $args ) {
+		$mapped_data = array();
+
+		// Should be always base_64 encoded of a serialized array
+		if ( empty( $args['tve_mapping'] ) || ! tve_dash_is_bas64_encoded( $args['tve_mapping'] ) || ! is_serialized( base64_decode( $args['tve_mapping'] ) ) ) {
+			return $mapped_data;
+		}
+
+		$form_data = unserialize( base64_decode( $args['tve_mapping'] ) );
+
+		$mapped_fields = array_map(
+			function ( $field ) {
+				return $field['id'];
+			},
+			$this->_mapped_custom_fields
+		);
+
+		foreach ( $mapped_fields as $mapped_field_name ) {
+
+			// Extract an array with all custom fields (siblings) names from form data
+			// {ex: [mapping_url_0, .. mapping_url_n] / [mapping_text_0, .. mapping_text_n]}
+			$cf_form_fields = preg_grep( "#^{$mapped_field_name}#i", array_keys( $form_data ) );
+
+			if ( ! empty( $cf_form_fields ) && is_array( $cf_form_fields ) ) {
+
+				foreach ( $cf_form_fields as $cf_form_name ) {
+					if ( empty( $form_data[ $cf_form_name ][ $this->_key ] ) ) {
+						continue;
+					}
+
+					$field_id = str_replace( $mapped_field_name . '_', '', $cf_form_name );
+
+					$mapped_data[ $field_id ] = array(
+						'type'  => $mapped_field_name,
+						'value' => $form_data[ $cf_form_name ][ $this->_key ],
+					);
+				}
+			}
+		}
+
+		return $mapped_data;
+	}
 }

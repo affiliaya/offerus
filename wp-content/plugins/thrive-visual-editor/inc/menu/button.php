@@ -18,9 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<i></i>
 		</div>
 		<div class="dropdown-content">
-			<div class="tve-control gl-st-button-toggle-1" data-view="MasterColor"></div>
-			<div class="master_color_warning global-edit-warning tcb-hide">
-				<?php echo __( 'Changing the Master Color will unlink the element from any global color/gradient which was applied on it previously.', 'thrive-cb' ); ?>
+			<div class="tve-control gl-st-button-toggle-1" data-view="ButtonPalettes"></div>
+			<div class="tve-master-color">
+				<div class="tve-control gl-st-button-toggle-1" data-view="MasterColor"></div>
+				<div class="master_color_warning global-edit-warning tcb-hide">
+					<?php echo __( 'Changing the Master Color will unlink the element from any global color/gradient which was applied on it previously.', 'thrive-cb' ); ?>
+				</div>
 			</div>
 			<div class="hide-states">
 				<div class="tve-control" data-view="SecondaryText"></div>

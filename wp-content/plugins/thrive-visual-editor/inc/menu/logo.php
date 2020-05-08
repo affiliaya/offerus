@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="tve-<?php echo TCB_Logo::COMPONENT; ?>-component" class="tve-component" data-view="Logo">
 	<div class="dropdown-header" data-prop="docked">
 		<?php echo __( 'Logo Options', 'thrive-cb' ); ?>
-		<i></i>
 	</div>
 	<div class="dropdown-content">
 		<div class="tve-logo-p">
@@ -31,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<hr/>
 		</div>
 		<div class="tve-control mt-10" data-view="ImageSize"></div>
+		<div class="tve-control" data-view="ImageAltText"></div>
 		<hr>
 		<div class="tve-control no-space" data-key="ToggleURL" data-extends="Switch" data-label="<?php echo __( 'Add link to Logo', 'thrive-cb' ); ?>"></div>
 		<div class="logo-link mt-10"></div>

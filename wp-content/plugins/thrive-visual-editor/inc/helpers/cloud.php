@@ -132,19 +132,13 @@ function tve_get_cloud_template_data( $tag, $args = array() ) {
 }
 
 /**
- * get a list of templates from the cloud
- * search first in a local wp_option (to avoid making too many requests to the templates server)
- * cache the results for a set period of time
+ * Returns the cloud landing pages transient name
  *
- * default cache interval: 8h
+ * @param array $filters
  *
- *
- * @param array $filters filtering options
- *
- * @return array
+ * @return string
  */
-function tve_get_cloud_templates( $filters = array() ) {
-
+function tve_get_cloud_templates_transient_name( $filters = array() ) {
 	$transient_name = 'tcb_lp';
 	if ( ! empty( $filters ) ) {
 		$transient_name .= '_' . md5( serialize( $filters ) );
@@ -158,7 +152,23 @@ function tve_get_cloud_templates( $filters = array() ) {
 	 *
 	 * @return string new transient name
 	 */
-	$transient_name = apply_filters( 'tve_cloud_templates_transient_name', $transient_name, $filters );
+	return apply_filters( 'tve_cloud_templates_transient_name', $transient_name, $filters );
+}
+
+/**
+ * get a list of templates from the cloud
+ * search first in a local wp_option (to avoid making too many requests to the templates server)
+ * cache the results for a set period of time
+ *
+ * default cache interval: 8h
+ *
+ *
+ * @param array $filters filtering options
+ *
+ * @return array
+ */
+function tve_get_cloud_templates( $filters = array() ) {
+	$transient_name = tve_get_cloud_templates_transient_name( $filters );
 
 	if ( defined( 'TCB_CLOUD_DEBUG' ) && TCB_CLOUD_DEBUG ) {
 		delete_transient( $transient_name );

@@ -9,6 +9,9 @@
 		<option value="inherit"></option>
 	</select>
 </label>
+<div class="mt-10 tcb-hidden info-text orange">
+	<span><?php echo sprintf( __( 'You have disabled Google Fonts on your website. Click <a style="display: inline;" target="_blank" href="%s">here</a> to enable Google Fonts.', 'thrive-cb' ), add_query_arg( 'page', 'tve_dash_general_settings_section', admin_url( 'admin.php' ) ) ); ?></span>
+</div>
 
 <#_.each( this.fonts, function( v, section ) { #>
 	<# if ( section === 'google' ) { #>

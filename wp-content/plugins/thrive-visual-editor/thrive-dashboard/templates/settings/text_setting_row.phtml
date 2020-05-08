@@ -1,16 +1,16 @@
-<div class="tvd-row">
-    <div class="tvd-col tvd-m3">
+<div>
+    <div>
         <?php if (($setting['multiple'] && empty($key)) || !$setting['multiple']): ?>
             <?php echo $setting['label']; ?>
         <?php else: ?>
             &nbsp;
         <?php endif; ?>
     </div>
-    <div class="tvd-col tvd-m3 tvd-input-field">
+    <div>
         <input type="<?php echo $setting['type']; ?>" class="<?php echo $setting['class']; ?>"  id="<?php echo $setting['id']; ?>" value="<?php echo $value; ?>">
         <label for="<?php echo $setting['id']; ?>" data-success="<?php echo $setting['data-success']; ?>"  data-error="<?php echo $setting['data-error']; ?>">&nbsp;</label>
     </div>
-    <div class="tvd-col tvd-m6">
+    <div>
         <?php if (($setting['multiple'] && empty($key)) || !$setting['multiple']): ?>
             <a class='tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-green tvd-save-option'> <?php echo __("Save", TVE_DASH_TRANSLATE_DOMAIN); ?></a>
             <?php if ($setting['multiple']): ?>

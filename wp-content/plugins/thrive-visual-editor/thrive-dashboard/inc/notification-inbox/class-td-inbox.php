@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class TD_Inbox {
 
+	const WEBINARJAM_V4 = 4;
+
 	/**
 	 * @var TD_Inbox
 	 */
@@ -71,6 +73,13 @@ final class TD_Inbox {
 	private $_ontraport_slug = 'ontraport';
 
 	/**
+	 * Ontraport slug
+	 *
+	 * @var string
+	 */
+	private $_webinarjam_slug = 'webinarjamstudio';
+
+	/**
 	 * TD_Inbox constructor.
 	 */
 	private function __construct() {
@@ -124,6 +133,7 @@ final class TD_Inbox {
 	public function default_notifications() {
 
 		$gotowebinar_version    = $this->get_api_version( $this->_gtw_slug );
+		$webinarjam_version     = $this->get_api_version( $this->_webinarjam_slug );
 		$gtw_on_without_version = $this->connected_api_without_version( $this->_gtw_slug, $gotowebinar_version );
 		$gtw_version            = $this->api_version_number( $gotowebinar_version );
 
@@ -149,6 +159,11 @@ final class TD_Inbox {
 
 		if ( $this->api_is_connected( $this->_ontraport_slug ) ) {
 			$this->add_notification( 'ontraport_updated' );
+		}
+
+		//Message for V4 for WebinarJam api
+		if ( $this->api_is_connected( $this->_webinarjam_slug ) && self::WEBINARJAM_V4 !== (int) $webinarjam_version ) {
+			$this->add_notification( 'webinarjamstudio_updated' );
 		}
 	}
 
@@ -278,6 +293,18 @@ final class TD_Inbox {
 							This way, your users will be able to subscribe to these when using the "Lead Generation" element.<br />
 							For more information about the Ontraport release, please visit their website <a href="https://ontraport.com/service-status" target="_blank">here</a> .<br/><br/>
 							We highly recommend that you sign up through one of your opt-in forms to make sure that everything is working as expected.',
+						TVE_DASH_TRANSLATE_DOMAIN
+					),
+					'type'  => TD_Inbox_Message::TYPE_INBOX, // to be shown on API list
+				);
+				break;
+			case'webinarjamstudio_updated':
+				$message = array(
+					'title' => __( 'Urgent: Your WebinarJam forms will stop working', TVE_DASH_TRANSLATE_DOMAIN ),
+					'info'  => __(
+						'The 3.0 Version of the WebinarJam platform is closing on March 31st. On this date, the systems will be wiped and any replays or information you have will be permanently deleted.<br /><br />
+							This is why it is crucial for you to migrate all your content to the 4.0 Version before then. It is critical that you go to your WebinarJam account today and upgrade to the new version. This way, you will give yourself ample time to move your content over. <br /><br />
+							After upgrading your WebinarJam account, please make sure to delete and re-add the WebinarJam connection, within your Thrive Dashboard, using the v4 option. Then, you will have to update the connection for all forms on your website that you have previously connected to WebinarJam. <br/>',
 						TVE_DASH_TRANSLATE_DOMAIN
 					),
 					'type'  => TD_Inbox_Message::TYPE_INBOX, // to be shown on API list

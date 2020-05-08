@@ -50,19 +50,6 @@ class TCB_Lead_Generation_Submit_Element extends TCB_Element_Abstract {
 							),
 						),
 					),
-					'MasterColor' => array(
-						'css_suffix' => ' button',
-						'css_prefix' => $prefix_config . ' ',
-						'config'     => array(
-							'default'             => '000',
-							'label'               => __( 'Master Color', 'thrive-cb' ),
-							'important'           => true,
-							'affected_components' => array( 'shadow', 'background', 'borders' ),
-							'options'             => array(
-								'showGlobals' => false,
-							),
-						),
-					),
 					'ButtonWidth' => array(
 						'css_prefix' => $prefix_config . ' ',
 						'config'     => array(
@@ -109,16 +96,7 @@ class TCB_Lead_Generation_Submit_Element extends TCB_Element_Abstract {
 						'css_prefix' => $prefix_config . ' ',
 						'config'     => array(
 							'label'   => __( 'Style', 'thrive-cb' ),
-							'items'   => array(
-								'default'      => __( 'Default', 'thrive-cb' ),
-								'ghost'        => __( 'Ghost', 'thrive-cb' ),
-								'rounded'      => __( 'Rounded', 'thrive-cb' ),
-								'full_rounded' => __( 'Full Rounded', 'thrive-cb' ),
-								'gradient'     => __( 'Gradient', 'thrive-cb' ),
-								'elevated'     => __( 'Elevated', 'thrive-cb' ),
-								'border_1'     => __( 'Border 1', 'thrive-cb' ),
-								'border_2'     => __( 'Border 2', 'thrive-cb' ),
-							),
+							'items'   => array(),
 							'default' => 'default',
 						),
 					),
@@ -175,7 +153,8 @@ class TCB_Lead_Generation_Submit_Element extends TCB_Element_Abstract {
 			),
 		);
 
-		return array_merge( $submit, $this->shared_styles_component() );
+		return $submit;
+//		return array_merge( $submit, $this->shared_styles_component() );
 	}
 
 	/**

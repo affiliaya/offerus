@@ -42,7 +42,8 @@ class TCB_Symbol_Template {
 			$content = do_shortcode( $content );
 
 			//apply thrive shortcodes
-			$content = tve_thrive_shortcodes( $content, true );
+			$keep_config = isset( $config['tve_shortcode_config'] ) ? $config['tve_shortcode_config'] : true;
+			$content     = tve_thrive_shortcodes( $content, $keep_config );
 
 			/* render the content added through WP Editor (element: "WordPress Content") */
 			$content = tve_do_wp_shortcodes( $content, is_editor_page() );
@@ -60,6 +61,8 @@ class TCB_Symbol_Template {
 		}
 
 		$content = apply_filters( 'tcb_symbol_template', $content );
+
+		$content = preg_replace( '!\s+!', ' ', $content );
 
 		return $content;
 	}
@@ -136,7 +139,7 @@ class TCB_Symbol_Template {
 				if ( $wrap ) {
 					$type = substr( TCB_Symbols_Taxonomy::get_symbol_type( $symbol_id ), 0, - 1 );
 
-					$content = TCB_Utils::wrap_content( $content, 'div', '',
+					$content = TCB_Utils::wrap_content( $content, 'div', "thrive-$type",
 						array( 'thrv_wrapper', 'thrv_symbol', 'thrive-shortcode', "thrv_$type", 'tve_no_drag', "thrv_symbol_$symbol_id" ),
 						array(
 							'data-id'            => $symbol_id,
