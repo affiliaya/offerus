@@ -57,7 +57,7 @@ if ( ! isset( $lp_template ) ) {
 			/* Content Width - inherit Content Width directly from LP settings */
 			.thrv-page-section[data-inherit-lp-settings="1"] .tve-page-section-in {
 				max-width: 1080px !important;
-				max-width: var(--page-section-max-width, 1080px) !important;
+				max-width: var(--page-section-max-width) !important;
 			}
 
 			body.tcb-full-header .thrv_header,

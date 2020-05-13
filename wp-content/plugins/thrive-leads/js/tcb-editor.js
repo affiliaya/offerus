@@ -189,7 +189,7 @@ TL_Editor.views.ThriveBoxAction = TCB_AnimViews.ThriveLightbox.extend( {
 						name: prop,
 						value: value
 					} );
-					TVE.Components.lead_generation.getWrapper('form').append( input );
+					TVE.Components.lead_generation.getWrapper( 'form' ).append( input );
 				}
 			} );
 
@@ -387,6 +387,10 @@ TL_Editor.views.ThriveBoxAction = TCB_AnimViews.ThriveLightbox.extend( {
 			list.push( 'thrive_leads_shortcode' );
 
 			return list;
+		} );
+
+		TVE.add_action( 'tcb.symbol.after_save', function ( $element ) {
+			$element.find( '.tve-tl-anim' ).removeClass( 'tve-tl-anim' );
 		} );
 	} );
 

@@ -93,6 +93,7 @@ class TCB_TOC_Element extends TCB_Element_Abstract {
 								),
 							),
 						),
+						'extends' => 'MultipleCheckbox',
 					),
 					'Columns'        => array(
 						'config'  => array(
@@ -183,6 +184,9 @@ class TCB_TOC_Element extends TCB_Element_Abstract {
 				'config' => array(
 					'disabled_controls' => array( 'inner' ),
 				),
+			),
+			'scroll'     => array(
+				'hidden' => false,
 			),
 		);
 	}

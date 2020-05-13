@@ -337,6 +337,13 @@ function tve_compat_content_filters_after_shortcode( $content ) {
 		$content = Form_maker_front_end_main( $content );
 	}
 
+	/* Compat with TOC Plus plugin
+	*/
+	if ( class_exists( 'toc', false ) && method_exists( 'toc', 'the_content' ) ) {
+		global $tic;
+		$content = $tic->the_content( $content );
+	}
+
 	return $content;
 }
 
@@ -691,3 +698,15 @@ function tve_rocket_exclude_css( $excluded_css ) {
 	return $excluded_css;
 }
 
+/**
+ * Compatibility with one signal push notification
+ *
+ * We don't need their scripts inside the editor
+ * Added in wp_head because there is the place where they register their scripts
+ */
+add_action( 'wp_head', function () {
+	if ( is_editor_page_raw() ) {
+		wp_deregister_script( 'remote_sdk' );
+		wp_dequeue_script( 'remote_sdk' );
+	}
+}, PHP_INT_MAX );

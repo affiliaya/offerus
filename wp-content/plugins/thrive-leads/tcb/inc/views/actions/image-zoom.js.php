@@ -33,8 +33,8 @@ if ( typeof img_size === 'undefined' ) {
 	                     } ).removeAttr( "width height" );
 	$clone.appendTo( "body" );
 	$clone.on( 'load', function () {
-		const height = parseFloat( $element.attr( 'height' ) ),
-			width = parseFloat( $element.attr( 'width' ) );
+		const height = parseFloat( $element.attr( 'height' ) || $element.height()),
+			width = parseFloat( $element.attr( 'width' ) || $element.width() );
 		img_size = {
 			"originalWidth": width,
 			"width": width,

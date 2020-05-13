@@ -168,6 +168,10 @@ class TCB_Style_Provider {
 			}
 		}
 
+		if ( tve_dash_is_google_fonts_blocked() ) {
+			$data['@imports'] = array();
+		}
+
 		if ( $return === 'string' ) {
 			$css = $include_fonts ? implode( "", $data['@imports'] ) : '';
 			foreach ( $data['media'] as $media => $css_str ) {
@@ -186,6 +190,6 @@ class TCB_Style_Provider {
 	public function get_css_imports() {
 		$styles = $this->read_styles();
 
-		return isset( $styles['@imports'] ) ? $styles['@imports'] : [];
+		return isset( $styles['@imports'] ) ? $styles['@imports'] : array();
 	}
 }

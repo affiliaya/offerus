@@ -442,10 +442,6 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 			}
 		}
 
-		if ( 1 === $depth && ! $this->has_children && $menu_type === 'mega' && $this->is_editor_page() ) {
-			$item_output .= tcb_template( 'elements/megamenu-no-items.phtml', null, true, 'backbone' );
-		}
-
 		/**
 		 * Filters a menu item's starting output.
 		 *

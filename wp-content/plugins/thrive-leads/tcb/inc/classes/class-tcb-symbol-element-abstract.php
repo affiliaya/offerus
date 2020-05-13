@@ -73,6 +73,7 @@ abstract class TCB_Symbol_Element_Abstract extends TCB_Cloud_Template_Element_Ab
 
 		return tcb_template( 'elements/section-placeholder', array(
 			'icon'       => $this->icon(),
+			'id'         => 'thrive-' . $this->tag(),
 			'class'      => 'thrv_symbol ' . 'thrv_' . $this->tag(),
 			'title'      => $title,
 			'extra_attr' => 'data-shortcode=thrive_' . $this->tag() . ' data-selector="' . '.thrv_symbol' . '.thrv_' . $this->tag() . '" data-tcb-elem-type="' . $this->tag() . '" data-element-name="' . esc_attr( $this->name() ) . '"',

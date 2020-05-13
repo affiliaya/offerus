@@ -6,6 +6,7 @@
 class Thrive_Dash_Api_WebinarJamStudio {
 	const NEW_API_URL = 'https://webinarjam.genndi.com/api/';
 	const OLD_API_URL = 'https://app.webinarjam.com/api/v2/';
+	const API_V4_URL = 'https://api.webinarjam.com/webinarjam/';
 
 	protected $apiKey;
 	protected $apiUrl;
@@ -36,12 +37,35 @@ class Thrive_Dash_Api_WebinarJamStudio {
 	}
 
 	/**
+	 * Return api version
+	 *
+	 * @return int
+	 */
+	public function getWebinarJamApiVersion() {
+		return (int) $this->apiVersion;
+	}
+
+	/**
 	 * Set api url
 	 *
 	 * @param $url
 	 */
 	public function setWebinarJamApiUrl() {
-		$this->apiVersion == 1 ? $this->apiUrl = self::NEW_API_URL : $this->apiUrl = self::OLD_API_URL;
+
+		switch ( (int) $this->apiVersion ) {
+
+			case 4:
+				$this->apiUrl = self::API_V4_URL;
+				break;
+
+			case 1:
+				$this->apiUrl = self::NEW_API_URL;
+				break;
+
+			default;
+				$this->apiUrl = self::OLD_API_URL;
+				break;
+		}
 	}
 
 	/**
@@ -52,7 +76,7 @@ class Thrive_Dash_Api_WebinarJamStudio {
 	 */
 	public function getUpcomingWebinars() {
 		$params = array(
-			'api_key' => $this->apiKey
+			'api_key' => $this->apiKey,
 		);
 		$data   = $this->_call( 'webinars', $params, 'POST' );
 
@@ -65,20 +89,21 @@ class Thrive_Dash_Api_WebinarJamStudio {
 	 * @param $webinarKey
 	 * @param $name
 	 * @param $email
+	 * @param $schedule
 	 *
 	 * @return bool
 	 * @throws Thrive_Dash_Api_WebinarJamStudio_Exception
 	 */
-	public function registerToWebinar( $webinarKey, $name, $email, $phone ) {
+	public function registerToWebinar( $webinarKey, $name, $email, $phone, $schedule ) {
 		$params = array(
 			'api_key'    => $this->apiKey,
 			'webinar_id' => $webinarKey,
 			'email'      => $email,
-			'schedule'   => 0,
+			'schedule'   => $schedule,
 			'phone'      => $phone ? $phone : ' ',
 		);
 
-		$this->apiVersion == 1 ?
+		$this->apiVersion == 1 || $this->apiVersion == 4 ?
 			$params['first_name'] = $name ? $name : ' ' :
 			$params['name'] = $name ? $name : ' ';
 
@@ -99,16 +124,17 @@ class Thrive_Dash_Api_WebinarJamStudio {
 	public function getWebinar( $webinar_id ) {
 		$params = array(
 			'api_key'    => $this->apiKey,
-			'webinar_id' => $webinar_id
+			'webinar_id' => $webinar_id,
 		);
 
 		return $this->_call( 'webinar', $params, 'POST' );
 	}
+
 	/**
 	 * perform a webservice call
 	 *
-	 * @param string $path api path
-	 * @param array $params request parameters
+	 * @param string $path   api path
+	 * @param array  $params request parameters
 	 * @param string $method GET or POST
 	 *
 	 * @throws Thrive_Dash_Api_WebinarJamStudio_Exception

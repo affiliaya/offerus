@@ -1,4 +1,4 @@
-/*! Thrive Leads - The ultimate Lead Capture solution for wordpress - 2020-03-03
+/*! Thrive Leads - The ultimate Lead Capture solution for wordpress - 2020-04-14
 * https://thrivethemes.com 
 * Copyright (c) 2020 * Thrive Themes */
 

@@ -17,7 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="dropdown-content">
 		<div class="hide-states">
-			<div class="tve-control mb-10 tve-toc-control" data-view="Headings"></div>
+			<div class="tve-control tve-toc-control" data-view="Headings"></div>
+			<span class="click blue-text center-text mt-5 mb-10 flex-mid" data-fn="refresh">
+				<?php tcb_icon( 'sync-regular' ); ?>&nbsp; <?php echo __( 'Update Table', 'thrive-cb' ) ?>
+			</span>
 			<hr>
 			<div class="tve-control" data-view="HeaderColor"></div>
 			<div class="tve-control" data-view="HeadBackground"></div>

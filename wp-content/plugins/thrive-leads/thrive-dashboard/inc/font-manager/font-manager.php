@@ -42,7 +42,7 @@ function tve_dash_font_manager_add() {
 		'font_size'          => $data['font_size'],
 		'font_height'        => $data['font_height'],
 		'font_color'         => $data['font_color'],
-		'custom_css'         => $data['custom_css']
+		'custom_css'         => $data['custom_css'],
 	);
 	if ( $options == false || count( json_decode( $options ), true ) == 0 ) {
 		//we don't have any other options saved
@@ -118,7 +118,7 @@ function tve_dash_font_manager_include_scripts( $hook ) {
 
 	$allowed = array(
 		'admin_page_tve_dash_font_manager',
-		'admin_page_tve_dash_font_import_manager'
+		'admin_page_tve_dash_font_import_manager',
 	);
 
 	if ( ! in_array( $hook, $allowed ) ) {
@@ -140,7 +140,7 @@ function tve_dash_font_manager_include_scripts( $hook ) {
 		tve_dash_enqueue_script( 'tve-dash-font-import-manager-js', TVE_DASH_URL . '/inc/font-import-manager/views/js/manager.js', array(
 			'jquery',
 			'media-upload',
-			'thickbox'
+			'thickbox',
 		) );
 	}
 
@@ -335,7 +335,7 @@ function tve_dash_get_font_family_array( $font_name = null ) {
 		'Ultra'               => "font-family: 'Ultra', serif;",
 		'VarelaRound'         => "font-family: 'Varela Round', sans-serif;",
 		'Verdana'             => "font-family: 'Verdana';",
-		'Vollkorn'            => "font-family: 'Vollkorn', serif;"
+		'Vollkorn'            => "font-family: 'Vollkorn', serif;",
 	);
 
 	if ( $font_name ) {

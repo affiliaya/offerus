@@ -62,9 +62,10 @@ if ( ! class_exists( 'TVD_Smart_Site' ) ) :
 			TD_DB_Manager::add_manager(
 				TVE_DASH_PATH . '/inc/smart-site/migrations',
 				'tve_td_db_version',
-				DB_VERSION,
+				TVE_DASH_DB_VERSION,
 				'Thrive Dashboard',
-				'td_'
+				'td_',
+				'tve_dash_reset'
 			);
 		}
 

@@ -99,7 +99,7 @@ class Thrive_Dash_List_Connection_Zoom extends Thrive_Dash_List_Connection_Abstr
 			list( $first_name, $last_name ) = $this->_getNameParts( $arguments['name'] );
 			// Sad, but last_name is required in this endpoint
 			if ( ! $last_name ) {
-				$last_name = $first_name;
+				$last_name = ' ';
 			}
 			$args['first_name'] = $first_name;
 			$args['last_name']  = $last_name;

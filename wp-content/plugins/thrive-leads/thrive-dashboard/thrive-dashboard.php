@@ -19,7 +19,7 @@ defined( 'TVE_SECRET' ) || define( 'TVE_SECRET', 'tve_secret' );
 /**
  * Dashboard Database Version
  */
-defined( 'DB_VERSION' ) || define( 'DB_VERSION', '1.0.1' );
+defined( 'TVE_DASH_DB_VERSION' ) || define( 'TVE_DASH_DB_VERSION', '1.0.1' );
 
 /**
  * REQUIRED FILES

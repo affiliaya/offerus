@@ -85,7 +85,7 @@ class TCB_Lead_Generation_Element extends TCB_Element_Abstract {
 					),
 					'HiddenFieldsControl' => array(
 						'config'  => array(
-							'sortable' => false,
+							'sortable'      => false,
 							'settings_icon' => 'pen-light',
 						),
 						'extends' => 'PreviewList',
@@ -205,8 +205,14 @@ class TCB_Lead_Generation_Element extends TCB_Element_Abstract {
 		return array(
 			'select_values' => array(
 				array(
+					'value'    => 'all_labels',
+					'selector' => '.thrv_text_element[data-label-for]',
+					'name'     => __( 'Grouped Lead Generation Labels', 'thrive-cb' ),
+					'singular' => __( '-- Label %s', 'thrive-cb' ),
+				),
+				array(
 					'value'    => 'all_lead_gen_items',
-					'selector' => '.tve_lg_input',
+					'selector' => '.tve_lg_input,.tve_lg_textarea',
 					'name'     => __( 'Grouped Lead Generation Inputs', 'thrive-cb' ),
 					'singular' => __( '-- Input %s', 'thrive-cb' ),
 				),

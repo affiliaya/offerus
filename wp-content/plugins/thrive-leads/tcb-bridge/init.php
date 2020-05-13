@@ -104,7 +104,6 @@ function tve_leads_frontend_enqueue_scripts() {
 	// hide tve more tag from front end display
 	if ( ! is_editor_page() ) {
 		tve_load_custom_css();
-		tve_hide_more_tag();
 		/* this will enqueue custom fonts for lightboxes */
 		tve_enqueue_custom_fonts();
 		$frontend_options['is_editor_page'] = false;

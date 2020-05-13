@@ -44,7 +44,7 @@ class TCB_REST_Symbols_Controller extends WP_REST_Posts_Controller {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_cloud_items' ),
-				'permission_callback' => array( $this, 'get_cloud_items_permissions_check' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
 			),
 		) );
 
@@ -58,7 +58,7 @@ class TCB_REST_Symbols_Controller extends WP_REST_Posts_Controller {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_cloud_item' ),
-				'permission_callback' => array( $this, 'get_cloud_item_permission_check' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
 			),
 		) );
 	}
@@ -66,9 +66,11 @@ class TCB_REST_Symbols_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Check to see if the user hase permission to view cloud items
 	 *
+	 * @param WP_REST_Request $request
+	 *
 	 * @return bool
 	 */
-	public function get_cloud_items_permissions_check() {
+	public function get_items_permissions_check( $request ) {
 		return TCB_Product::has_external_access();
 	}
 

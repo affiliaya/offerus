@@ -713,6 +713,10 @@ abstract class Thrive_Dash_List_Connection_Abstract {
 				'id'          => 'mapping_hidden',
 				'placeholder' => __( 'Hidden', TVE_DASH_TRANSLATE_DOMAIN ),
 			),
+			array(
+				'id'          => 'mapping_textarea',
+				'placeholder' => __( 'Textarea', TVE_DASH_TRANSLATE_DOMAIN ),
+			),
 		);
 	}
 

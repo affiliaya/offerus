@@ -62,6 +62,10 @@ class TCB_ContentBox_Element extends TCB_Element_Abstract {
 		$content_box = array(
 			'contentbox' => array(
 				'config' => array(
+					'ContentPalettes'      => array(
+						'config'  => array(),
+						'extends' => 'Palettes',
+					),
 					'BoxHeight'        => array(
 						'config'  => array(
 							'default' => '80',

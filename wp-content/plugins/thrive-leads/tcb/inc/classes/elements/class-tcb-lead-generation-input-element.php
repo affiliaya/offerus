@@ -24,9 +24,13 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 	}
 
 	public function own_components() {
-		$prefix_config           = tcb_selection_root();
-		$controls_default_config = array(
-			'css_suffix' => array( ' input', ' select' ),
+		$prefix_config                = tcb_selection_root();
+		$controls_default_config      = array(
+			'css_suffix' => array( ' input', ' select', ' textarea' ),
+			'css_prefix' => $prefix_config . ' ',
+		);
+		$controls_default_config_text = array(
+			'css_suffix' => array( ' input', ' select', ' textarea', ' ::placeholder' ),
 			'css_prefix' => $prefix_config . ' ',
 		);
 
@@ -37,6 +41,14 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 						'config' => array(
 							'label' => __( 'Placeholder', 'thrive-cb' ),
 						),
+					),
+					'ShowLabel'   => array(
+						'config'  => array(
+							'name'    => '',
+							'label'   => __( 'Show Label', 'thrive-cb' ),
+							'default' => true,
+						),
+						'extends' => 'Switch',
 					),
 					'icon_side'   => array(
 						'rem_ic_css_suf' => $controls_default_config['css_suffix'], //Remove Icon Css Suffix
@@ -66,21 +78,14 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 			),
 			'typography'            => array(
 				'config' => array(
-					'FontSize'      => $controls_default_config,
-					'FontColor'     => array(
-						'important'  => true,
-						'css_suffix' => array( ' input', ' input::placeholder', ' select' ),
-						'css_prefix' => $prefix_config . ' ',
-					),
-					'FontFace'      => $controls_default_config,
-					'LetterSpacing' => $controls_default_config,
-					'LineHeight'    => $controls_default_config,
-					'TextAlign'     => $controls_default_config,
-					'TextStyle'     => array(
-						'css_suffix' => array( ' input', ' input::placeholder', ' select' ),
-						'css_prefix' => $prefix_config . ' ',
-					),
-					'TextTransform' => $controls_default_config,
+					'FontSize'      => $controls_default_config_text,
+					'FontColor'     => array_merge( array( 'important' => true ), $controls_default_config_text ),
+					'FontFace'      => $controls_default_config_text,
+					'LetterSpacing' => $controls_default_config_text,
+					'LineHeight'    => $controls_default_config_text,
+					'TextAlign'     => $controls_default_config_text,
+					'TextStyle'     => $controls_default_config_text,
+					'TextTransform' => $controls_default_config_text,
 				),
 			),
 			'layout'                => array(

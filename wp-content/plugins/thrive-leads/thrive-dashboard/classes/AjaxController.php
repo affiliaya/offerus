@@ -20,16 +20,21 @@ class TVE_Dash_AjaxController {
 	private static $instance;
 
 	/**
+	 * @var string TTW base URL
+	 */
+	private $_thrv_base_url;
+
+	/**
 	 * Token API endpoint
 	 *
 	 * @var string
 	 */
-	private $_token_endpoint = 'https://thrivethemes.com/api/v1/public/token';
+	private $_token_endpoint;
 
 	/**
 	 * @var string
 	 */
-	private $_ttw_auth_endpoint = 'https://thrivethemes.com/api/v1/public/get_key';
+	private $_ttw_auth_endpoint;
 
 	/**
 	 * For signing temp key request
@@ -44,6 +49,17 @@ class TVE_Dash_AjaxController {
 	 * @var string
 	 */
 	private $_temp_key_option = 'ttw_temp_key';
+
+	/**
+	 * TVE_Dash_AjaxController constructor.
+	 */
+	public function __construct() {
+
+		$this->_thrv_base_url = defined( 'THRV_ENV' ) && is_string( THRV_ENV ) ? THRV_ENV : 'https://thrivethemes.com';
+
+		$this->_token_endpoint    = esc_url( "{$this->_thrv_base_url}/api/v1/public/token" );
+		$this->_ttw_auth_endpoint = esc_url( "{$this->_thrv_base_url}/api/v1/public/get_key" );
+	}
 
 	/**
 	 * singleton implementation
@@ -100,6 +116,7 @@ class TVE_Dash_AjaxController {
 			'tve_social_fb_app_id',
 			'tve_comments_facebook_admins',
 			'tve_comments_disqus_shortname',
+			'tve_google_fonts_disable_api_call',
 		);
 		$field   = $this->param( 'field' );
 		$value   = $this->param( 'value' );
@@ -216,10 +233,6 @@ class TVE_Dash_AjaxController {
 		unset( $data['has_token'] );
 		$data['saved'] = true;
 
-		if ( defined( 'TVE_DASH_TOKEN_ENDPOINT' ) ) {
-			$this->_token_endpoint = TVE_DASH_TOKEN_ENDPOINT;
-		}
-
 		$response = tve_dash_api_remote_post(
 			$this->_token_endpoint,
 			array(
@@ -306,7 +319,7 @@ class TVE_Dash_AjaxController {
 				'body'      => json_encode( $data ),
 				'method'    => 'DELETE',
 				'headers'   => array(
-					'Content-Type' => 'application/json',
+					'Content-Type'  => 'application/json',
 					'Authorization' => base64_encode( $this->_ttw_auth_endpoint_salt ),
 				),
 				'timeout'   => 15,

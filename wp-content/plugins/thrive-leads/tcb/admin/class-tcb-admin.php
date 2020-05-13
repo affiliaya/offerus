@@ -213,7 +213,7 @@ class TCB_Admin {
 		tve_enqueue_script( 'tcb-admin-edit-post', tve_editor_js() . '/admin' . $js_suffix );
 		wp_localize_script( 'tcb-admin-edit-post', 'TCB_Post_Edit_Data', array_merge( tcb_admin_get_localization(), array(
 			'post_id'      => get_the_ID(),
-			'landing_page' => tve_post_is_landing_page( get_the_ID() ),
+			'landing_page' => tve_post_is_landing_page(),
 		) ) );
 
 		tve_enqueue_style( 'tcb-admin-style', $this->admin_url( 'assets/css/tcb-admin-styles.css' ) );

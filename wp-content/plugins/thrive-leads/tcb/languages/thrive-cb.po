@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: inc/backbone/controls/font-manager.phtml:67
+#: inc/backbone/controls/font-manager.phtml:70
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: thrive-content-builder 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-03 16:08+0200\n"
+"POT-Creation-Date: 2020-04-14 16:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "The template saved!"
 msgstr ""
 
 #: admin/includes/class-tcb-admin-ajax.php:313
-#: admin/includes/class-tcb-admin-ajax.php:339 inc/helpers/cloud.php:260
+#: admin/includes/class-tcb-admin-ajax.php:339 inc/helpers/cloud.php:270
 msgid "Invalid template"
 msgstr ""
 
@@ -119,45 +119,45 @@ msgstr ""
 msgid "Unique identifier for the object."
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:84
-#: admin/includes/class-tcb-symbols-rest-controller.php:89
-#: admin/includes/class-tcb-symbols-rest-controller.php:140
-#: admin/includes/class-tcb-symbols-rest-controller.php:149
-#: inc/classes/class-tcb-editor-ajax.php:1347
-#: inc/classes/class-tcb-editor-ajax.php:1355
-#: inc/classes/class-tcb-editor-ajax.php:1378
-#: inc/classes/class-tcb-editor-ajax.php:1400
-#: inc/classes/class-tcb-editor-ajax.php:1412
-#: inc/classes/class-tcb-editor-ajax.php:1435
-#: inc/classes/class-tcb-editor-ajax.php:1471
-#: inc/classes/class-tcb-editor-ajax.php:1500
-#: inc/classes/class-tcb-editor-ajax.php:1518
-#: inc/classes/class-tcb-editor-ajax.php:1565
-#: inc/classes/class-tcb-editor-ajax.php:1602
+#: admin/includes/class-tcb-symbols-rest-controller.php:86
+#: admin/includes/class-tcb-symbols-rest-controller.php:91
+#: admin/includes/class-tcb-symbols-rest-controller.php:142
+#: admin/includes/class-tcb-symbols-rest-controller.php:151
+#: inc/classes/class-tcb-editor-ajax.php:1350
+#: inc/classes/class-tcb-editor-ajax.php:1358
+#: inc/classes/class-tcb-editor-ajax.php:1381
+#: inc/classes/class-tcb-editor-ajax.php:1403
+#: inc/classes/class-tcb-editor-ajax.php:1415
+#: inc/classes/class-tcb-editor-ajax.php:1438
+#: inc/classes/class-tcb-editor-ajax.php:1474
+#: inc/classes/class-tcb-editor-ajax.php:1503
+#: inc/classes/class-tcb-editor-ajax.php:1521
+#: inc/classes/class-tcb-editor-ajax.php:1568
+#: inc/classes/class-tcb-editor-ajax.php:1605
 msgid "Invalid element type"
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:144
-#: inc/classes/class-tcb-editor-ajax.php:1404
-#: inc/classes/class-tcb-editor-ajax.php:1439
+#: admin/includes/class-tcb-symbols-rest-controller.php:146
+#: inc/classes/class-tcb-editor-ajax.php:1407
+#: inc/classes/class-tcb-editor-ajax.php:1442
 msgid "Missing template id"
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:212
-#: inc/classes/class-tcb-symbol-element-abstract.php:99
+#: admin/includes/class-tcb-symbols-rest-controller.php:214
+#: inc/classes/class-tcb-symbol-element-abstract.php:100
 msgid ""
 "Sorry, you are not allowed to create global elements with the same title"
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:274
+#: admin/includes/class-tcb-symbols-rest-controller.php:276
 msgid "We were not able to copy the symbol"
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:314
+#: admin/includes/class-tcb-symbols-rest-controller.php:316
 msgid "The inital thumbnail doesn't exists"
 msgstr ""
 
-#: admin/includes/class-tcb-symbols-rest-controller.php:346
+#: admin/includes/class-tcb-symbols-rest-controller.php:348
 msgid "Copy of "
 msgstr ""
 
@@ -334,7 +334,7 @@ msgstr ""
 msgid "Enter Category Name"
 msgstr ""
 
-#: admin/includes/i18n.php:56 inc/i18n.php:278
+#: admin/includes/i18n.php:56 inc/i18n.php:282
 msgid "Enter Symbol Name"
 msgstr ""
 
@@ -346,7 +346,7 @@ msgstr ""
 msgid "Category name is required"
 msgstr ""
 
-#: admin/includes/i18n.php:59 inc/i18n.php:297
+#: admin/includes/i18n.php:59 inc/i18n.php:301
 msgid "The Category was successfully created!"
 msgstr ""
 
@@ -362,11 +362,11 @@ msgstr ""
 msgid "There was an error while trying to create your symbol"
 msgstr ""
 
-#: admin/includes/i18n.php:63 inc/i18n.php:290
+#: admin/includes/i18n.php:63 inc/i18n.php:294
 msgid "Add as Category"
 msgstr ""
 
-#: admin/includes/i18n.php:64 inc/i18n.php:289
+#: admin/includes/i18n.php:64 inc/i18n.php:293
 msgid "Select Category..."
 msgstr ""
 
@@ -418,11 +418,11 @@ msgstr ""
 msgid "Search footers"
 msgstr ""
 
-#: admin/includes/i18n.php:77 inc/i18n.php:280
+#: admin/includes/i18n.php:77 inc/i18n.php:284
 msgid "Symbol Name"
 msgstr ""
 
-#: admin/includes/i18n.php:78 inc/i18n.php:279
+#: admin/includes/i18n.php:78 inc/i18n.php:283
 #: inc/views/modals/lp-export.php:18 inc/views/modals/lp-save-template.php:20
 #: inc/views/modals/save-elements.php:36 inc/views/modals/save-elements.php:59
 #: inc/views/modals/save-template.php:20
@@ -474,7 +474,7 @@ msgstr ""
 #: admin/includes/views/templates/modals/move-symbol.phtml:32
 #: admin/includes/views/templates/modals/new-category.phtml:18
 #: admin/includes/views/templates/modals/section-modal-create-step-1.phtml:37
-#: inc/backbone/modals/cf-settings.php:10 inc/i18n.php:187
+#: inc/backbone/modals/cf-settings.php:10 inc/i18n.php:191
 #: inc/menu/post.php:57 inc/views/editor-settings.php:40
 #: inc/views/modals/cf-error-messages.php:14
 #: inc/views/modals/fancy-divider.php:18
@@ -928,7 +928,7 @@ msgid "Fade in"
 msgstr ""
 
 #: event-manager/classes/actions/TCB_Thrive_CSS_Animation.php:245
-#: inc/i18n.php:325
+#: inc/i18n.php:329
 msgid "Rotate"
 msgstr ""
 
@@ -1010,7 +1010,7 @@ msgid "Mouse over element"
 msgstr ""
 
 #: event-manager/classes/triggers/TCB_Event_Trigger_Mouseover.php:21
-#: inc/i18n.php:225 inc/backbone/element-states.phtml:17
+#: inc/i18n.php:229 inc/backbone/element-states.phtml:17
 msgid "Hover"
 msgstr ""
 
@@ -1092,7 +1092,8 @@ msgstr ""
 #: inc/backbone/controls/decoration/decoration.phtml:11
 #: inc/backbone/controls/preview-list-item.phtml:2
 #: inc/backbone/controls/preview-toggle-list-item.phtml:10
-#: inc/backbone/controls/style-change.phtml:6
+#: inc/backbone/controls/style-change.phtml:7
+#: inc/backbone/controls/style-change.phtml:19
 #: inc/backbone/post-list/extra-image.phtml:18
 #: inc/backbone/shadow/no-shadow.phtml:1
 msgid "None"
@@ -1186,13 +1187,13 @@ msgstr ""
 
 #: inc/classes/class-tcb-contact-form.php:478
 #: inc/classes/class-tcb-contact-form.php:481
-#: inc/classes/class-tcb-custom-fields-shortcode.php:137
+#: inc/classes/class-tcb-custom-fields-shortcode.php:143
 #: inc/views/elements/contact_form.php:17
 msgid "First Name"
 msgstr ""
 
 #: inc/classes/class-tcb-contact-form.php:482
-#: inc/classes/class-tcb-custom-fields-shortcode.php:139
+#: inc/classes/class-tcb-custom-fields-shortcode.php:145
 msgid "John"
 msgstr ""
 
@@ -1202,12 +1203,12 @@ msgstr ""
 
 #: inc/classes/class-tcb-contact-form.php:489
 #: inc/classes/class-tcb-contact-form.php:493
-#: inc/classes/class-tcb-custom-fields-shortcode.php:142
+#: inc/classes/class-tcb-custom-fields-shortcode.php:148
 msgid "Last Name"
 msgstr ""
 
 #: inc/classes/class-tcb-contact-form.php:494
-#: inc/classes/class-tcb-custom-fields-shortcode.php:144
+#: inc/classes/class-tcb-custom-fields-shortcode.php:150
 msgid "Doe"
 msgstr ""
 
@@ -1238,13 +1239,14 @@ msgstr ""
 msgid "j.doe@inbox.com"
 msgstr ""
 
-#: inc/classes/class-tcb-contact-form.php:519 inc/i18n.php:424
+#: inc/classes/class-tcb-contact-form.php:519 inc/i18n.php:430
 msgid "Invalid Email"
 msgstr ""
 
 #: inc/classes/class-tcb-contact-form.php:522
 #: inc/classes/class-tcb-contact-form.php:526
 #: inc/views/elements/contact_form.php:33
+#: inc/backbone/controls/lead-generation/textarea-style.phtml:4
 msgid "Message"
 msgstr ""
 
@@ -1278,7 +1280,7 @@ msgstr ""
 msgid "https://yourwebsite.com/"
 msgstr ""
 
-#: inc/classes/class-tcb-contact-form.php:551 inc/i18n.php:135
+#: inc/classes/class-tcb-contact-form.php:551 inc/i18n.php:139
 msgid "Invalid URL"
 msgstr ""
 
@@ -1295,17 +1297,17 @@ msgstr ""
 msgid "Invalid reCAPTCHA"
 msgstr ""
 
-#: inc/classes/class-tcb-custom-fields-shortcode.php:132
-#: inc/classes/class-tcb-custom-fields-shortcode.php:134
+#: inc/classes/class-tcb-custom-fields-shortcode.php:138
+#: inc/classes/class-tcb-custom-fields-shortcode.php:140
 msgid "Username"
 msgstr ""
 
-#: inc/classes/class-tcb-custom-fields-shortcode.php:706
+#: inc/classes/class-tcb-custom-fields-shortcode.php:801
 msgid "Custom Fields Global"
 msgstr ""
 
-#: inc/classes/class-tcb-custom-fields-shortcode.php:708
-#: inc/classes/class-tcb-custom-fields-shortcode.php:725
+#: inc/classes/class-tcb-custom-fields-shortcode.php:803
+#: inc/classes/class-tcb-custom-fields-shortcode.php:820
 #: inc/classes/elements/class-tcb-image-element.php:80
 msgid "Custom Fields"
 msgstr ""
@@ -1346,7 +1348,7 @@ msgstr ""
 msgid "Category saved!"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:349 inc/i18n.php:213
+#: inc/classes/class-tcb-editor-ajax.php:349 inc/i18n.php:217
 msgid "The content is empty. Please input some content."
 msgstr ""
 
@@ -1383,55 +1385,59 @@ msgstr ""
 msgid "Invalid Parameters! A color must contain a name and a color string!"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1321
+#: inc/classes/class-tcb-editor-ajax.php:1324
 msgid "Lightbox created"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1479
-#: inc/classes/class-tcb-editor-ajax.php:1920
-#: inc/classes/class-tcb-symbol-element-abstract.php:154
+#: inc/classes/class-tcb-editor-ajax.php:1482
+#: inc/classes/class-tcb-editor-ajax.php:1946
+#: inc/classes/class-tcb-symbol-element-abstract.php:155
 msgid "Error when retrieving symbols"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1495
+#: inc/classes/class-tcb-editor-ajax.php:1498
 msgid "Missing ID"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1532
+#: inc/classes/class-tcb-editor-ajax.php:1535
 msgid "Missing symbol title"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1560
-#: inc/classes/class-tcb-symbol-element-abstract.php:275
-#: inc/classes/class-tcb-symbol-element-abstract.php:377
+#: inc/classes/class-tcb-editor-ajax.php:1563
+#: inc/classes/class-tcb-symbol-element-abstract.php:276
+#: inc/classes/class-tcb-symbol-element-abstract.php:378
 msgid "Missing symbol id"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1597
+#: inc/classes/class-tcb-editor-ajax.php:1600
 msgid "Missing preview file"
 msgstr ""
 
-#: inc/classes/class-tcb-editor-ajax.php:1667
+#: inc/classes/class-tcb-editor-ajax.php:1670
 msgid "Invalid arguments"
 msgstr ""
 
-#: inc/classes/class-tcb-editor.php:553
+#: inc/classes/class-tcb-editor-ajax.php:1879
+msgid "You are not allowed to update this meta"
+msgstr ""
+
+#: inc/classes/class-tcb-editor.php:561
 #: inc/classes/elements/class-tcb-landing-page-element.php:47
-#: inc/functions.php:3132
+#: inc/functions.php:3165
 msgid "Landing Page"
 msgstr ""
 
-#: inc/classes/class-tcb-editor.php:556
+#: inc/classes/class-tcb-editor.php:564
 #: inc/classes/elements/class-tcb-post-element.php:18
 msgid "Page"
 msgstr ""
 
-#: inc/classes/class-tcb-editor.php:558
+#: inc/classes/class-tcb-editor.php:566
 #: inc/classes/elements/class-tcb-post-element.php:18
 msgid "Post"
 msgstr ""
 
-#: inc/classes/class-tcb-editor.php:847
+#: inc/classes/class-tcb-editor.php:855
 msgid "Change Template"
 msgstr ""
 
@@ -1459,7 +1465,7 @@ msgstr ""
 msgid "Choose Default Paragraph Style"
 msgstr ""
 
-#: inc/classes/class-tcb-element-abstract.php:174 inc/i18n.php:414
+#: inc/classes/class-tcb-element-abstract.php:174 inc/i18n.php:420
 msgid "Landing Page Default"
 msgstr ""
 
@@ -1524,12 +1530,11 @@ msgid ""
 msgstr ""
 
 #: inc/classes/class-tcb-element-abstract.php:768
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:117
 #: inc/classes/elements/class-tcb-countdown-element.php:73
 #: inc/classes/elements/class-tcb-countdownevergreen-element.php:71
 #: inc/classes/elements/class-tcb-credit-element.php:99
-#: inc/classes/elements/class-tcb-form-submit-element.php:121
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:111
+#: inc/classes/elements/class-tcb-form-submit-element.php:108
+#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:98
 #: inc/classes/elements/class-tcb-rating-element.php:87
 #: inc/classes/elements/class-tcb-social-element.php:73
 #: inc/views/actions/tooltip.php:12
@@ -1596,15 +1601,15 @@ msgstr ""
 msgid "Invalid username or email."
 msgstr ""
 
-#: inc/classes/class-tcb-login-element-handler.php:186 inc/i18n.php:196
+#: inc/classes/class-tcb-login-element-handler.php:186 inc/i18n.php:200
 msgid "Redirect to Custom URL"
 msgstr ""
 
-#: inc/classes/class-tcb-login-element-handler.php:192 inc/i18n.php:197
+#: inc/classes/class-tcb-login-element-handler.php:192 inc/i18n.php:201
 msgid "No Redirect"
 msgstr ""
 
-#: inc/classes/class-tcb-login-element-handler.php:198 inc/i18n.php:198
+#: inc/classes/class-tcb-login-element-handler.php:198 inc/i18n.php:202
 #: inc/backbone/contact-form/submit-setup-form.phtml:12
 msgid "Show success notification"
 msgstr ""
@@ -1625,16 +1630,16 @@ msgstr ""
 
 #: inc/classes/class-tcb-search-form.php:114
 #: inc/classes/class-tcb-search-form.php:115
-#: inc/classes/elements/class-tcb-search-form-element.php:17 inc/i18n.php:300
+#: inc/classes/elements/class-tcb-search-form-element.php:17 inc/i18n.php:304
 #: inc/backbone/post-list/select.phtml:2
 msgid "Search"
 msgstr ""
 
-#: inc/classes/class-tcb-symbol-element-abstract.php:93
+#: inc/classes/class-tcb-symbol-element-abstract.php:94
 msgid "Sorry, you are not allowed to create symbols without title"
 msgstr ""
 
-#: inc/classes/class-tcb-symbol-element-abstract.php:407
+#: inc/classes/class-tcb-symbol-element-abstract.php:408
 msgid "The file could not be saved"
 msgstr ""
 
@@ -1695,7 +1700,7 @@ msgstr ""
 
 #: inc/classes/class-tcb-utils.php:291 inc/classes/class-tcb-utils.php:347
 #: inc/classes/class-tcb-utils.php:370 inc/classes/class-tcb-utils.php:410
-#: inc/classes/class-tcb-utils.php:438 inc/i18n.php:406
+#: inc/classes/class-tcb-utils.php:438 inc/i18n.php:412
 #: inc/views/actions/link.php:13
 #: inc/backbone/inline/dynamiclink-popup.phtml:22
 #: inc/backbone/inline/staticlink-popup.phtml:4
@@ -1704,7 +1709,7 @@ msgstr ""
 
 #: inc/classes/class-tcb-utils.php:297 inc/classes/class-tcb-utils.php:353
 #: inc/classes/class-tcb-utils.php:376 inc/classes/class-tcb-utils.php:416
-#: inc/classes/class-tcb-utils.php:444 inc/i18n.php:405
+#: inc/classes/class-tcb-utils.php:444 inc/i18n.php:411
 msgid "No Follow"
 msgstr ""
 
@@ -1800,6 +1805,30 @@ msgstr ""
 msgid "Widget"
 msgstr ""
 
+#: inc/classes/class-tcb-woo.php:171 inc/classes/class-tcb-woo.php:172
+msgid "Add To Cart"
+msgstr ""
+
+#: inc/classes/class-tcb-woo.php:178 inc/classes/class-tcb-woo.php:179
+msgid "Cart Page"
+msgstr ""
+
+#: inc/classes/class-tcb-woo.php:185 inc/classes/class-tcb-woo.php:186
+msgid "Shop Page"
+msgstr ""
+
+#: inc/classes/class-tcb-woo.php:231
+msgid "Sale Price"
+msgstr ""
+
+#: inc/classes/class-tcb-woo.php:232
+msgid "Regular Price"
+msgstr ""
+
+#: inc/classes/class-tcb-woo.php:233
+msgid "Average Rating"
+msgstr ""
+
 #: inc/classes/content-templates/class-tcb-content-templates-api.php:304
 msgid "Could not extract the archive file"
 msgstr ""
@@ -1825,151 +1854,83 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:64
+#: inc/classes/elements/class-tcb-button-element.php:86
 #: inc/classes/elements/class-tcb-contact-form-submit-element.php:46
 #: inc/classes/elements/class-tcb-form-submit-element.php:50
-#: inc/classes/elements/class-tcb-lead-generation-input-element.php:46
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:58
 #: inc/classes/elements/class-tcb-lead-generation-select-element.php:47
 #: inc/classes/elements/class-tcb-lead-generation-submit-element.php:40
-#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:45
 msgid "Icon Side"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:66
+#: inc/classes/elements/class-tcb-button-element.php:88
 #: inc/classes/elements/class-tcb-contact-form-submit-element.php:50
 #: inc/classes/elements/class-tcb-form-submit-element.php:54
-#: inc/classes/elements/class-tcb-lead-generation-input-element.php:50
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:62
 #: inc/classes/elements/class-tcb-lead-generation-select-element.php:51
 #: inc/classes/elements/class-tcb-lead-generation-submit-element.php:44
-#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:49
-#: inc/i18n.php:329
+#: inc/i18n.php:333
 msgid "Left"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:67
+#: inc/classes/elements/class-tcb-button-element.php:89
 #: inc/classes/elements/class-tcb-contact-form-submit-element.php:54
 #: inc/classes/elements/class-tcb-form-submit-element.php:58
-#: inc/classes/elements/class-tcb-lead-generation-input-element.php:54
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:66
 #: inc/classes/elements/class-tcb-lead-generation-select-element.php:55
 #: inc/classes/elements/class-tcb-lead-generation-submit-element.php:48
-#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:53
-#: inc/i18n.php:330
+#: inc/i18n.php:334
 msgid "Right"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:74
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:64
-#: inc/classes/elements/class-tcb-contentbox-element.php:91
-#: inc/classes/elements/class-tcb-form-submit-element.php:68
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:58
-#: inc/classes/elements/class-tcb-search-form-submit-element.php:76
-msgid "Master Color"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:85
+#: inc/classes/elements/class-tcb-button-element.php:96
 #: inc/classes/elements/class-tcb-form-submit-element.php:43
 #: inc/views/elements/icon.php:16
 msgid "Add Icon"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:93
+#: inc/classes/elements/class-tcb-button-element.php:104
+#: inc/classes/elements/class-tcb-contentbox-element.php:95
+#: inc/classes/elements/class-tcb-search-form-submit-element.php:76
+msgid "Master Color"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-button-element.php:115
 msgid "Secondary button text"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:102
+#: inc/classes/elements/class-tcb-button-element.php:124
 msgid "Size and Alignment"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:160
+#: inc/classes/elements/class-tcb-button-element.php:182
 msgid "Align Left"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:166
+#: inc/classes/elements/class-tcb-button-element.php:188
 msgid "Align Center"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:171
+#: inc/classes/elements/class-tcb-button-element.php:193
 msgid "Align Right"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:176
+#: inc/classes/elements/class-tcb-button-element.php:198
 msgid "Full Width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:186
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:78
-#: inc/classes/elements/class-tcb-form-submit-element.php:82
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:72
+#: inc/classes/elements/class-tcb-button-element.php:208
+#: inc/classes/elements/class-tcb-contact-form-submit-element.php:65
+#: inc/classes/elements/class-tcb-form-submit-element.php:69
+#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:59
 msgid "Button width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:195
+#: inc/classes/elements/class-tcb-button-element.php:217
 msgid "Button Styles"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-button-element.php:197
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:119
-#: inc/classes/elements/class-tcb-form-submit-element.php:123
-#: inc/classes/elements/class-tcb-lead-generation-radio-option-element.php:100
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:113
-#: inc/i18n.php:224 inc/backbone/controls/background/background-image.phtml:7
-#: inc/backbone/controls/text/typefocus-settings.phtml:4
-msgid "Default"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:198
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:120
-#: inc/classes/elements/class-tcb-form-submit-element.php:124
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:114
-msgid "Ghost"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:199
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:121
-#: inc/classes/elements/class-tcb-countdown-element.php:80
-#: inc/classes/elements/class-tcb-countdownevergreen-element.php:78
-#: inc/classes/elements/class-tcb-form-submit-element.php:125
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:115
-msgid "Rounded"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:200
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:122
-#: inc/classes/elements/class-tcb-form-submit-element.php:126
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:116
-msgid "Full Rounded"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:201
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:123
-#: inc/classes/elements/class-tcb-form-submit-element.php:127
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:117
-#: inc/i18n.php:42
-msgid "Gradient"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:202
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:124
-#: inc/classes/elements/class-tcb-form-submit-element.php:128
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:118
-msgid "Elevated"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:203
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:125
-#: inc/classes/elements/class-tcb-form-submit-element.php:129
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:119
-msgid "Border 1"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:204
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:126
-#: inc/classes/elements/class-tcb-form-submit-element.php:130
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:120
-msgid "Border 2"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-button-element.php:206
+#: inc/classes/elements/class-tcb-button-element.php:219
 msgid "Template Button"
 msgstr ""
 
@@ -1981,7 +1942,7 @@ msgstr ""
 msgid "Button Group Item"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-callaction-element.php:33 inc/i18n.php:250
+#: inc/classes/elements/class-tcb-callaction-element.php:33 inc/i18n.php:254
 msgid "Call to Action"
 msgstr ""
 
@@ -2009,7 +1970,7 @@ msgstr ""
 #: inc/classes/elements/class-tcb-columns-element.php:23
 #: inc/classes/elements/class-tcb-lead-generation-radio-element.php:58
 #: inc/classes/elements/class-tcb-postgrid-element.php:313
-#: inc/classes/elements/class-tcb-toc-element.php:99
+#: inc/classes/elements/class-tcb-toc-element.php:100
 #: inc/classes/elements/class-tcb-toggle-element.php:76
 msgid "Columns"
 msgstr ""
@@ -2023,9 +1984,9 @@ msgid "Reverse column order"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-columns-element.php:90
-#: inc/classes/elements/class-tcb-contentbox-element.php:101
-#: inc/classes/elements/class-tcb-footer-element.php:134
-#: inc/classes/elements/class-tcb-header-element.php:158
+#: inc/classes/elements/class-tcb-contentbox-element.php:105
+#: inc/classes/elements/class-tcb-footer-element.php:137
+#: inc/classes/elements/class-tcb-header-element.php:162
 #: inc/classes/elements/class-tcb-section-element.php:114
 msgid "Vertical Position"
 msgstr ""
@@ -2044,7 +2005,7 @@ msgid "Stretch to fit screen width"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-columns-element.php:143
-#: inc/classes/elements/class-tcb-contentbox-element.php:70
+#: inc/classes/elements/class-tcb-contentbox-element.php:74
 msgid "Minimum Height"
 msgstr ""
 
@@ -2105,7 +2066,7 @@ msgstr ""
 msgid "Order By"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contact-form-element.php:36 inc/i18n.php:252
+#: inc/classes/elements/class-tcb-contact-form-element.php:36 inc/i18n.php:256
 msgid "Contact Form"
 msgstr ""
 
@@ -2157,7 +2118,7 @@ msgid "Grouped Inputs"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-contact-form-element.php:177
-#: inc/classes/elements/class-tcb-lead-generation-element.php:211
+#: inc/classes/elements/class-tcb-lead-generation-element.php:217
 #: inc/classes/elements/class-tcb-login-element.php:154
 #, php-format
 msgid "-- Input %s"
@@ -2169,6 +2130,7 @@ msgid "Grouped Labels"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-contact-form-element.php:183
+#: inc/classes/elements/class-tcb-lead-generation-element.php:211
 #: inc/classes/elements/class-tcb-login-element.php:160
 #: inc/classes/elements/class-tcb-login-element.php:166
 #: inc/classes/elements/class-tcb-login-element.php:172
@@ -2194,9 +2156,9 @@ msgstr ""
 msgid "Contact Form Submit"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contact-form-submit-element.php:86
-#: inc/classes/elements/class-tcb-form-submit-element.php:90
-#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:80
+#: inc/classes/elements/class-tcb-contact-form-submit-element.php:73
+#: inc/classes/elements/class-tcb-form-submit-element.php:77
+#: inc/classes/elements/class-tcb-lead-generation-submit-element.php:67
 msgid "Button Align"
 msgstr ""
 
@@ -2214,75 +2176,75 @@ msgstr ""
 msgid "Content Box"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:82
+#: inc/classes/elements/class-tcb-contentbox-element.php:86
 msgid "Maximum Width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:123
+#: inc/classes/elements/class-tcb-contentbox-element.php:127
 msgid "Content Box Styles"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:125
+#: inc/classes/elements/class-tcb-contentbox-element.php:129
 msgid "Content box 1"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:126
+#: inc/classes/elements/class-tcb-contentbox-element.php:130
 msgid "Content box 2"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:127
+#: inc/classes/elements/class-tcb-contentbox-element.php:131
 msgid "Content box 3"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:128
+#: inc/classes/elements/class-tcb-contentbox-element.php:132
 msgid "Content box 4"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:129
+#: inc/classes/elements/class-tcb-contentbox-element.php:133
 msgid "Content box 5"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:130
+#: inc/classes/elements/class-tcb-contentbox-element.php:134
 msgid "Content box 6"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:131
+#: inc/classes/elements/class-tcb-contentbox-element.php:135
 msgid "Content box 7"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:132
+#: inc/classes/elements/class-tcb-contentbox-element.php:136
 msgid "Content box 8"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:133
+#: inc/classes/elements/class-tcb-contentbox-element.php:137
 msgid "Content box 9"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:134
+#: inc/classes/elements/class-tcb-contentbox-element.php:138
 msgid "Content box 10"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:135
+#: inc/classes/elements/class-tcb-contentbox-element.php:139
 msgid "Content box 11"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:136
+#: inc/classes/elements/class-tcb-contentbox-element.php:140
 msgid "Content box 12"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:137
+#: inc/classes/elements/class-tcb-contentbox-element.php:141
 msgid "Content box 13"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:138
+#: inc/classes/elements/class-tcb-contentbox-element.php:142
 msgid "Content box 14"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:139
+#: inc/classes/elements/class-tcb-contentbox-element.php:143
 msgid "Content box 15"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-contentbox-element.php:141
+#: inc/classes/elements/class-tcb-contentbox-element.php:145
 msgid "Template ContentBox"
 msgstr ""
 
@@ -2298,6 +2260,11 @@ msgstr ""
 #: inc/classes/elements/class-tcb-countdown-element.php:76
 #: inc/classes/elements/class-tcb-countdownevergreen-element.php:74
 msgid "Simple"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-countdown-element.php:80
+#: inc/classes/elements/class-tcb-countdownevergreen-element.php:78
+msgid "Rounded"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-countdown-element.php:84
@@ -2364,6 +2331,7 @@ msgstr ""
 #: inc/classes/elements/class-tcb-image-element.php:93
 #: inc/classes/elements/class-tcb-lead-generation-element.php:139
 #: inc/classes/elements/class-tcb-link-element.php:108
+#: inc/classes/elements/class-tcb-logo-element.php:67
 #: inc/classes/elements/class-tcb-megamenu-item-element.php:81
 #: inc/classes/elements/class-tcb-menu-item-element.php:105
 #: inc/classes/elements/class-tcb-rating-element.php:100
@@ -2460,38 +2428,38 @@ msgstr ""
 msgid "Footer"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:71
-#: inc/classes/elements/class-tcb-header-element.php:82
+#: inc/classes/elements/class-tcb-footer-element.php:74
+#: inc/classes/elements/class-tcb-header-element.php:86
 #: inc/classes/elements/class-tcb-post-element.php:57 inc/menu/post.php:13
 msgid "Visibility"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:79
-#: inc/classes/elements/class-tcb-header-element.php:90
+#: inc/classes/elements/class-tcb-footer-element.php:82
+#: inc/classes/elements/class-tcb-header-element.php:94
 msgid "Inherit content size from layout"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:87
-#: inc/classes/elements/class-tcb-header-element.php:98
+#: inc/classes/elements/class-tcb-footer-element.php:90
+#: inc/classes/elements/class-tcb-header-element.php:102
 msgid "Stretch background to full width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:97
-#: inc/classes/elements/class-tcb-header-element.php:108
+#: inc/classes/elements/class-tcb-footer-element.php:100
+#: inc/classes/elements/class-tcb-header-element.php:112
 msgid "Content Width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:106
-#: inc/classes/elements/class-tcb-header-element.php:118
+#: inc/classes/elements/class-tcb-footer-element.php:109
+#: inc/classes/elements/class-tcb-header-element.php:122
 msgid "Stretch content to full width"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:116
+#: inc/classes/elements/class-tcb-footer-element.php:119
 msgid "Footer Minimum Height"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-footer-element.php:126
-#: inc/classes/elements/class-tcb-header-element.php:150
+#: inc/classes/elements/class-tcb-footer-element.php:129
+#: inc/classes/elements/class-tcb-header-element.php:154
 #: inc/classes/elements/class-tcb-section-element.php:89
 msgid "Match height to screen"
 msgstr ""
@@ -2536,7 +2504,7 @@ msgstr ""
 msgid "Insert Address"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-guaranteebox-element.php:23 inc/i18n.php:251
+#: inc/classes/elements/class-tcb-guaranteebox-element.php:23 inc/i18n.php:255
 msgid "Guarantee Box"
 msgstr ""
 
@@ -2546,15 +2514,15 @@ msgstr ""
 msgid "Header"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-header-element.php:129
+#: inc/classes/elements/class-tcb-header-element.php:133
 msgid "Push Content"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-header-element.php:130
+#: inc/classes/elements/class-tcb-header-element.php:134
 msgid "Over Content"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-header-element.php:140
+#: inc/classes/elements/class-tcb-header-element.php:144
 msgid "Content Minimum Height"
 msgstr ""
 
@@ -2562,7 +2530,7 @@ msgstr ""
 msgid "Custom HTML"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-icon-element.php:28 inc/i18n.php:311
+#: inc/classes/elements/class-tcb-icon-element.php:28 inc/i18n.php:315
 msgid "Icon"
 msgstr ""
 
@@ -2584,7 +2552,7 @@ msgstr ""
 #: inc/classes/elements/class-tcb-image-element.php:70
 #: inc/classes/elements/class-tcb-megamenu-image-element.php:76
 #: inc/classes/elements/class-tcb-tab-image-element.php:76
-#: inc/menu/contentbox.php:38 inc/backbone/util/file-picker.phtml:20
+#: inc/menu/contentbox.php:39 inc/backbone/util/file-picker.phtml:20
 msgid "Replace Image"
 msgstr ""
 
@@ -2657,6 +2625,7 @@ msgid "Title"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-image-element.php:135
+#: inc/classes/elements/class-tcb-logo-element.php:75
 msgid "Alt Text"
 msgstr ""
 
@@ -2677,7 +2646,7 @@ msgid "Opacity"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-image-element.php:188 inc/i18n.php:25
-#: inc/i18n.php:324
+#: inc/i18n.php:328
 msgid "Blur"
 msgstr ""
 
@@ -2694,7 +2663,7 @@ msgid "Sepia"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-image-element.php:232 inc/i18n.php:30
-#: inc/i18n.php:190
+#: inc/i18n.php:194
 msgid "Invert"
 msgstr ""
 
@@ -2769,9 +2738,8 @@ msgid "Send lead data to {service}"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-lead-generation-checkbox-element.php:73
-#: inc/classes/elements/class-tcb-lead-generation-input-element.php:62
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:74
 #: inc/classes/elements/class-tcb-lead-generation-select-element.php:63
-#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:61
 #: inc/backbone/lead-generation/consent.phtml:7
 msgid "Required field"
 msgstr ""
@@ -2826,14 +2794,18 @@ msgid "Explicit Consent Checkbox"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-lead-generation-element.php:210
-msgid "Grouped Lead Generation Inputs"
+msgid "Grouped Lead Generation Labels"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-lead-generation-element.php:216
+msgid "Grouped Lead Generation Inputs"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-lead-generation-element.php:222
 msgid "Grouped Radio Labels"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-lead-generation-element.php:217
+#: inc/classes/elements/class-tcb-lead-generation-element.php:223
 #, php-format
 msgid "-- Radio Label %s"
 msgstr ""
@@ -2842,22 +2814,25 @@ msgstr ""
 msgid "Lead Generation Input"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-lead-generation-input-element.php:38
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:42
 #: inc/classes/elements/class-tcb-lead-generation-select-element.php:39
-#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:38
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:42
 #: inc/classes/elements/class-tcb-search-form-input-element.php:77
-#: inc/i18n.php:432 inc/backbone/controls/contact-form/edit-cf-item.phtml:30
+#: inc/i18n.php:438 inc/backbone/controls/contact-form/edit-cf-item.phtml:30
 #: inc/backbone/controls/lead-generation/edit-field.phtml:13
 #: inc/backbone/login/edit-form-label.phtml:12
 msgid "Placeholder"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-lead-generation-radio-element.php:15
-msgid "Lead Generation Radio"
+#: inc/classes/elements/class-tcb-lead-generation-input-element.php:48
+#: inc/classes/elements/class-tcb-lead-generation-radio-element.php:47
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:48
+#: inc/backbone/controls/lead-generation/edit-field.phtml:26
+msgid "Show Label"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-lead-generation-radio-element.php:47
-msgid "Show Label"
+#: inc/classes/elements/class-tcb-lead-generation-radio-element.php:15
+msgid "Lead Generation Radio"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-lead-generation-radio-element.php:69
@@ -2874,7 +2849,7 @@ msgstr ""
 
 #: inc/classes/elements/class-tcb-lead-generation-radio-element.php:92
 #: inc/classes/elements/class-tcb-lead-generation-radio-option-element.php:71
-#: inc/i18n.php:434
+#: inc/i18n.php:440
 msgid "Set as default"
 msgstr ""
 
@@ -2921,6 +2896,13 @@ msgstr ""
 msgid "Choose radio style"
 msgstr ""
 
+#: inc/classes/elements/class-tcb-lead-generation-radio-option-element.php:100
+#: inc/i18n.php:228 inc/backbone/controls/background/background-image.phtml:7
+#: inc/backbone/controls/custom-fields.phtml:32
+#: inc/backbone/controls/text/typefocus-settings.phtml:4
+msgid "Default"
+msgstr ""
+
 #: inc/classes/elements/class-tcb-lead-generation-radio-option-element.php:101
 msgid "Style 1"
 msgstr ""
@@ -2949,6 +2931,26 @@ msgstr ""
 msgid "Lead Generation Textarea"
 msgstr ""
 
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:56
+msgid "Show Character Count"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:64
+msgid "Disable User Resizing"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:72
+msgid "Rows / Visible Lines"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:82
+msgid "Min. Characters"
+msgstr ""
+
+#: inc/classes/elements/class-tcb-lead-generation-textarea-element.php:93
+msgid "Max. Characters"
+msgstr ""
+
 #: inc/classes/elements/class-tcb-lightbox-element.php:75
 msgid "Show \"close\" icon"
 msgstr ""
@@ -2971,7 +2973,7 @@ msgstr ""
 
 #: inc/classes/elements/class-tcb-link-element.php:63
 #: inc/classes/elements/class-tcb-link-element.php:93
-#: inc/classes/elements/class-tcb-link-element.php:110 inc/i18n.php:350
+#: inc/classes/elements/class-tcb-link-element.php:110 inc/i18n.php:356
 msgid "Inherit"
 msgstr ""
 
@@ -2986,9 +2988,9 @@ msgstr ""
 msgid "Highlight"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-link-element.php:91 inc/i18n.php:312
-#: inc/backbone/controls/font-manager.phtml:27
-#: inc/backbone/controls/font-manager.phtml:65
+#: inc/classes/elements/class-tcb-link-element.php:91 inc/i18n.php:316
+#: inc/backbone/controls/font-manager.phtml:30
+#: inc/backbone/controls/font-manager.phtml:68
 msgid "Font"
 msgstr ""
 
@@ -3008,12 +3010,12 @@ msgstr ""
 msgid "Effect Speed"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-link-element.php:169 inc/i18n.php:342
+#: inc/classes/elements/class-tcb-link-element.php:169 inc/i18n.php:346
 msgid "Speed"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-login-element.php:15
-#: inc/classes/elements/class-tcb-login-form-element.php:25 inc/i18n.php:441
+#: inc/classes/elements/class-tcb-login-form-element.php:25 inc/i18n.php:447
 msgid "Login Form"
 msgstr ""
 
@@ -3056,10 +3058,6 @@ msgstr ""
 
 #: inc/classes/elements/class-tcb-logo-element.php:20
 msgid "Logo"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-logo-element.php:67
-msgid "Logo Size"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-lpblock-element.php:18
@@ -3485,7 +3483,7 @@ msgid "Password protected"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-post-list-element.php:18
-#: inc/classes/post-list/class-tcb-post-list.php:56 inc/i18n.php:255
+#: inc/classes/post-list/class-tcb-post-list.php:56 inc/i18n.php:259
 #: inc/menu/post_list.php:15
 msgid "Post List"
 msgstr ""
@@ -3626,26 +3624,26 @@ msgstr ""
 msgid "Box Container"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:91
+#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:92
 msgid "Grouped Pricing Boxes"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:92
+#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:93
 #, php-format
 msgid "-- Box %s"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:97
+#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:98
 msgid "Grouped Pricing Boxes Buttons"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:98
+#: inc/classes/elements/class-tcb-pricing-table-box-container-element.php:99
 #, php-format
 msgid "-- Button %s"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-pricing-table-element.php:26
-#: inc/i18n.php:248
+#: inc/i18n.php:252
 msgid "Pricing Table"
 msgstr ""
 
@@ -3735,14 +3733,10 @@ msgid "Custom aspect ratio & orientation"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-responsivevideo-element.php:117
-msgid "Floating video"
-msgstr ""
-
-#: inc/classes/elements/class-tcb-responsivevideo-element.php:124
 msgid "Custom start / end times"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-responsivevideo-element.php:131
+#: inc/classes/elements/class-tcb-responsivevideo-element.php:124
 msgid "Anonymize viewing data"
 msgstr ""
 
@@ -3833,7 +3827,7 @@ msgstr ""
 msgid "Show share count"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-stylebox-element.php:23 inc/i18n.php:249
+#: inc/classes/elements/class-tcb-stylebox-element.php:23 inc/i18n.php:253
 msgid "Styled Box"
 msgstr ""
 
@@ -3921,7 +3915,7 @@ msgstr ""
 msgid "Show Tab Image"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-table-element.php:23 inc/i18n.php:247
+#: inc/classes/elements/class-tcb-table-element.php:23 inc/i18n.php:251
 msgid "Table"
 msgstr ""
 
@@ -4001,7 +3995,7 @@ msgid "-- Body Item %s"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-tabs-element.php:23
-#: inc/classes/elements/class-tcb-tabs-old-element.php:23 inc/i18n.php:257
+#: inc/classes/elements/class-tcb-tabs-old-element.php:23 inc/i18n.php:261
 #: inc/menu/tabs_old.php:25
 msgid "Tabs"
 msgstr ""
@@ -4090,7 +4084,7 @@ msgstr ""
 msgid "Border"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-testimonial-element.php:23 inc/i18n.php:245
+#: inc/classes/elements/class-tcb-testimonial-element.php:23 inc/i18n.php:249
 msgid "Testimonial"
 msgstr ""
 
@@ -4102,11 +4096,11 @@ msgstr ""
 msgid "Headings"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toc-element.php:120
+#: inc/classes/elements/class-tcb-toc-element.php:121
 msgid "Distribute Evenly"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toc-element.php:130
+#: inc/classes/elements/class-tcb-toc-element.php:131
 msgid "Minimum Width"
 msgstr ""
 
@@ -4115,11 +4109,11 @@ msgid "Toggle Content"
 msgstr ""
 
 #: inc/classes/elements/class-tcb-toggle-element.php:23
-#: inc/classes/elements/class-tcb-toggle-old-element.php:23 inc/i18n.php:256
+#: inc/classes/elements/class-tcb-toggle-old-element.php:23 inc/i18n.php:260
 msgid "Toggle"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toggle-element.php:86 inc/i18n.php:217
+#: inc/classes/elements/class-tcb-toggle-element.php:86 inc/i18n.php:221
 msgid "Max width"
 msgstr ""
 
@@ -4199,15 +4193,15 @@ msgstr ""
 msgid "Default State"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toggle-title-element.php:131
+#: inc/classes/elements/class-tcb-toggle-title-element.php:132
 msgid "Placement"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toggle-title-element.php:153
+#: inc/classes/elements/class-tcb-toggle-title-element.php:154
 msgid "Icon Size"
 msgstr ""
 
-#: inc/classes/elements/class-tcb-toggle-title-element.php:165
+#: inc/classes/elements/class-tcb-toggle-title-element.php:166
 msgid "Rotate Icon"
 msgstr ""
 
@@ -4254,7 +4248,7 @@ msgid "Active Page"
 msgstr ""
 
 #: inc/classes/elements/post-list-sub-elements/class-tcb-post-author-picture-element.php:45
-#: inc/i18n.php:314 inc/backbone/inline/link-types.phtml:3
+#: inc/i18n.php:318 inc/backbone/inline/link-types.phtml:3
 #: inc/backbone/post-list/extra-image.phtml:6
 msgid "Static"
 msgstr ""
@@ -4342,7 +4336,7 @@ msgstr ""
 msgid "Featured Content List"
 msgstr ""
 
-#: inc/classes/post-list/class-tcb-post-list.php:731
+#: inc/classes/post-list/class-tcb-post-list.php:735
 msgid "Article Components"
 msgstr ""
 
@@ -4416,91 +4410,96 @@ msgid ""
 "clean permalinks\"%s option"
 msgstr ""
 
-#: inc/functions.php:287 inc/functions.php:596
+#: inc/functions.php:295 inc/functions.php:605
 msgid "Edit with Thrive Architect"
 msgstr ""
 
-#: inc/functions.php:606
+#: inc/functions.php:615
 msgid "Close Thrive Architect"
 msgstr ""
 
-#: inc/functions.php:722 inc/functions.php:776
+#: inc/functions.php:731 inc/functions.php:790
 msgid "Continue Reading"
 msgstr ""
 
-#: inc/functions.php:2331
+#: inc/functions.php:2350
 msgid ""
 "Thrive Leads Shortcode could not be rendered, please check it in Thrive "
 "Leads Section!"
 msgstr ""
 
-#: inc/functions.php:2853
+#: inc/functions.php:2886
 msgid "No menu items have been found."
 msgstr ""
 
-#: inc/functions.php:3130
+#: inc/functions.php:3163
 msgid "Thrive Architect Content"
 msgstr ""
 
-#: inc/functions.php:3131
+#: inc/functions.php:3164
 msgid "Thrive Architect Custom CSS"
 msgstr ""
 
-#: inc/functions.php:3433
+#: inc/functions.php:3466
 #, php-format
 msgid "Only %s files are accepted"
 msgstr ""
 
-#: inc/functions.php:3502
+#: inc/functions.php:3535
 msgid "Please prove you are not a robot!!!"
 msgstr ""
 
-#: inc/functions.php:3509
+#: inc/functions.php:3542
 msgid "The email address is required"
 msgstr ""
 
-#: inc/functions.php:3515
+#: inc/functions.php:3548
 msgid "The email address is invalid"
 msgstr ""
 
-#: inc/functions.php:3550
+#: inc/functions.php:3583
 msgid "User consent is required"
 msgstr ""
 
-#: inc/functions.php:3568
+#: inc/functions.php:3601
 msgid "No connection for this form"
 msgstr ""
 
-#: inc/functions.php:3722
+#: inc/functions.php:3757
 msgid "All categories"
 msgstr ""
 
-#: inc/functions.php:3862
+#: inc/functions.php:3897
 msgid "M j, Y @ G:i"
 msgstr ""
 
-#: inc/functions.php:3864
+#: inc/functions.php:3899
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: inc/functions.php:4069
+#: inc/functions.php:4104
 msgid "Copy"
 msgstr ""
 
-#: inc/functions.php:4070
+#: inc/functions.php:4105
 msgid "ERROR: The username field is empty."
 msgstr ""
 
-#: inc/functions.php:4071
+#: inc/functions.php:4106
 msgid "ERROR: The password field is empty."
 msgstr ""
 
-#: inc/functions.php:4072
+#: inc/functions.php:4107
 msgid "ERROR: Enter a username or email address."
 msgstr ""
 
-#: inc/helpers/cloud.php:249
+#: inc/functions.php:4108
+#, php-format
+msgid "At least %s characters are needed"
+msgstr ""
+
+#: inc/helpers/cloud.php:259
 msgid "Invalid request"
 msgstr ""
 
@@ -4584,6 +4583,10 @@ msgstr ""
 msgid "Background Effects"
 msgstr ""
 
+#: inc/i18n.php:42
+msgid "Gradient"
+msgstr ""
+
 #: inc/i18n.php:43
 msgid "Linear gradient"
 msgstr ""
@@ -4600,7 +4603,7 @@ msgstr ""
 msgid "Repeating radial gradient"
 msgstr ""
 
-#: inc/i18n.php:48 inc/i18n.php:402
+#: inc/i18n.php:48 inc/i18n.php:408
 #: inc/backbone/controls/link/link-select.phtml:2
 msgid "Link"
 msgstr ""
@@ -4805,144 +4808,160 @@ msgstr ""
 msgid "Default aspect ratio (16:9)"
 msgstr ""
 
-#: inc/i18n.php:103 inc/i18n.php:124
+#: inc/i18n.php:101
+msgid "Sticky Float on Scroll"
+msgstr ""
+
+#: inc/i18n.php:102
+msgid "Enable Close Button"
+msgstr ""
+
+#: inc/i18n.php:103
+msgid "View Floating Video in Preview"
+msgstr ""
+
+#: inc/i18n.php:104
+msgid "Floating Video Preview"
+msgstr ""
+
+#: inc/i18n.php:107 inc/i18n.php:128
 msgid "Email error"
 msgstr ""
 
-#: inc/i18n.php:104 inc/i18n.php:128
+#: inc/i18n.php:108 inc/i18n.php:132
 msgid "Phone number error"
 msgstr ""
 
-#: inc/i18n.php:105
+#: inc/i18n.php:109
 msgid "Password error"
 msgstr ""
 
-#: inc/i18n.php:106
+#: inc/i18n.php:110
 msgid "Password mismatch"
 msgstr ""
 
-#: inc/i18n.php:107 inc/i18n.php:138
+#: inc/i18n.php:111 inc/i18n.php:142
 msgid "Required field error"
 msgstr ""
 
-#: inc/i18n.php:110 inc/i18n.php:125
+#: inc/i18n.php:114 inc/i18n.php:129
 msgid "Email address invalid"
 msgstr ""
 
-#: inc/i18n.php:111 inc/i18n.php:129
+#: inc/i18n.php:115 inc/i18n.php:133
 msgid "Phone number invalid"
 msgstr ""
 
-#: inc/i18n.php:112
+#: inc/i18n.php:116
 msgid "Password invalid"
 msgstr ""
 
-#: inc/i18n.php:113
+#: inc/i18n.php:117
 msgid "Password mismatch error"
 msgstr ""
 
-#: inc/i18n.php:114
+#: inc/i18n.php:118
 msgid "Required field missing"
 msgstr ""
 
-#: inc/i18n.php:118
+#: inc/i18n.php:122
 msgid "Some fields are empty!"
 msgstr ""
 
-#: inc/i18n.php:121
+#: inc/i18n.php:125
 msgid "The passwords do not match"
 msgstr ""
 
-#: inc/i18n.php:132
+#: inc/i18n.php:136
 msgid "URL error"
 msgstr ""
 
-#: inc/i18n.php:133
+#: inc/i18n.php:137
 msgid "URL invalid"
 msgstr ""
 
-#: inc/i18n.php:134
+#: inc/i18n.php:138
 msgid ""
 "Please enter the URL where visitors will be redirected to after they submit "
 "the form"
 msgstr ""
 
-#: inc/i18n.php:139
+#: inc/i18n.php:143
 msgid "Required field empty"
 msgstr ""
 
-#: inc/i18n.php:142
+#: inc/i18n.php:146
 msgid ""
 "You have to set to which email address(es) the contact form should be sent"
 msgstr ""
 
-#: inc/i18n.php:143
+#: inc/i18n.php:147
 msgid ""
 "To email field is invalid. Please check the emil address(es) are correct"
 msgstr ""
 
-#: inc/i18n.php:146
+#: inc/i18n.php:150
 msgid ""
 "Please enter the subject for the email that will be sent to you when the "
 "form will be sent"
 msgstr ""
 
-#: inc/i18n.php:149
+#: inc/i18n.php:153
 msgid ""
 "CC email field is invalid. Please check the emil address(es) are correct"
 msgstr ""
 
-#: inc/i18n.php:152
+#: inc/i18n.php:156
 msgid ""
 "BCC email field is invalid. Please check the emil address(es) are correct"
 msgstr ""
 
-#: inc/i18n.php:155
+#: inc/i18n.php:159
 msgid ""
 "Please select an action to be performed after the form will be submitted"
 msgstr ""
 
-#: inc/i18n.php:158
+#: inc/i18n.php:162
 msgid "Please fill in the confirmation message"
 msgstr ""
 
-#: inc/i18n.php:161
+#: inc/i18n.php:165
 msgid "Please fill in the subject for confirmation email"
 msgstr ""
 
-#: inc/i18n.php:164
+#: inc/i18n.php:168
 msgid "Please fill in the from name"
 msgstr ""
 
-#: inc/i18n.php:167
+#: inc/i18n.php:171
 msgid "Please fill in From Email"
 msgstr ""
 
-#: inc/i18n.php:168
+#: inc/i18n.php:172
 msgid "From Email is not a valid email address"
 msgstr ""
 
-#: inc/i18n.php:171
+#: inc/i18n.php:175
 msgid "Invalid email address for reply to"
 msgstr ""
 
-#: inc/i18n.php:174
+#: inc/i18n.php:178
 msgid "Please fill in notification text"
 msgstr ""
 
-#: inc/i18n.php:178
+#: inc/i18n.php:182
 msgid "New message from: "
 msgstr ""
 
-#: inc/i18n.php:179
+#: inc/i18n.php:183
 msgid "After submit action"
 msgstr ""
 
-#: inc/i18n.php:180
+#: inc/i18n.php:184
 msgid "Your message has been sent, thank you!"
 msgstr ""
 
-#: inc/i18n.php:181
+#: inc/i18n.php:185
 msgid ""
 "Hello, \n"
 "\n"
@@ -4953,74 +4972,74 @@ msgid ""
 "[wp_site_title]"
 msgstr ""
 
-#: inc/i18n.php:182
+#: inc/i18n.php:186
 msgid "Contact Form submission confirmation"
 msgstr ""
 
-#: inc/i18n.php:184
+#: inc/i18n.php:188
 msgid "This table has merged cells. It cannot be sorted"
 msgstr ""
 
-#: inc/i18n.php:185
+#: inc/i18n.php:189
 msgid "Delete content template"
 msgstr ""
 
-#: inc/i18n.php:186
+#: inc/i18n.php:190
 msgid ""
 "Are you sure you want to remove this Content Template? This action cannot be "
 "undone"
 msgstr ""
 
-#: inc/i18n.php:188 inc/backbone/page-events/actions/lightbox.phtml:16
+#: inc/i18n.php:192 inc/backbone/page-events/actions/lightbox.phtml:16
 #: inc/backbone/page-events/actions/lightbox.phtml:38
 msgid "Create new lightbox"
 msgstr ""
 
-#: inc/i18n.php:189
+#: inc/i18n.php:193
 msgid "Change Direction"
 msgstr ""
 
-#: inc/i18n.php:191
+#: inc/i18n.php:195
 msgid "Image is required for pinterest share"
 msgstr ""
 
-#: inc/i18n.php:192
+#: inc/i18n.php:196
 msgid "Edit HTML Form"
 msgstr ""
 
-#: inc/i18n.php:193
+#: inc/i18n.php:197
 msgid "Connect Form To Service"
 msgstr ""
 
-#: inc/i18n.php:194 inc/views/elements/lead_generation.php:24
+#: inc/i18n.php:198 inc/views/elements/lead_generation.php:24
 msgid "Sign Up"
 msgstr ""
 
-#: inc/i18n.php:195
+#: inc/i18n.php:199
 msgid "Reload Page"
 msgstr ""
 
-#: inc/i18n.php:199
+#: inc/i18n.php:203
 msgid "Go to next step in quiz"
 msgstr ""
 
-#: inc/i18n.php:200
+#: inc/i18n.php:204
 msgid "Invalid code! Please add at least one input."
 msgstr ""
 
-#: inc/i18n.php:201
+#: inc/i18n.php:205
 msgid "API successfully added"
 msgstr ""
 
-#: inc/i18n.php:202
+#: inc/i18n.php:206
 msgid "Choose connection"
 msgstr ""
 
-#: inc/i18n.php:203
+#: inc/i18n.php:207
 msgid "You have no active connections."
 msgstr ""
 
-#: inc/i18n.php:204
+#: inc/i18n.php:208
 msgid ""
 "Are you sure you want to DELETE all of the content that was created in this "
 "landing page and revert to the theme page?\n"
@@ -5028,799 +5047,807 @@ msgid ""
 "deleted."
 msgstr ""
 
-#: inc/i18n.php:205
+#: inc/i18n.php:209
 msgid ""
 "Are you sure you want to CLEAR all content from this Landing Page? This "
 "action cannot be undone"
 msgstr ""
 
-#: inc/i18n.php:206
+#: inc/i18n.php:210
 msgid "Template name is required"
 msgstr ""
 
-#: inc/i18n.php:207
+#: inc/i18n.php:211
 msgid "Please enter a template name, it will be easier to reload it after."
 msgstr ""
 
-#: inc/i18n.php:208
+#: inc/i18n.php:212
 msgid "First, you must select a template from the available ones."
 msgstr ""
 
-#: inc/i18n.php:209
+#: inc/i18n.php:213
 msgid "An unknown error has occured. Response was: "
 msgstr ""
 
-#: inc/i18n.php:210
+#: inc/i18n.php:214
 msgid ""
 "Importing a landing page will overwrite the current contents of this page. "
 "Are you sure you want to continue ?"
 msgstr ""
 
-#: inc/i18n.php:211
+#: inc/i18n.php:215
 msgid "If you leave this page then any unsaved changes will be lost"
 msgstr ""
 
-#: inc/i18n.php:212
+#: inc/i18n.php:216
 msgid "All changes saved!"
 msgstr ""
 
-#: inc/i18n.php:214
+#: inc/i18n.php:218
 msgid ""
 "An event is already setup for this Trigger and Action. Please choose another "
 "configuration."
 msgstr ""
 
-#: inc/i18n.php:215
+#: inc/i18n.php:219
 msgid "Custom URL"
 msgstr ""
 
-#: inc/i18n.php:216
+#: inc/i18n.php:220
 msgid "Edit your caption text here"
 msgstr ""
 
-#: inc/i18n.php:218
+#: inc/i18n.php:222
 msgid "Float"
 msgstr ""
 
-#: inc/i18n.php:219
+#: inc/i18n.php:223
 msgid "Position"
 msgstr ""
 
-#: inc/i18n.php:220
+#: inc/i18n.php:224
 msgid "Overflow"
 msgstr ""
 
-#: inc/i18n.php:221
+#: inc/i18n.php:225
 msgid "Z-index"
 msgstr ""
 
-#: inc/i18n.php:222
+#: inc/i18n.php:226
 msgid "Edit Components"
 msgstr ""
 
-#: inc/i18n.php:223 inc/backbone/element-states.phtml:3
+#: inc/i18n.php:227 inc/backbone/element-states.phtml:3
 msgid "State:"
 msgstr ""
 
-#: inc/i18n.php:226
+#: inc/i18n.php:230
 msgid "Visited"
 msgstr ""
 
-#: inc/i18n.php:228
+#: inc/i18n.php:232
 msgid ""
 "Animations applied here are available on all screen sizes. In order to edit "
 "these, switch to Desktop Preview."
 msgstr ""
 
-#: inc/i18n.php:229
+#: inc/i18n.php:233
 msgid "KlickTipp Thank You URL"
 msgstr ""
 
-#: inc/i18n.php:230
+#: inc/i18n.php:234
 msgid "An unknown error occured."
 msgstr ""
 
-#: inc/i18n.php:231 inc/views/modals/lp-templates.php:17
+#: inc/i18n.php:235 inc/views/modals/lp-templates.php:17
 msgid "Choose Landing Page Template"
 msgstr ""
 
-#: inc/i18n.php:232
+#: inc/i18n.php:236
 msgid "Change Landing Page Template"
 msgstr ""
 
-#: inc/i18n.php:233
+#: inc/i18n.php:237
 msgid "Wrap columns on tablet"
 msgstr ""
 
-#: inc/i18n.php:234
+#: inc/i18n.php:238
 msgid "Wrap columns on mobile"
 msgstr ""
 
-#: inc/i18n.php:235
+#: inc/i18n.php:239
 msgid "Edit Lightbox"
 msgstr ""
 
-#: inc/i18n.php:236
+#: inc/i18n.php:240
 msgid "Edit Thrivebox"
 msgstr ""
 
-#: inc/i18n.php:237
+#: inc/i18n.php:241
 msgid "Fetching data..."
 msgstr ""
 
-#: inc/i18n.php:238
+#: inc/i18n.php:242
 msgid "Element"
 msgstr ""
 
-#: inc/i18n.php:239
+#: inc/i18n.php:243
 msgid "Turn Off Save Reminders "
 msgstr ""
 
-#: inc/i18n.php:240
+#: inc/i18n.php:244
 msgid "Turn On Save Reminders "
 msgstr ""
 
-#: inc/i18n.php:241
+#: inc/i18n.php:245
 msgid ""
 "You cannot have nested links inside containers. Please remove the link of "
 "the ##split## in order to drop the new element"
 msgstr ""
 
-#: inc/i18n.php:242
+#: inc/i18n.php:246
 msgid ""
 "You cannot have nested links inside containers. Please remove the link of "
 "the ##split## in order to insert new link"
 msgstr ""
 
-#: inc/i18n.php:243
+#: inc/i18n.php:247
 msgid ""
 "You cannot have nested links inside containers. Pasted text contains links. "
 "Try to remove the link of the"
 msgstr ""
 
-#: inc/i18n.php:246
+#: inc/i18n.php:250
 msgid "Menu"
 msgstr ""
 
-#: inc/i18n.php:253
+#: inc/i18n.php:257
 msgid "Checkout"
 msgstr ""
 
-#: inc/i18n.php:254 inc/backbone/controls/decoration/decoration.phtml:15
+#: inc/i18n.php:258 inc/backbone/controls/decoration/decoration.phtml:15
 msgid "Fancy Divider"
 msgstr ""
 
-#: inc/i18n.php:258
+#: inc/i18n.php:262
 msgid "Search Form"
 msgstr ""
 
-#: inc/i18n.php:260
+#: inc/i18n.php:264
 msgid "Above"
 msgstr ""
 
-#: inc/i18n.php:261
+#: inc/i18n.php:265
 msgid "Below"
 msgstr ""
 
-#: inc/i18n.php:262
+#: inc/i18n.php:266
 msgid "Left of"
 msgstr ""
 
-#: inc/i18n.php:263
+#: inc/i18n.php:267
 msgid "Right of"
 msgstr ""
 
-#: inc/i18n.php:264
+#: inc/i18n.php:268
 msgid "Inside"
 msgstr ""
 
-#: inc/i18n.php:265
+#: inc/i18n.php:269
 msgid "The symbol could not be saved"
 msgstr ""
 
-#: inc/i18n.php:266
+#: inc/i18n.php:270
 msgid "The symbol cannot be saved while you are in hover state!"
 msgstr ""
 
-#: inc/i18n.php:267
+#: inc/i18n.php:271
 msgid "The header cannot be saved while you are in hover state!"
 msgstr ""
 
-#: inc/i18n.php:268
+#: inc/i18n.php:272
 msgid "The footer cannot be saved while you are in hover state!"
 msgstr ""
 
-#: inc/i18n.php:269
+#: inc/i18n.php:273
 msgid "The symbol cannot be saved while you are in lead generation edit state!"
 msgstr ""
 
-#: inc/i18n.php:270
+#: inc/i18n.php:274
 msgid "The header cannot be saved while you are in lead generation edit state!"
 msgstr ""
 
-#: inc/i18n.php:271
+#: inc/i18n.php:275
 msgid "The footer cannot be saved while you are in lead generation edit state!"
 msgstr ""
 
-#: inc/i18n.php:272
+#: inc/i18n.php:276
 msgid "The Symbol was saved successfully"
 msgstr ""
 
-#: inc/i18n.php:273
+#: inc/i18n.php:277
 msgid "The Header was saved successfully"
 msgstr ""
 
-#: inc/i18n.php:274
+#: inc/i18n.php:278
 msgid "The Footer was saved successfully"
 msgstr ""
 
-#: inc/i18n.php:275 inc/i18n.php:308
+#: inc/i18n.php:279 inc/i18n.php:312
 msgid ""
 "You already have a Header in the page. Scroll up to the top of the page to "
 "see it."
 msgstr ""
 
-#: inc/i18n.php:276 inc/i18n.php:309
+#: inc/i18n.php:280 inc/i18n.php:313
 msgid ""
 "You already have a Footer in the page. Scroll down to the bottom of the page "
 "to see it."
 msgstr ""
 
-#: inc/i18n.php:277
+#: inc/i18n.php:281
 msgid "Enter Template Name"
 msgstr ""
 
-#: inc/i18n.php:281
+#: inc/i18n.php:285
 msgid "Save New Symbol"
 msgstr ""
 
-#: inc/i18n.php:282 inc/views/modals/save-elements.php:65
+#: inc/i18n.php:286 inc/views/modals/save-elements.php:65
 msgid "Save New Template"
 msgstr ""
 
-#: inc/i18n.php:283 inc/views/modals/save-elements.php:76
+#: inc/i18n.php:287 inc/views/modals/save-elements.php:76
 msgid "Update Existing Template"
 msgstr ""
 
-#: inc/i18n.php:284
+#: inc/i18n.php:288
 msgid ""
 "Saved Templates can be easily loaded into your pages. Updating a template "
 "will not affect any live content."
 msgstr ""
 
-#: inc/i18n.php:285
+#: inc/i18n.php:289
 msgid " results. Check \"Show all Saved Templates\""
 msgstr ""
 
-#: inc/i18n.php:286
+#: inc/i18n.php:290
 msgid "Type a name to search for existing templates or to create a new one"
 msgstr ""
 
-#: inc/i18n.php:287
+#: inc/i18n.php:291
 msgid "Type a name to create a new Symbol"
 msgstr ""
 
-#: inc/i18n.php:288
+#: inc/i18n.php:292
 msgid ""
 "Saved Symbols can be loaded across your website. Changes you make will be "
 "reflected everywhere the symbol is displayed."
 msgstr ""
 
-#: inc/i18n.php:291
+#: inc/i18n.php:295
 msgid "Symbol name is blank. Please choose a name for your symbol."
 msgstr ""
 
-#: inc/i18n.php:292
+#: inc/i18n.php:296
 msgid "The header's name is required"
 msgstr ""
 
-#: inc/i18n.php:293
+#: inc/i18n.php:297
 msgid "The footer's name is required"
 msgstr ""
 
-#: inc/i18n.php:294
+#: inc/i18n.php:298
 msgid "The element for generating the thumb is missing"
 msgstr ""
 
-#: inc/i18n.php:295
+#: inc/i18n.php:299
 msgid "Something went wrong when getting image source"
 msgstr ""
 
-#: inc/i18n.php:296
+#: inc/i18n.php:300
 msgid "The thumb for the content wasn't save"
 msgstr ""
 
-#: inc/i18n.php:298
+#: inc/i18n.php:302
 msgid ""
 "All the symbols inside this element will be automatically unlinked. It's not "
 "possible to save a symbol or a template that contain another symbol."
 msgstr ""
 
-#: inc/i18n.php:299
+#: inc/i18n.php:303
 msgid ""
 "All the symbols inside the page will be unlinked so you don't loose their "
 "content."
 msgstr ""
 
-#: inc/i18n.php:301 inc/i18n.php:306 inc/views/modals/fancy-divider.php:13
+#: inc/i18n.php:305 inc/i18n.php:310 inc/views/modals/fancy-divider.php:13
 msgid "Choose"
 msgstr ""
 
-#: inc/i18n.php:302
+#: inc/i18n.php:306
 #, php-format
 msgid ""
 "If you change your %s template, you will lose all the content that you have "
 "added to your existing %s!"
 msgstr ""
 
-#: inc/i18n.php:303
+#: inc/i18n.php:307
 msgid "Add template to category"
 msgstr ""
 
-#: inc/i18n.php:304
+#: inc/i18n.php:308
 msgid "Add symbol to category"
 msgstr ""
 
-#: inc/i18n.php:305 inc/backbone/controls/link/element-link.phtml:39
+#: inc/i18n.php:309 inc/backbone/controls/link/element-link.phtml:39
 #: inc/backbone/inline/dynamiclink-popup.phtml:25
 #: inc/backbone/inline/shortcodes/main.phtml:18
 #: inc/backbone/inline/staticlink-popup.phtml:9
 msgid "Insert"
 msgstr ""
 
-#: inc/i18n.php:307
+#: inc/i18n.php:311
 msgid "Auto position cannot be used when floating is enabled"
 msgstr ""
 
-#: inc/i18n.php:310
+#: inc/i18n.php:314
 msgid "Save & Close "
 msgstr ""
 
-#: inc/i18n.php:315
+#: inc/i18n.php:319
 msgid "Sticky"
 msgstr ""
 
-#: inc/i18n.php:316
+#: inc/i18n.php:320
 msgid "End of Page"
 msgstr ""
 
-#: inc/i18n.php:317
+#: inc/i18n.php:321
 msgid "End of Parent Container"
 msgstr ""
 
-#: inc/i18n.php:318
+#: inc/i18n.php:322
 msgid "It reaches another Element"
 msgstr ""
 
-#: inc/i18n.php:319
+#: inc/i18n.php:323
 msgid "Appear on Scroll Up"
 msgstr ""
 
-#: inc/i18n.php:320
+#: inc/i18n.php:324
 msgid "Parallax"
 msgstr ""
 
-#: inc/i18n.php:321
+#: inc/i18n.php:325
 msgid "Horizontal Scroll"
 msgstr ""
 
-#: inc/i18n.php:322
+#: inc/i18n.php:326
 msgid "Vertical Scroll"
 msgstr ""
 
-#: inc/i18n.php:323
+#: inc/i18n.php:327
 msgid "Transparency "
 msgstr ""
 
-#: inc/i18n.php:326
+#: inc/i18n.php:330
 msgid "3D Perspective"
 msgstr ""
 
-#: inc/i18n.php:327
+#: inc/i18n.php:331
 msgid "Scale"
 msgstr ""
 
-#: inc/i18n.php:328
+#: inc/i18n.php:332
 msgid "Up"
 msgstr ""
 
-#: inc/i18n.php:331
+#: inc/i18n.php:335
 msgid "Down"
 msgstr ""
 
-#: inc/i18n.php:332
+#: inc/i18n.php:336
 msgid "Scale Up"
 msgstr ""
 
-#: inc/i18n.php:333
+#: inc/i18n.php:337
 msgid "Scale Up Down"
 msgstr ""
 
-#: inc/i18n.php:334
+#: inc/i18n.php:338
 msgid "Scale Down"
 msgstr ""
 
-#: inc/i18n.php:335
+#: inc/i18n.php:339
 msgid "Scale Down Up"
 msgstr ""
 
-#: inc/i18n.php:336
+#: inc/i18n.php:340
 msgid "Fade In"
 msgstr ""
 
-#: inc/i18n.php:337
+#: inc/i18n.php:341
 msgid "Fade Out"
 msgstr ""
 
-#: inc/i18n.php:338
+#: inc/i18n.php:342
 msgid "Fade In Out "
 msgstr ""
 
-#: inc/i18n.php:339
+#: inc/i18n.php:343
 msgid "Fade Out In"
 msgstr ""
 
-#: inc/i18n.php:340
+#: inc/i18n.php:344
 msgid "From Perspective"
 msgstr ""
 
-#: inc/i18n.php:341
+#: inc/i18n.php:345
 msgid "To Perspective"
 msgstr ""
 
-#: inc/i18n.php:343
+#: inc/i18n.php:347
 msgid "Level"
 msgstr ""
 
-#: inc/i18n.php:344
+#: inc/i18n.php:348
 msgid "Parallax preview mode active"
 msgstr ""
 
-#: inc/i18n.php:346 inc/views/modals/lp-templates.php:43
+#: inc/i18n.php:350 inc/views/modals/lp-templates.php:43
 msgid "Default Templates"
 msgstr ""
 
-#: inc/i18n.php:347
+#: inc/i18n.php:351
+msgid "Cloud Templates"
+msgstr ""
+
+#: inc/i18n.php:352
+msgid "Thrive Templates"
+msgstr ""
+
+#: inc/i18n.php:353
 msgid "Style Name"
 msgstr ""
 
-#: inc/i18n.php:348
+#: inc/i18n.php:354
 msgid "Inherit Landing Page Font"
 msgstr ""
 
-#: inc/i18n.php:349
+#: inc/i18n.php:355
 msgid "Inherit Theme Font"
 msgstr ""
 
-#: inc/i18n.php:351 inc/views/elements/contentbox.php:15
+#: inc/i18n.php:357 inc/views/elements/contentbox.php:15
 #: inc/views/elements/reveal.php:15
 msgid "Click to add text or drag and drop element from right hand panel"
 msgstr ""
 
-#: inc/i18n.php:353
+#: inc/i18n.php:359
 msgid ""
 "There aren't any instances on this page. You can add it by drag and drop."
 msgstr ""
 
-#: inc/i18n.php:354
+#: inc/i18n.php:360
 msgid "Global Styles"
 msgstr ""
 
-#: inc/i18n.php:355
+#: inc/i18n.php:361
 msgid "Template Styles"
 msgstr ""
 
-#: inc/i18n.php:356 inc/backbone/util/favorite-colors.phtml:2
+#: inc/i18n.php:362 inc/backbone/util/favorite-colors.phtml:2
 msgid "Careful, you are editing a global color."
 msgstr ""
 
-#: inc/i18n.php:357
+#: inc/i18n.php:363
 msgid "Careful, you are editing a template color."
 msgstr ""
 
-#: inc/i18n.php:358 inc/backbone/util/favorite-gradients.phtml:2
+#: inc/i18n.php:364 inc/backbone/util/favorite-gradients.phtml:2
 msgid "Careful, you are editing a global gradient."
 msgstr ""
 
-#: inc/i18n.php:359
+#: inc/i18n.php:365
 msgid "Careful, you are editing a template gradient."
 msgstr ""
 
-#: inc/i18n.php:360
+#: inc/i18n.php:366
 msgid ""
 "By deleting the global style, all the elements using it will be reset to "
 "their default styles. Are you sure you want to proceed?"
 msgstr ""
 
-#: inc/i18n.php:361
+#: inc/i18n.php:367
 msgid "You have no Global Styles created"
 msgstr ""
 
-#: inc/i18n.php:362
+#: inc/i18n.php:368
 msgid "You need to define a name to your global style!"
 msgstr ""
 
-#: inc/i18n.php:363
+#: inc/i18n.php:369
 #, php-format
 msgid "Save Global %s Style"
 msgstr ""
 
-#: inc/i18n.php:364
+#: inc/i18n.php:370
 msgid "Editing Global Style"
 msgstr ""
 
-#: inc/i18n.php:365
+#: inc/i18n.php:371
 msgid "This can only be changed at the Global Style level"
 msgstr ""
 
-#: inc/i18n.php:366
+#: inc/i18n.php:372
 msgid "This cannot be changed at the Global Style level"
 msgstr ""
 
-#: inc/i18n.php:367
+#: inc/i18n.php:373
 msgid "Update global color"
 msgstr ""
 
-#: inc/i18n.php:368
+#: inc/i18n.php:374
 msgid "Update template color"
 msgstr ""
 
-#: inc/i18n.php:369
+#: inc/i18n.php:375
 msgid "Update global gradient"
 msgstr ""
 
-#: inc/i18n.php:370
+#: inc/i18n.php:376
 msgid "Update template gradient"
 msgstr ""
 
-#: inc/i18n.php:371
+#: inc/i18n.php:377
 msgid "Edit global color"
 msgstr ""
 
-#: inc/i18n.php:372
+#: inc/i18n.php:378
 msgid "Edit template color"
 msgstr ""
 
-#: inc/i18n.php:373
+#: inc/i18n.php:379
 msgid "Edit global gradient"
 msgstr ""
 
-#: inc/i18n.php:374
+#: inc/i18n.php:380
 msgid "Edit template gradient"
 msgstr ""
 
-#: inc/i18n.php:375
+#: inc/i18n.php:381
 msgid "Unlink global color"
 msgstr ""
 
-#: inc/i18n.php:376
+#: inc/i18n.php:382
 msgid "Unlink template color"
 msgstr ""
 
-#: inc/i18n.php:377
+#: inc/i18n.php:383
 msgid "Unlink global gradient"
 msgstr ""
 
-#: inc/i18n.php:378
+#: inc/i18n.php:384
 msgid "Unlink template gradient"
 msgstr ""
 
-#: inc/i18n.php:379
+#: inc/i18n.php:385
 msgid "Cancel changes"
 msgstr ""
 
-#: inc/i18n.php:380
+#: inc/i18n.php:386
 msgid "Save as favorite color"
 msgstr ""
 
-#: inc/i18n.php:381
+#: inc/i18n.php:387
 msgid "Save as favorite gradient"
 msgstr ""
 
-#: inc/i18n.php:382
+#: inc/i18n.php:388
 msgid "Save as global color"
 msgstr ""
 
-#: inc/i18n.php:383
+#: inc/i18n.php:389
 msgid "Save as global gradient"
 msgstr ""
 
-#: inc/i18n.php:386
+#: inc/i18n.php:392
 msgid ""
 "The action could not be finished because the plugin \"WordFence\" blocked "
 "the request. Set your WordFence Firewall to \"Learning Mode\" or $1 this "
 "action and try again."
 msgstr ""
 
-#: inc/i18n.php:387
+#: inc/i18n.php:393
 msgid "The action could not be finished because it was forbidden."
 msgstr ""
 
-#: inc/i18n.php:388
+#: inc/i18n.php:394
 msgid "The action could not be finished because the URL could not be found."
 msgstr ""
 
-#: inc/i18n.php:389
+#: inc/i18n.php:395
 msgid "The action could not be finished because of a fatal server error."
 msgstr ""
 
-#: inc/i18n.php:390
+#: inc/i18n.php:396
 msgid ""
 "The action could not be finished because your session expired and you are no "
 "longer logged in. Log in using the form below in order to continue."
 msgstr ""
 
-#: inc/i18n.php:393
+#: inc/i18n.php:399
 msgid "Static link"
 msgstr ""
 
-#: inc/i18n.php:394
+#: inc/i18n.php:400
 msgid "Jumplink"
 msgstr ""
 
-#: inc/i18n.php:395
+#: inc/i18n.php:401
 msgid "Dynamic link"
 msgstr ""
 
-#: inc/i18n.php:397
+#: inc/i18n.php:403
 msgid "Jump link successfully added"
 msgstr ""
 
-#: inc/i18n.php:398
+#: inc/i18n.php:404
 msgid "Dynamic link successfully added"
 msgstr ""
 
-#: inc/i18n.php:399
+#: inc/i18n.php:405
 msgid "Content Box Link"
 msgstr ""
 
-#: inc/i18n.php:400
+#: inc/i18n.php:406
 msgid "Image Link"
 msgstr ""
 
-#: inc/i18n.php:401
+#: inc/i18n.php:407
 msgid "Button Link"
 msgstr ""
 
-#: inc/i18n.php:403
+#: inc/i18n.php:409
 msgid "The selected item has a link that is invalid or no longer available!"
 msgstr ""
 
-#: inc/i18n.php:404
+#: inc/i18n.php:410
 msgid "Logo Link"
 msgstr ""
 
-#: inc/i18n.php:407 inc/backbone/inline/jumplink-popup.phtml:3
+#: inc/i18n.php:413 inc/backbone/inline/jumplink-popup.phtml:3
 msgid "Smooth Animation"
 msgstr ""
 
-#: inc/i18n.php:408
+#: inc/i18n.php:414
 msgid "Select a target"
 msgstr ""
 
-#: inc/i18n.php:409
+#: inc/i18n.php:415
 #, php-format
 msgid "You have a %s link set. Remove it first."
 msgstr ""
 
-#: inc/i18n.php:410 inc/views/post-list-sub-elements/author-bio.php:18
+#: inc/i18n.php:416 inc/views/post-list-sub-elements/author-bio.php:18
 msgid "No Author Description"
 msgstr ""
 
-#: inc/i18n.php:411
+#: inc/i18n.php:417
 msgid "You're about to connect more than one API to the form!"
 msgstr ""
 
-#: inc/i18n.php:412
+#: inc/i18n.php:418
 msgid ""
 "That API connection is not available anymore. Remove it and choose another "
 "one."
 msgstr ""
 
-#: inc/i18n.php:413
+#: inc/i18n.php:419
 msgid "State has been reset!"
 msgstr ""
 
-#: inc/i18n.php:415
+#: inc/i18n.php:421
 msgid "Formatting"
 msgstr ""
 
-#: inc/i18n.php:416
+#: inc/i18n.php:422
 msgid "Add a tag..."
 msgstr ""
 
-#: inc/i18n.php:417
+#: inc/i18n.php:423
 msgid ""
 "Please note that disabling this checkbox will hide the download option from "
 "the player, but your media could still be downloaded if a visitor finds the "
 "direct file URL."
 msgstr ""
 
-#: inc/i18n.php:418
+#: inc/i18n.php:424
 msgid "All Categories"
 msgstr ""
 
-#: inc/i18n.php:419 inc/backbone/post-list/query-options.phtml:3
+#: inc/i18n.php:425 inc/backbone/post-list/query-options.phtml:3
 msgid "I want to display the following"
 msgstr ""
 
-#: inc/i18n.php:420
+#: inc/i18n.php:426
 msgid "I want to Feature the following Content"
 msgstr ""
 
-#: inc/i18n.php:421
+#: inc/i18n.php:427
 msgid "Autofill form inputs on target URL"
 msgstr ""
 
-#: inc/i18n.php:423
+#: inc/i18n.php:429
 msgid "From Name should not be empty"
 msgstr ""
 
-#: inc/i18n.php:425
+#: inc/i18n.php:431
 msgid "Some fields aren't properly completed"
 msgstr ""
 
-#: inc/i18n.php:426
+#: inc/i18n.php:432
 msgid "Only one email is allowed for \"Reply To\" field"
 msgstr ""
 
-#: inc/i18n.php:427
+#: inc/i18n.php:433
 msgid "Only one email is allowed for \"From Email\" field"
 msgstr ""
 
-#: inc/i18n.php:428
+#: inc/i18n.php:434
 msgid ""
 "Be advised that for some email delivery services, the email will not be sent "
 "if the subject is empty."
 msgstr ""
 
-#: inc/i18n.php:429
+#: inc/i18n.php:435
 msgid ""
 "Be advised that for some email delivery services, the email will not be sent "
 "if the message is empty."
 msgstr ""
 
-#: inc/i18n.php:431
+#: inc/i18n.php:437
 msgid ""
 "The shortcode [ form_fields ] includes all data submitted by the user in "
 "list format"
 msgstr ""
 
-#: inc/i18n.php:433 inc/backbone/controls/contact-form/edit-cf-item.phtml:22
+#: inc/i18n.php:439 inc/backbone/controls/contact-form/edit-cf-item.phtml:22
 #: inc/backbone/controls/lead-generation/edit-option.phtml:2
 #: inc/backbone/login/edit-form-label.phtml:4
 msgid "Label"
 msgstr ""
 
-#: inc/i18n.php:435
+#: inc/i18n.php:441
 msgid "The name was changed successfully"
 msgstr ""
 
-#: inc/i18n.php:436
+#: inc/i18n.php:442
 msgid "This was deleted successfully"
 msgstr ""
 
-#: inc/i18n.php:437
+#: inc/i18n.php:443
 msgid "Something went wrong. Please try again."
 msgstr ""
 
-#: inc/i18n.php:438
+#: inc/i18n.php:444
 msgid "Please enter a new name."
 msgstr ""
 
-#: inc/i18n.php:439
+#: inc/i18n.php:445
 msgid "Save and Return to Post Editor"
 msgstr ""
 
-#: inc/i18n.php:442
+#: inc/i18n.php:448
 msgid "Password Recovery"
 msgstr ""
 
-#: inc/i18n.php:443
+#: inc/i18n.php:449
 msgid "Password Recovery Confirmation"
 msgstr ""
 
-#: inc/i18n.php:444
+#: inc/i18n.php:450
 msgid "Already Logged In"
 msgstr ""
 
@@ -5867,7 +5894,7 @@ msgstr ""
 msgid "Main Options"
 msgstr ""
 
-#: inc/menu/button.php:23 inc/menu/pagination_button.php:23
+#: inc/menu/button.php:25 inc/menu/pagination_button.php:23
 msgid ""
 "Changing the Master Color will unlink the element from any global color/"
 "gradient which was applied on it previously."
@@ -5898,10 +5925,9 @@ msgid "This only works if you are friends on Facebook with the moderator(s)"
 msgstr ""
 
 #: inc/menu/contact_form_submit.php:21 inc/menu/form_submit.php:21
-#: inc/menu/lead_generation_input.php:21
+#: inc/menu/lead_generation_input.php:22
 #: inc/menu/lead_generation_select.php:21
 #: inc/menu/lead_generation_submit.php:21
-#: inc/menu/lead_generation_textarea.php:21
 msgid "Remove Input Icon"
 msgstr ""
 
@@ -5923,7 +5949,7 @@ msgstr ""
 #: inc/menu/lead_generation.php:106 inc/menu/table.php:48
 #: inc/menu/tabs_old.php:38 inc/menu/text.php:44
 #: inc/backbone/controls/audio.phtml:15 inc/backbone/controls/layout.phtml:37
-#: inc/backbone/controls/responsive-video-settings.phtml:81
+#: inc/backbone/controls/responsive-video-settings.phtml:120
 #: inc/backbone/lead-generation/apis/email-extra/settings.phtml:8
 msgid "Advanced"
 msgstr ""
@@ -5932,11 +5958,11 @@ msgstr ""
 msgid "Edit error messages"
 msgstr ""
 
-#: inc/menu/contentbox.php:24
+#: inc/menu/contentbox.php:25
 msgid "Add link to Content Box"
 msgstr ""
 
-#: inc/menu/contentbox.php:34
+#: inc/menu/contentbox.php:35
 msgid "Background Image"
 msgstr ""
 
@@ -6221,17 +6247,17 @@ msgstr ""
 msgid "Logo Options"
 msgstr ""
 
-#: inc/menu/logo.php:21
+#: inc/menu/logo.php:20
 msgid ""
 "The logo element is a global element, which means it updates simultaneously "
 "in all places it's used on your site."
 msgstr ""
 
-#: inc/menu/logo.php:24
+#: inc/menu/logo.php:23
 msgid "Select a Logo"
 msgstr ""
 
-#: inc/menu/logo.php:30
+#: inc/menu/logo.php:29
 msgid "Add New Logo Variation"
 msgstr ""
 
@@ -6410,6 +6436,10 @@ msgstr ""
 
 #: inc/menu/tabs.php:23
 msgid "Edit Tab Items"
+msgstr ""
+
+#: inc/menu/toc.php:22
+msgid "Update Table"
 msgstr ""
 
 #: inc/menu/toggle_old.php:27 inc/menu/toggle.php:39
@@ -7186,7 +7216,6 @@ msgstr ""
 
 #: inc/views/modals/lp-templates.php:67
 #: inc/backbone/controls/responsive.phtml:24
-#: inc/backbone/elements/megamenu-no-items.phtml:5
 #: inc/backbone/util/favorite-colors.phtml:3
 #: inc/backbone/util/favorite-gradients.phtml:3
 msgid "Learn more"
@@ -7784,6 +7813,22 @@ msgstr ""
 msgid "Max Rating"
 msgstr ""
 
+#: inc/backbone/controls/custom-fields.phtml:21
+msgid "More Options"
+msgstr ""
+
+#: inc/backbone/controls/custom-fields.phtml:26
+msgid "If not available"
+msgstr ""
+
+#: inc/backbone/controls/custom-fields.phtml:28
+msgid "Hide element"
+msgstr ""
+
+#: inc/backbone/controls/custom-fields.phtml:29
+msgid "Show Default"
+msgstr ""
+
 #: inc/backbone/controls/custom-menu/modal-menu-type.phtml:2
 msgid "What type of menu would you like to build?"
 msgstr ""
@@ -7819,28 +7864,35 @@ msgid ""
 "this list - each menu template comes with a default set of styled menu items."
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:19
+#: inc/backbone/controls/font-manager.phtml:13
+#, php-format
+msgid ""
+"You have disabled Google Fonts on your website. Click <a style=\"display: "
+"inline;\" target=\"_blank\" href=\"%s\">here</a> to enable Google Fonts."
+msgstr ""
+
+#: inc/backbone/controls/font-manager.phtml:22
 msgid "Show recommended fonts only"
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:35
+#: inc/backbone/controls/font-manager.phtml:38
 msgid "Regular"
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:40
+#: inc/backbone/controls/font-manager.phtml:43
 msgid "Bold"
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:48
+#: inc/backbone/controls/font-manager.phtml:51
 #, php-format
 msgid "Also include the %sItalic%s version"
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:52
+#: inc/backbone/controls/font-manager.phtml:55
 msgid "Including the Italic styles may result in slower loading"
 msgstr ""
 
-#: inc/backbone/controls/font-manager.phtml:57
+#: inc/backbone/controls/font-manager.phtml:60
 msgid "Charset"
 msgstr ""
 
@@ -7893,11 +7945,11 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: inc/backbone/controls/lead-generation/edit-field.phtml:27
+#: inc/backbone/controls/lead-generation/edit-field.phtml:32
 msgid "Field Mapping"
 msgstr ""
 
-#: inc/backbone/controls/lead-generation/edit-field.phtml:30
+#: inc/backbone/controls/lead-generation/edit-field.phtml:35
 msgid "Field mapping unavailable"
 msgstr ""
 
@@ -8070,22 +8122,30 @@ msgstr ""
 msgid "Aspect ratio"
 msgstr ""
 
-#: inc/backbone/controls/responsive-video-settings.phtml:86
+#: inc/backbone/controls/responsive-video-settings.phtml:83
+msgid "Float Position"
+msgstr ""
+
+#: inc/backbone/controls/responsive-video-settings.phtml:125
 msgid ""
 "Autoplay is not currently supported by default on mobile devices (tablets, "
 "phones). More info "
 msgstr ""
 
-#: inc/backbone/controls/responsive-video-settings.phtml:87
+#: inc/backbone/controls/responsive-video-settings.phtml:126
 msgid "here"
 msgstr ""
 
-#: inc/backbone/controls/responsive-video-settings.phtml:88
+#: inc/backbone/controls/responsive-video-settings.phtml:127
 msgid "Autoplay will be muted by default on Chrome and Safari."
 msgstr ""
 
-#: inc/backbone/controls/responsive-video-settings.phtml:100
+#: inc/backbone/controls/responsive-video-settings.phtml:139
 msgid "Video Thumbnail"
+msgstr ""
+
+#: inc/backbone/controls/responsive-video-settings.phtml:145
+msgid "Configure Play Icon"
 msgstr ""
 
 #: inc/backbone/controls/responsive-video-voo-settings.phtml:7
@@ -8098,14 +8158,6 @@ msgstr ""
 
 #: inc/backbone/controls/responsive-video-voo-settings.phtml:46
 msgid "Aspect Orientation"
-msgstr ""
-
-#: inc/backbone/controls/responsive-video-voo-settings.phtml:62
-msgid "Float Position"
-msgstr ""
-
-#: inc/backbone/controls/responsive-video-voo-settings.phtml:80
-msgid "Floating behaviour is disabled in editor. "
 msgstr ""
 
 #: inc/backbone/controls/responsive.phtml:22
@@ -8193,10 +8245,6 @@ msgstr ""
 msgid "S"
 msgstr ""
 
-#: inc/backbone/controls/toc/headings.phtml:6
-msgid "Update Table"
-msgstr ""
-
 #: inc/backbone/controls/toggle.phtml:3
 msgid "Add new Toggle"
 msgstr ""
@@ -8209,6 +8257,20 @@ msgstr ""
 msgid ""
 "Label text will be the value submitted to your custom field. Disable this to "
 "submit a different value."
+msgstr ""
+
+#: inc/backbone/controls/tooltip/lg-textarea-max.phtml:3
+msgid "Set to 0 for no character limit"
+msgstr ""
+
+#: inc/backbone/controls/tooltip/lg-textarea-min.phtml:3
+msgid "Set to 0 for \"not required\""
+msgstr ""
+
+#: inc/backbone/controls/tooltip/lg-textarea-resize.phtml:3
+msgid ""
+"When user resizing is disabled your customers will be unable to change the "
+"size of the textarea"
 msgstr ""
 
 #: inc/backbone/controls/tooltip/promote-panel.phtml:4
@@ -8282,15 +8344,6 @@ msgstr ""
 
 #: inc/backbone/element-states.phtml:20
 msgid "Active"
-msgstr ""
-
-#: inc/backbone/elements/megamenu-no-items.phtml:2
-msgid "No submenu items found ..."
-msgstr ""
-
-#: inc/backbone/elements/megamenu-no-items.phtml:4
-msgid ""
-"In order to populate the megamenu, use a menu that has 3rd level menu items. "
 msgstr ""
 
 #: inc/backbone/elements/social.phtml:2
@@ -8862,6 +8915,10 @@ msgstr ""
 
 #: inc/backbone/util/color-picker/add-color.phtml:16
 msgid "Favorite"
+msgstr ""
+
+#: inc/backbone/util/custom-file-picker.phtml:10
+msgid "Change Element"
 msgstr ""
 
 #: inc/backbone/util/edit-global-colors.phtml:14

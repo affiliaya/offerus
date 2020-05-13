@@ -281,6 +281,7 @@ function tve_leads_query_group() {
 	$manager->load_dependencies();
 
 	$groups = tve_leads_get_groups( array(
+		'full_data'       => false,
 		'tracking_data'   => false,
 		'active_tests'    => false,
 		'completed_tests' => false,
@@ -306,6 +307,13 @@ function tve_leads_query_group() {
 				'allowed_post_types' => $savedOptions->getTabSavedOptions( 5, 'show_group_options' ),
 				'flag_url_match'     => $savedOptions->flag( 'direct_url_match' ),
 			);
+			/* only get form types for a single group - the one that is matched by the current request */
+			$tve_lead_group->form_types = tve_leads_get_form_types( array(
+				'lead_group_id'  => $group->ID,
+				'tracking_data'  => false,
+				'get_variations' => true,
+				'no_content'     => false,
+			) );
 			break;
 		}
 	}

@@ -224,7 +224,7 @@ class TCB_Logo_REST {
 	 * @return WP_Error|bool
 	 */
 	public static function route_permission( $request ) {
-		return TCB_Product::has_access();
+		return TCB_Product::has_external_access();
 	}
 }
 

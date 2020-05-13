@@ -10508,3 +10508,16 @@ time picker styles
   .tvd-ni-notify span {
     color: #D2000D;
     margin-right: 3px; }
+
+#tve_dash_general_settings > div > div {
+  display: flex;
+  margin-top: 20px; }
+  #tve_dash_general_settings > div > div > div:first-child {
+    flex: 0 0 180px; }
+  #tve_dash_general_settings > div > div > div:nth-child(2) {
+    margin-right: 50px; }
+  #tve_dash_general_settings > div > div > div > input {
+    margin: 0; }
+
+#tve_dash_general_settings:last-child p {
+  margin: 10px 0; }

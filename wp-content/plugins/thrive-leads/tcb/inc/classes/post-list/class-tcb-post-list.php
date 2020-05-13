@@ -183,7 +183,7 @@ class TCB_Post_List {
 		$content = $shared_styles . TCB_Post_List_Shortcodes::before_wrap(
 				array(
 					'content' => $content,
-					'tag'     => 'main',
+					'tag'     => 'div',
 					'id'      => empty( $this->attr['id'] ) ? '' : $this->attr['id'],
 					'class'   => $class,
 				), $this->attr );
@@ -214,22 +214,18 @@ class TCB_Post_List {
 	 * Post list classes to be displayed depending on the attributes and screen
 	 *
 	 * @param array $attr
-	 * @param bool  $is_main
 	 *
 	 * @return string
 	 */
-	public function class_attr( $attr = array(), $is_main = false ) {
-		$classes = array();
+	public function class_attr( $attr = array() ) {
+		$classes = array( TCB_POST_LIST_CLASS );
 
-		if ( ! $is_main || ! is_singular() ) {
-			$classes[] = TCB_POST_LIST_CLASS;
-			if ( $this->in_editor_render ) {
-				$classes[] = 'tcb-compact-element';
-				/*If the Post List is a Featured List, add the classes that will remove the duplicate and drag options*/
-				if ( $this->is_featured() ) {
-					$classes[] = 'tve_no_drag';
-					$classes[] = 'tve_no_duplicate';
-				}
+		if ( $this->in_editor_render ) {
+			$classes[] = 'tcb-compact-element';
+			/*If the Post List is a Featured List, add the classes that will remove the duplicate and drag options*/
+			if ( $this->is_featured() ) {
+				$classes[] = 'tve_no_drag';
+				$classes[] = 'tve_no_duplicate';
 			}
 		}
 
@@ -308,8 +304,7 @@ class TCB_Post_List {
 		if ( empty( $id ) ) {
 			$post = array();
 		} else {
-			$date_format   = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
-			$custom_fields = static::get_post_custom_fields( $id );
+			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
 			$post = array(
 				'tcb_post_categories'       => do_shortcode( '[tcb_post_categories link=1]' ),
@@ -354,14 +349,23 @@ class TCB_Post_List {
 				'tcb_post_comments_link'    => static::comments_link( $id ),
 			);
 
+			$custom_fields      = static::get_post_custom_fields( $id );
 			$custom_field_types = array( 'data', 'link', 'image', 'number', 'countdown', 'audio', 'video' );
+
 			foreach ( $custom_field_types as $field ) {
 				$post[ 'tcb_post_custom_fields_' . $field ] = $custom_fields[ $field ];
 			}
-		};
+		}
 
-
-		return $post;
+		/**
+		 * filter post info that we're going to localize. maybe add some more data.
+		 *
+		 * @param array $post
+		 * @param int   $id
+		 *
+		 * @return array
+		 */
+		return apply_filters( 'tcb_post_list_post_info', $post, $id );
 	}
 
 	/**

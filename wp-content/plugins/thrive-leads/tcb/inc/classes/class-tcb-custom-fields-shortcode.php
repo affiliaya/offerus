@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class TCB_Custom_Fields_Shortcode
  */
 class TCB_Custom_Fields_Shortcode {
-	const GLOBAL_SHORTCODE_URL = 'thrive_custom_fields_shortcode_url';
+	const GLOBAL_SHORTCODE_URL  = 'thrive_custom_fields_shortcode_url';
 	const GLOBAL_SHORTCODE_DATA = 'thrive_custom_fields_shortcode_data';
 
 	private $pattern_replacement = array(
@@ -34,7 +34,7 @@ class TCB_Custom_Fields_Shortcode {
 		'link'      => array( 'text', 'image', 'email', 'url', 'file', 'page_link', 'link' ),
 		'image'     => array( 'image', 'text' ),
 		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker' ),
-		'video'     => array( 'file', 'text' ),
+		'video'     => array( 'file' ),
 		'audio'     => array( 'file', 'text' ),
 		'map'       => array( 'map', 'text' ),
 		'countdown' => array( 'date_time_picker' ),
@@ -47,16 +47,12 @@ class TCB_Custom_Fields_Shortcode {
 		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker' ),
 		'number'    => array( 'number', 'range' ),
 		'countdown' => array( 'date_time_picker' ),
-		'video'     => array( 'file', 'text' ),
+		'video'     => array( 'file' ),
 		'audio'     => array( 'file', 'text' ),
 	);
 
-	public static $whitelisted_fields = array(
-		'_price',
-		'_sale_price',
-		'_regular_price',
-		'_wc_average_rating',
-	);
+	/* some WooCommerce fields we're here, we've created a new category for them */
+	public static $whitelisted_fields = array();
 
 	public static $blacklisted_fields = array(
 		'\_%',
@@ -67,24 +63,34 @@ class TCB_Custom_Fields_Shortcode {
 	);
 
 	public static $protected_fields = array(
-		'_',                //General protected metadata starts with '_'
-		'thrive_',            //Thrive Architect metadata
+		'_',                    //General protected metadata starts with '_'
+		'thrive_',              //Thrive Architect metadata
 		'thrv_',
 		'tve_',
 		'td_nm_',
 		'tcb_',
 		'tcb2_',
-		'tcm_',                //Thrive Comments metadata
-		'tva_',                //Thrive Apprentice metadata
-		'tu_',                //Thrive Ultimate metadata
-		'tqb_',                //Thrive Quiz Builder metadata
-		'tvo_',                //Thrive Ovation metadata
-		'_tho',                //Thrive Headline Optimiser metadata
-		'is_control',        //Thrive Optimize metadata
+		'tcm_',                 //Thrive Comments metadata
+		'tva_',                 //Thrive Apprentice metadata
+		'tu_',                  //Thrive Ultimate metadata
+		'tqb_',                 //Thrive Quiz Builder metadata
+		'tvo_',                 //Thrive Ovation metadata
+		'_tho',                 //Thrive Headline Optimiser metadata
+		'is_control',           //Thrive Optimize metadata
 
 		/**  Protected Metadata for other plugins**/
 
-		'total_sales',        //WooCommerce metadata
+		'total_sales',          //WooCommerce metadata
+		'rank_math_',           //Rank Math SEO metadata
+	);
+
+	private $video_regex = array(
+		'/https?:\/\/(.+)\.(cdn\.vooplayer\.com)\/publish\/(.+)/'                                                                               => 'vooplayer',
+		'/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/'                => 'youtube',
+		'/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|list\/|playlist\?list=|playlist\?.+&list=))((\w|-){18})(?:\S+)?$/' => 'youtube',
+		'/(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/'                             => 'vimeo',
+		'/https?:\/\/(.+)?(wistia.com|wi.st)\/(?:medias|embed)\/(.+)/'                                                                          => 'wistia',
+		'/https?:\/\/(.+)?fast.wistia.net\/embed\/(.+?)\/(.+)/'                                                                                 => 'wistia',
 	);
 
 	/**
@@ -97,7 +103,7 @@ class TCB_Custom_Fields_Shortcode {
 	/**
 	 * @var TCB_Custom_Fields_Shortcode
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	/**
 	 * Holds the value of the user shortcodes
@@ -111,8 +117,8 @@ class TCB_Custom_Fields_Shortcode {
 	 *
 	 * @return TCB_Custom_Fields_Shortcode
 	 */
-	public static function getInstance() {
-		if ( self::$instance == null ) {
+	public static function get_instance() {
+		if ( self::$instance === null ) {
 			self::$instance = new self();
 		}
 
@@ -151,7 +157,6 @@ class TCB_Custom_Fields_Shortcode {
 		add_filter( 'tcb_content_allowed_shortcodes', array( $this, 'allowed_shortcodes' ) );
 		add_filter( 'tcb_dynamiclink_data', array( $this, 'global_links_shortcodes' ) );
 		add_filter( 'tcb_inline_shortcodes', array( $this, 'tcb_inline_shortcodes' ), 11 );
-
 
 		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'alter_custom_fields_image_attributes' ) );
 
@@ -208,7 +213,7 @@ class TCB_Custom_Fields_Shortcode {
 			$method_name = 'render_dynamic_field_' . $args['type'];
 
 			if ( method_exists( $this, $method_name ) ) {
-				return $this->$method_name();
+				return $this->$method_name( $args );
 			}
 		}
 	}
@@ -218,14 +223,17 @@ class TCB_Custom_Fields_Shortcode {
 	 *
 	 * @return string
 	 */
-	private function render_dynamic_field_author() {
+	private function render_dynamic_field_author( $args = array() ) {
 
-		$post_title = the_title_attribute( array( 'echo' => 0 ) );
+		$post_title  = the_title_attribute( array( 'echo' => 0 ) );
+		$post_author = get_post_field( 'post_author', get_the_ID() );
 
-		return get_avatar( get_the_author_meta( 'ID' ), 96, '', $post_title, array(
-			'class'    => 'tve_image',
-			'title'    => $post_title,
-			'data-d-f' => 'author',
+		$args['alt']          = ! empty($args['alt']) ? $args['alt'] : $post_title;
+		$args['title']        = ! empty($args['title']) ? $args['title'] : $post_title;
+		$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image';
+		return get_avatar( $post_author, 256, '', $args['alt'], array(
+			'class'      => $args['data-classes'],
+			'extra_attr' => 'loading="lazy" data-d-f="author" title="' . $args['title'] . '" width="500" height="500"',
 		) );
 	}
 
@@ -234,22 +242,26 @@ class TCB_Custom_Fields_Shortcode {
 	 *
 	 * @return string
 	 */
-	private function render_dynamic_field_featured() {
+	private function render_dynamic_field_featured( $args = array() ) {
 		$featured_image_url = tve_editor_url( 'editor/css/images/featured_image.png' );
 		$post_title         = the_title_attribute( array( 'echo' => 0 ) );
-		if ( has_post_thumbnail() ) {
-			$thumbnail_id = get_post_thumbnail_id();
 
+		$args['alt']   = ! empty($args['alt']) ? $args['alt'] : $post_title;
+		$args['title'] = ! empty($args['title']) ? $args['title'] : $post_title;
+		if ( has_post_thumbnail() ) {
+			$thumbnail_id         = get_post_thumbnail_id();
+			$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image wp-image-' . $thumbnail_id;
 			return wp_get_attachment_image( $thumbnail_id, 'full', false, array(
-				'class'    => 'tve_image wp-image-' . $thumbnail_id,
-				'title'    => $post_title,
-				'alt'      => $post_title,
+				'class'    => $args['data-classes'],
+				'title'    => $args['title'],
+				'alt'      => $args['alt'],
 				'data-id'  => $thumbnail_id,
 				'data-d-f' => 'featured',
+				'loading'  => 'lazy',
 			) );
 		}
-
-		return '<img class="tve_image" alt="' . $post_title . '" data-id="' . 0 . '" data-d-f="featured" width="500" height="500" title="' . $post_title . '" src="' . $featured_image_url . '" >';
+		$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image';
+		return '<img loading="lazy" class="' . $args['data-classes'] . '" alt="' . $args['alt'] . '" data-id="' . 0 . '" data-d-f="featured" width="500" height="500" title="' . $args['title'] . '" src="' . $featured_image_url . '" >';
 	}
 
 	/**
@@ -293,10 +305,27 @@ class TCB_Custom_Fields_Shortcode {
 		$params = $this->get_custom_fields_shortcode_params( $args['data-id'], 'map' );
 
 		if ( empty( $params ) ) {
-			return '<iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" data-c-f-id="' . $args['data-id'] . '"  src="https://maps.google.com/maps?q=' . '0' . ',' . '0' . '&amp;t=m&amp;z=' . '0' . '&amp;output=embed&amp;iwloc=near"></iframe>';
+			$params = array(
+				'latitude'  => 0,
+				'longitude' => 0,
+				'zoom'      => 0,
+			);
+
+			if ( isset( $args['data-placeholder'] ) && is_string( $args['data-placeholder'] ) && preg_match( '/(-?[0-9]+\.[0-9]+),(-?[0-9]+\.[0-9]+)/', $args['data-placeholder'], $match ) ) {
+				$params = array(
+					'latitude'  => $match[1],
+					'longitude' => $match[2],
+					'zoom'      => isset( $args['zoom'] ) ? $args['zoom'] : 0,
+				);
+			} else {
+				$params['hidden'] = 'data-c-f-hidden=1 ';
+			}
+		} else {
+			$params['zoom']   = isset( $args['zoom'] ) ? $args['zoom'] : 0;
+			$params['hidden'] = '';
 		}
 
-		return '<iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" data-c-f-id="' . $args['data-id'] . '" src="https://maps.google.com/maps?q=' . $params['latitude'] . ',' . $params['longitude'] . '&amp;t=m&amp;z=' . $args['zoom'] . '&amp;output=embed&amp;iwloc=near"></iframe>';
+		return '<iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" ' . $params['hidden'] . 'data-c-f-id="' . $args['data-id'] . '" src="https://maps.google.com/maps?q=' . $params['latitude'] . ',' . $params['longitude'] . '&amp;t=m&amp;z=' . $params['zoom'] . '&amp;output=embed&amp;iwloc=near"></iframe>';
 	}
 
 	public function render_custom_fields_audio( $args = array(), $param = null ) {
@@ -315,18 +344,46 @@ class TCB_Custom_Fields_Shortcode {
 				'name'      => $args['data-id'],
 			) );
 
-			if ( ! is_editor_page_raw( true ) ) {
+			if ( isset( $args['data-placeholder'] ) ) {
+				$params['url'] = wp_get_attachment_url( $args['data-placeholder'] );
+			}
+
+			if ( ! is_editor_page_raw( true ) && ! isset( $args['data-placeholder'] ) ) {
 				return '';
 			}
 		}
 
-		$params['extra'] = '';
-		$params['extra'] .= isset( $args['loop'] ) && $args['loop'] == '1' ? 'loop="1"' : '';
-		$params['extra'] .= isset( $args['no_download'] ) && $args['no_download'] == '1' ? 'controlslist="nodownload" ' : '';
-		$params['extra'] .= isset( $args['autoplay'] ) && $args['autoplay'] == '1' ? 'data-autoplay="1" ' : '';
+		$params['extra']  = '';
+		$params['extra'] .= isset( $args[ 'loop' . '' ] ) && $args['loop'] === '1' ? 'loop="1"' : '';
+		$params['extra'] .= isset( $args['no_download'] ) && $args['no_download'] === '1' ? 'controlslist="nodownload" ' : '';
+		$params['extra'] .= isset( $args['autoplay'] ) && $args['autoplay'] === '1' ? 'data-autoplay="1" ' : '';
 		$params['extra'] .= empty( $args['in_postlist'] ) ? '' : 'data-post-list="1" ';
 
 		return tcb_template( 'custom-fields-elements/audio.phtml', $params, true );
+	}
+
+	private function get_video_params( $args, $params ) {
+		$params['value']    = empty( $params['value'] ) ? '' : $params['value'];
+		$params['video_id'] = $this->verify_video_url( $params['value'], true );
+		switch ( $args['data-type'] ) {
+			case 'youtube':
+				$params['video_id']    = empty( $params['video_id'] ) ? '' : $params['video_id'][1];
+				$params['embeded_url'] = 'https://www.youtube.com/embed/' . $params['video_id'] . $args['data-query'];
+				break;
+			case 'vimeo':
+				$params['video_id']    = empty( $params['video_id'] ) ? '' : $params['video_id'][4];
+				$params['embeded_url'] = 'https://player.vimeo.com/video/' . $params['video_id'] . $args['data-query'];
+				break;
+			case 'wistia':
+				$params['video_id']    = empty( $params['video_id'] ) ? '' : $params['video_id'][ count( $params['video_id'] ) - 1 ];
+				$params['embeded_url'] = 'https://fast.wistia.net/embed/iframe/' . $params['video_id'] . $args['data-query'];
+				break;
+			case 'vooplayer':
+				$params['video_id'] = empty( $params['video_id'] ) ? '' : $params['video_id'][3];
+				break;
+		}
+
+		return $params;
 	}
 
 	public function render_custom_fields_video( $args = array(), $param = null ) {
@@ -343,17 +400,35 @@ class TCB_Custom_Fields_Shortcode {
 				'name'      => $args['data-id'],
 			) );
 
-			if ( ! is_editor_page_raw( true ) ) {
+			if ( isset( $args['data-placeholder'] ) ) {
+				$params['url'] = wp_get_attachment_url( $args['data-placeholder'] );
+			}
+
+			if ( ! is_editor_page_raw( true ) && ! isset( $args['data-placeholder'] ) ) {
 				return '';
 			}
 		}
 
-		$params['extra'] = '';
-		$params['extra'] .= isset( $args['loop'] ) && $args['loop'] == '1' ? 'loop ' : '';
-		$params['extra'] .= isset( $args['controls'] ) && $args['controls'] == '0' ? '' : 'controls="controls" ';
+		$params['extra']  = empty( $args['data-query'] ) ? '' : $args['data-query'];
 		$params['extra'] .= empty( $args['in_postlist'] ) ? '' : 'data-post-list="1" ';
 
-		return tcb_template( 'custom-fields-elements/video.phtml', $params, true );
+		$template = tcb_template( 'custom-fields-elements/video.phtml', $params, true );
+
+		$args['data-type'] = empty( $args['data-type'] ) ? 'external' : $args['data-type'];
+		switch ( $args['data-type'] ) {
+			case 'youtube':
+			case 'vimeo':
+			case 'wistia':
+				$params   = $this->get_video_params( $args, $params );
+				$template = '<iframe class="tcb-responsive-video" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" src="' . $params['embeded_url'] . '" data-src="' . $params['embeded_url'] . '" frameborder="0" allowfullscreen data-c-f-id="' . $args['data-id'] . '"></iframe>';
+				break;
+			case 'vooplayer':
+				$params   = $this->get_video_params( $args, $params );
+				$template = '<iframe allow="autoplay" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" class="video-player-container vooplayer tcb-responsive-video" data-playerId="' . $params['video_id'] . '" url-params="" allowtransparency="true"  name="vooplayerframe" frameborder="0" allowfullscreen="true" scrolling="no" src="" style="max-width: 100%; position:relative; opacity: 1; min-width: 100%; height:100% !important; width: auto; top: auto;" data-c-f-id="' . $args['data-id'] . '"> </iframe>';
+				break;
+		}
+
+		return $template;
 	}
 
 	public function render_custom_fields_image( $args = array(), $param ) {
@@ -362,7 +437,7 @@ class TCB_Custom_Fields_Shortcode {
 
 		$params = empty( $args['in_postlist'] ) ? $this->get_custom_fields_shortcode_params( $args['data-id'], 'image' ) : $param;
 
-		if ( empty( $params ) ) {
+		if ( empty( $params ) && ! isset( $args['data-placeholder'] ) ) {
 
 			$params = array(
 				'alt'      => 'Placeholder',
@@ -379,19 +454,26 @@ class TCB_Custom_Fields_Shortcode {
 				return '';
 			}
 
-			$params['extra'] = empty( $args['in_postlist'] ) ? '' : 'data-post-list="1"';
+			$params['extra']   = empty( $args['in_postlist'] ) ? '' : 'data-post-list="1"';
+			$params['classes'] = empty( $args['data-classes'] ) ? 'tve_image wp-image-' . $params['id'] . '' : $args['data-classes'];
 
 			$html = tcb_template( 'custom-fields-elements/image.phtml', $params, true );
 
 		} else {
 
+			if ( empty( $params ) && isset( $args['data-placeholder'] ) ) {
+				$params['id']    = $args['data-placeholder'];
+				$params['alt']   = 'Placeholder';
+				$params['name']  = $args['data-id'];
+				$params['title'] = 'Placeholder';
+			}
 			$aux = array(
-				'class'       => 'tve_image wp-image-' . $params['id'],
-				'data-d-f'    => 'author',
+				'class'       => empty( $args['data-classes'] ) ? 'tve_image wp-image-' . $params['id'] . '' : $args['data-classes'],
 				'alt'         => esc_attr( $params['alt'] ),
 				'data-c-f-id' => esc_attr( $params['name'] ),
 				'title'       => esc_attr( $params['title'] ),
 			);
+
 			if ( ! empty( $args['in_postlist'] ) ) {
 				$aux['data-post-list'] = esc_attr( 1 );
 			}
@@ -425,7 +507,16 @@ class TCB_Custom_Fields_Shortcode {
 				'min'  => '00',
 			);
 
-			if ( ! is_editor_page_raw( true ) ) {
+			if ( isset( $args['data-placeholder'] ) ) {
+				$aux    = explode( ':', $args['data-placeholder'] );
+				$params = array(
+					'date' => $aux[0],
+					'hour' => $aux[1],
+					'min'  => $aux[2],
+				);
+			}
+
+			if ( ! is_editor_page_raw( true ) && ! isset( $args['data-placeholder'] ) ) {
 				$return[] = array( 'prop' => 'data-c-f-hidden', 'value' => 1 );
 
 				return htmlspecialchars( wp_json_encode( $return ), ENT_QUOTES );
@@ -453,7 +544,11 @@ class TCB_Custom_Fields_Shortcode {
 				'value' => '0',
 			);
 
-			if ( ! is_editor_page_raw( true ) ) {
+			if ( isset( $args['data-placeholder'] ) ) {
+				$params['value'] = $args['data-placeholder'];
+			}
+
+			if ( ! is_editor_page_raw( true ) && ! isset( $args['data-placeholder'] ) ) {
 				$return[] = array( 'prop' => 'data-c-f-hidden', 'value' => 1 );
 
 				return htmlspecialchars( wp_json_encode( $return ), ENT_QUOTES );
@@ -816,6 +911,31 @@ class TCB_Custom_Fields_Shortcode {
 		);
 	}
 
+	private function verify_video_url( $url, $get_regex = false ) {
+
+		foreach ( $this->video_regex as $reg => $provider ) {
+			if ( preg_match( $reg, $url, $aux ) ) {
+				return $get_regex ? $aux : array(
+					'value'     => $aux[0],
+					'video_src' => $provider,
+				);
+			}
+		}
+
+		if ( preg_match( '/.+\.(wmv|avi|mov|mpg|mp4|m4v|ogv|3gp|3g2)$/', $url, $aux ) ) {
+			return $get_regex ? $aux : array(
+				'value'     => $url,
+				'video_src' => 'external',
+				'url'       => $url,
+				'title'     => 'External Video',
+				'id'        => 0,
+				'mime_type' => 'video/' . $aux[1],
+			);
+		}
+
+		return false;
+	}
+
 	/**
 	 * Integration with Advanced Custom Fields
 	 * https://www.advancedcustomfields.com/
@@ -842,7 +962,7 @@ class TCB_Custom_Fields_Shortcode {
 
 			$acf_key = static::ACF_PREFIX . $field_key;
 
-			if ( $value['value'] == '' && $value['type'] !== 'true_false' ) {
+			if ( $value['value'] === '' && 'true_false' !== $value['type'] ) {
 				continue;
 			}
 
@@ -862,7 +982,6 @@ class TCB_Custom_Fields_Shortcode {
 
 					switch ( $k ) {
 						case 'countdown':
-
 							$field = array( 'value' => $formatted_value );
 
 							$date          = date_create_from_format( 'Y-m-d H:i:s', $value['value'] );
@@ -872,7 +991,6 @@ class TCB_Custom_Fields_Shortcode {
 
 							break;
 						case 'link':
-
 							$field = array( 'value' => $formatted_value );
 							if ( in_array( $value['type'], array( 'file', 'image' ) ) ) {
 								$field['value'] = $attachment['url'];
@@ -895,15 +1013,22 @@ class TCB_Custom_Fields_Shortcode {
 						case 'image':
 							//TODO Filter types in case of video/audio (ex: .flv is not working)
 							if ( ! empty( $attachment ) && $attachment['type'] === $k ) {
-								$field = array_merge( $attachment, array( 'name' => $acf_key, 'mime' => $attachment['mime_type'] ) );
+								$field              = array_merge( $attachment, array(
+									'name' => $acf_key,
+									'mime' => $attachment['mime_type'],
+								) );
+								$field['video_src'] = 'external';
 							} else {
-								$field = false;
+								$field = $k === 'video' ? $this->verify_video_url( $value['value'] ) : false;
 							}
 
 							break;
 						case 'map':
 							if ( is_string( $value['value'] ) && preg_match( '/(-?[0-9]+\.[0-9]+),(-?[0-9]+\.[0-9]+)/', $value['value'], $match ) ) {
-								$field = array( 'latitude' => $match[1], 'longitude' => $match[2] );
+								$field = array(
+									'latitude'  => $match[1],
+									'longitude' => $match[2],
+								);
 							}
 
 							break;
@@ -990,7 +1115,7 @@ class TCB_Custom_Fields_Shortcode {
  * @return TCB_Custom_Fields_Shortcode
  */
 function tcb_custom_fields_api() {
-	return TCB_Custom_Fields_Shortcode::getInstance();
+	return TCB_Custom_Fields_Shortcode::get_instance();
 }
 
 tcb_custom_fields_api();

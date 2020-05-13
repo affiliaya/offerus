@@ -7,6 +7,30 @@
  */
 
 /**
+ * Get the timout, in seconds that should be set for an external api request
+ *
+ * @param string $request_method current request method
+ *
+ * @return int
+ */
+function tve_dash_request_timeout( $request_method = 'get' ) {
+	/* SUPP-988, SUPP-3317, SUPP-8988 increased timeout to 30, it seems some hosts have some issues, not being able to resolve API URLs in 5 seconds */
+	/**
+	 * Filter the default request timeout used throughout Thrive products.
+	 * 30 seconds is a "hard-earned" value, it started from 10, and got increased each time a new server could not download something in that time.
+	 * The filter offers a workaround for 3rd party code to increase this timeout if they have further issues.
+	 * Ideally we could provide them with a mini-plugin that does this
+	 *
+	 * @param int    $timeout        timeout in seconds
+	 * @param string $request_method allows finer control
+	 *
+	 * @return int
+	 *
+	 */
+	return apply_filters( 'thrive_request_timeout', 30, $request_method );
+}
+
+/**
  * Wrapper over the WP wp_remote_get function
  *
  * @param string $url  Site URL to retrieve.
@@ -19,7 +43,7 @@
 function tve_dash_api_remote_get( $url, $args = array() ) {
 	$args['sslverify'] = false;
 	/* SUPP-988 increased timeout to 15, it seems some hosts have some issues, not being able to resolve API URLs in 5 seconds */
-	$args['timeout'] = 15;
+	$args['timeout'] = tve_dash_request_timeout( 'get' );
 
 	return wp_remote_get( $url, $args );
 }
@@ -34,7 +58,7 @@ function tve_dash_api_remote_get( $url, $args = array() ) {
  *
  * @param resource $handle
  */
-function tve_dash_api_curl_ssl_version( & $handle ) {
+function tve_dash_api_curl_ssl_version( &$handle ) {
 	curl_setopt( $handle, CURLOPT_SSLVERSION, CURL_SSLVERSION_DEFAULT );
 }
 
@@ -50,8 +74,7 @@ function tve_dash_api_curl_ssl_version( & $handle ) {
  */
 function tve_dash_api_remote_post( $url, $args = array() ) {
 	$args['sslverify'] = false;
-	/* SUPP-988, SUPP-3317 increased timeout to 20, it seems some hosts have some issues, not being able to resolve API URLs in 5 seconds */
-	$args['timeout'] = 20;
+	$args['timeout']   = tve_dash_request_timeout( 'post' );
 
 	return wp_remote_post( $url, $args );
 }

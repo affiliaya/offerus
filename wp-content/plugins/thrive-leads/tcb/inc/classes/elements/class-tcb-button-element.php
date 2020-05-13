@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class TCB_Button_Element
  */
-class TCB_Button_Element extends TCB_Element_Abstract {
+class TCB_Button_Element extends TCB_Cloud_Template_Element_Abstract {
 
 	/**
 	 * Get element alternate
@@ -51,6 +51,24 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 	}
 
 	/**
+	 * This element is not a placeholder
+	 *
+	 * @return bool|true
+	 */
+	public function is_placeholder() {
+		return false;
+	}
+
+	/**
+	 * HTML layout of the element for when it's dragged in the canvas
+	 *
+	 * @return string
+	 */
+	protected function html() {
+		return tcb_template( 'elements/' . $this->tag() . '.php', $this, true );
+	}
+
+	/**
 	 * Component and control config
 	 *
 	 * @return array
@@ -59,7 +77,11 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 		$button = array(
 			'button'     => array(
 				'config' => array(
-					'icon_side'     => array(
+					'ButtonPalettes' => array(
+						'config'  => array(),
+						'extends' => 'Palettes',
+					),
+					'icon_side'      => array(
 						'config' => array(
 							'name'    => __( 'Icon Side', 'thrive-cb' ),
 							'buttons' => array(
@@ -68,7 +90,15 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 							),
 						),
 					),
-					'MasterColor'   => array(
+					'ButtonIcon'     => array(
+						'config'  => array(
+							'name'    => '',
+							'label'   => __( 'Add Icon', 'thrive-cb' ),
+							'default' => false,
+						),
+						'extends' => 'Switch',
+					),
+					'MasterColor'    => array(
 						'config' => array(
 							'default'             => '000',
 							'label'               => __( 'Master Color', 'thrive-cb' ),
@@ -79,15 +109,7 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 							),
 						),
 					),
-					'ButtonIcon'    => array(
-						'config'  => array(
-							'name'    => '',
-							'label'   => __( 'Add Icon', 'thrive-cb' ),
-							'default' => false,
-						),
-						'extends' => 'Switch',
-					),
-					'SecondaryText' => array(
+					'SecondaryText'  => array(
 						'config'  => array(
 							'name'    => '',
 							'label'   => __( 'Secondary button text', 'thrive-cb' ),
@@ -96,7 +118,7 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 						'to'      => '.tcb-button-texts',
 						'extends' => 'Switch',
 					),
-					'ButtonSize'    => array(
+					'ButtonSize'     => array(
 						'css_prefix' => tcb_selection_root() . ' ',
 						'config'     => array(
 							'name'       => __( 'Size and Alignment', 'thrive-cb' ),
@@ -151,7 +173,7 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 							),
 						),
 					),
-					'Align'         => array(
+					'Align'          => array(
 						'config' => array(
 							'buttons' => array(
 								array(
@@ -178,7 +200,7 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 							),
 						),
 					),
-					'ButtonWidth'   => array(
+					'ButtonWidth'    => array(
 						'config'  => array(
 							'default' => '0',
 							'min'     => '10',
@@ -189,20 +211,11 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'Slider',
 					),
-					'style'         => array(
+					'style'          => array(
 						'css_suffix' => ' .tcb-button-link',
 						'config'     => array(
 							'label'         => __( 'Button Styles', 'thrive-cb' ),
-							'items'         => array(
-								'default'      => __( 'Default', 'thrive-cb' ),
-								'ghost'        => __( 'Ghost', 'thrive-cb' ),
-								'rounded'      => __( 'Rounded', 'thrive-cb' ),
-								'full_rounded' => __( 'Full Rounded', 'thrive-cb' ),
-								'gradient'     => __( 'Gradient', 'thrive-cb' ),
-								'elevated'     => __( 'Elevated', 'thrive-cb' ),
-								'border_1'     => __( 'Border 1', 'thrive-cb' ),
-								'border_2'     => __( 'Border 2', 'thrive-cb' ),
-							),
+							'items'         => array(),
 							'default_label' => __( 'Template Button', 'thrive-cb' ),
 							'default'       => 'default',
 						),
@@ -294,5 +307,14 @@ class TCB_Button_Element extends TCB_Element_Abstract {
 	 */
 	public function category() {
 		return $this->get_thrive_basic_label();
+	}
+
+	/**
+	 * Get default button templates from the cloud
+	 *
+	 * @return array|mixed|WP_Error
+	 */
+	public function get_default_templates() {
+		return tve_get_cloud_content_templates( $this->get_template_tag() );
 	}
 }

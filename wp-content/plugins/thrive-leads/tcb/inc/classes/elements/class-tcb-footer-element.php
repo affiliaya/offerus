@@ -62,7 +62,10 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 	 * @return array
 	 */
 	public function own_components() {
-		return array(
+		$background_selector = '.symbol-section-out';
+		$content_selector    = '.symbol-section-in';
+
+		$components = array(
 			'footer'     => array(
 				'config' => array(
 					'Visibility'         => array(
@@ -117,7 +120,7 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 							'um'      => array( 'px', 'vh' ),
 							'css'     => 'min-height',
 						),
-						'to'      => '.symbol-section-in',
+						'to'      => $content_selector,
 						'extends' => 'Slider',
 					),
 					'FullHeight'         => array(
@@ -126,7 +129,7 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 							'label'   => __( 'Match height to screen', 'thrive-cb' ),
 							'default' => true,
 						),
-						'to'      => '.symbol-section-in',
+						'to'      => $content_selector,
 						'extends' => 'Switch',
 					),
 					'VerticalPosition'   => array(
@@ -148,7 +151,7 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 								),
 							),
 						),
-						'to'      => '.symbol-section-in',
+						'to'      => $content_selector,
 						'extends' => 'ButtonGroup',
 					),
 				),
@@ -161,14 +164,11 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 			),
 			'shadow'     => array(
 				'config' => array(
-					'to' => '.symbol-section-out',
+					'to' => $background_selector,
 				),
 			),
 			'layout'     => array(
-				'disabled_controls' => array( '.tve-advanced-controls', 'Float', 'hr', 'Position', 'PositionFrom', 'zIndex', 'Width', 'Height' ),
-				'config'            => array(
-					'css_suffix' => ' .thrive-symbol-shortcode',
-				),
+				'disabled_controls' => array( '.tve-advanced-controls', 'Float', 'hr', 'Position', 'PositionFrom', 'zIndex', 'Width', 'Height', 'Alignment', 'Display' ),
 			),
 			'borders'    => array(
 				'config' => array(
@@ -180,15 +180,19 @@ class TCB_Footer_Element extends TCB_Symbol_Element_Abstract {
 			'typography' => array(
 				'disabled_controls' => array(),
 				'config'            => array(
-					'to' => '.symbol-section-in',
+					'to' => $content_selector,
 				),
 			),
 			'decoration' => array(
 				'config' => array(
-					'to' => '.symbol-section-out',
+					'to' => $background_selector,
 				),
 			),
 			'animation'  => array( 'hidden' => true ),
 		);
+
+		$components['layout']['config']['MarginAndPadding']['padding_to'] = $content_selector;
+
+		return $components;
 	}
 }

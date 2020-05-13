@@ -9,6 +9,13 @@ class Thrive_Dash_Api_HubSpot {
 	protected $apiKey;
 
 	/**
+	 * Max number of allowed lists to be pulled from '/contacts/v1/lists' endpoint
+	 *
+	 * @var int
+	 */
+	protected $_allowed_count = 250;
+
+	/**
 	 * @param string $apiKey always required
 	 *
 	 * @throws Thrive_Dash_Api_HubSpot_Exception
@@ -29,13 +36,42 @@ class Thrive_Dash_Api_HubSpot {
 	 * @throws Thrive_Dash_Api_HubSpot_Exception
 	 */
 	public function getContactLists() {
-		$params = array(
-			'hapikey' => $this->apiKey
-		);
-		/* Removed static so we fetch all lists(static + dynamic)  not just the static ones */
-		$data = $this->_call( '/contacts/v1/lists', $params, 'GET' );
 
-		return is_array( $data ) && isset( $data['lists'] ) ? $data['lists'] : array();
+		$params = array(
+			'hapikey' => $this->apiKey,
+			'count'   => $this->_allowed_count,
+		);
+
+		$cnt  = 0;
+		$data = array();
+
+		/**
+		 * Do a max of 30 requests getting 250 list items per request with an incremented offset
+		 */
+		do {
+
+			/* Removed static so we fetch all lists(static + dynamic)  not just the static ones */
+			$result = $this->_call( '/contacts/v1/lists', $params, 'GET' );
+
+			if ( is_array( $result ) && ! empty( $result['lists'] ) ) {
+				$data = array_merge( $data, (array) $result['lists'] );
+			}
+
+			// Offset set
+			if ( ! empty( $result['offset'] ) ) {
+				$params['offset'] = $result['offset'];
+			}
+
+			$has_more = isset( $result['has-more'] ) ? $result['has-more'] : false;
+			$cnt ++;
+
+			// Never trust APIs :) [ Enough requests here: 250 x 30 = 7.500 items in list ]
+			if ( $cnt > 30 ) {
+				$has_more = false;
+			}
+		} while ( true === $has_more );
+
+		return is_array( $data ) ? $data : array();
 	}
 
 	/**
@@ -77,13 +113,15 @@ class Thrive_Dash_Api_HubSpot {
 	/**
 	 * perform a webservice call
 	 *
-	 * @param string $path api path
-	 * @param array $params request parameters
+	 * @param string $path   api path
+	 * @param array  $params request parameters
 	 * @param string $method GET or POST
 	 *
+	 * @return mixed
 	 * @throws Thrive_Dash_Api_HubSpot_Exception
 	 */
 	protected function _call( $path, $params = array(), $method = 'GET' ) {
+
 		$url = self::API_URL . ltrim( $path, '/' );
 
 		$args = array(
@@ -91,7 +129,7 @@ class Thrive_Dash_Api_HubSpot {
 				'Content-type' => 'application/json',
 				'Accept'       => 'application/json',
 			),
-			'body'    => json_encode( $params )
+			'body'    => $params,
 		);
 
 		switch ( $method ) {

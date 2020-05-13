@@ -12,6 +12,20 @@ TL_Front.add_page_css = function ( stylesheets ) {
 
 		href = href.replace( /^http(s)?:\/\//, '//' );
 
+		if ( href.indexOf( 'thrive_flat' ) !== - 1 ) {
+			var testElement = document.createElement( 'div' );
+			testElement.classList.add( 'tve-cb' );
+			document.body.append( testElement );
+			/* tcb/editor/css/sass/elements/_contentbox.scss line 59 - we're checking if a specific css exists then the file has been loaded
+			 * one of the cases where the previous implementation was not working was when a caching plugin was merging the js files */
+			if ( getComputedStyle( testElement )[ 'clear' ] === 'both' ) {
+				testElement.remove();
+				return;
+			}
+
+			testElement.remove();
+		}
+
 		/* make sure a css is not loaded twice */
 		if ( ! ThriveGlobal.$j( '#' + _id ).length && ! ThriveGlobal.$j( 'link[href="http:' + href + '"]' ).length && ! ThriveGlobal.$j( 'link[href="https:' + href + '"]' ).length ) {
 			ThriveGlobal.$j( '<link rel="stylesheet" id="' + _id + '" type="text/css" href="' + href + '"/>' ).prependTo( 'head' );
@@ -425,7 +439,7 @@ ThriveGlobal.$j( function () {
 				isFluent = false;
 
 			if ( fluentVars && fluentVars.forms ) {
-				isFluent =  fluentVars.forms.some( function ( formData ) {
+				isFluent = fluentVars.forms.some( function ( formData ) {
 					return formData.form_id_selector === id;
 				} )
 			}
@@ -441,7 +455,7 @@ ThriveGlobal.$j( function () {
 				type = $form.parents( '.tve-leads-conversion-object' ).first().attr( 'data-tl-type' ),
 				custom_fields = {};
 
-			if ( $form.data( 'tve-force-submit' ) || $form.data( 'tl-do-submit' ) || ! type || ! TL_Const.forms[ type ] || isFluentForm( $form ) ) {
+			if ( $form.data( 'tve-force-submit' ) || $form.closest( '.thrv_custom_html_shortcode' ).length || $form.data( 'tl-do-submit' ) || ! type || ! TL_Const.forms[ type ] || isFluentForm( $form ) ) {
 				return true;
 			}
 			$form.tve_form_loading();
@@ -627,7 +641,6 @@ ThriveGlobal.$j( function () {
 
 		/* We hide all the triggers for the two step lightbox and display them only if the lightbox is visible */
 		var two_step_triggers = ThriveGlobal.$j( '.tve-leads-two-step-trigger' ).hide();
-
 
 		/**
 		 * ajax load all the forms that are to be displayed on this page

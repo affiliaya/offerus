@@ -9,6 +9,7 @@
 class Thrive_Dash_List_Connection_WebinarJamStudio extends Thrive_Dash_List_Connection_Abstract {
 	/**
 	 * Return the connection type
+	 *
 	 * @return String
 	 */
 	public static function getType() {
@@ -24,6 +25,7 @@ class Thrive_Dash_List_Connection_WebinarJamStudio extends Thrive_Dash_List_Conn
 
 	/**
 	 * these are called webinars, not lists
+	 *
 	 * @return string
 	 */
 	public function getListSubtitle() {
@@ -76,7 +78,7 @@ class Thrive_Dash_List_Connection_WebinarJamStudio extends Thrive_Dash_List_Conn
 	 */
 	public function testConnection() {
 		/** @var Thrive_Dash_Api_WebinarJamStudio $api */
-		$api         = $this->getApi();
+		$api = $this->getApi();
 
 		/**
 		 * just try getting the list of the webinars as a connection test
@@ -105,7 +107,15 @@ class Thrive_Dash_List_Connection_WebinarJamStudio extends Thrive_Dash_List_Conn
 		try {
 			$name  = empty( $arguments['name'] ) ? '' : $arguments['name'];
 			$phone = ! isset( $arguments['phone'] ) || empty( $arguments['phone'] ) ? '' : $arguments['phone'];
-			$api->registerToWebinar( $list_identifier, $name, $arguments['email'], $phone );
+
+			$webinar  = $api->getWebinar( $list_identifier );
+			$schedule = 0;
+
+			if ( 4 === $api->getWebinarJamApiVersion() ) {
+				$schedule = isset( $webinar['webinar']['schedules'][0]['schedule'] ) ? $webinar['webinar']['schedules'][0]['schedule'] : $schedule;
+			}
+
+			$api->registerToWebinar( $list_identifier, $name, $arguments['email'], $phone, $schedule );
 
 			return true;
 		} catch ( Thrive_Dash_Api_WebinarJamStudio_Exception $e ) {
@@ -138,7 +148,7 @@ class Thrive_Dash_List_Connection_WebinarJamStudio extends Thrive_Dash_List_Conn
 			foreach ( $webinars as $key => $item ) {
 				$lists [] = array(
 					'id'   => $item['webinar_id'],
-					'name' => $item['name']
+					'name' => $item['name'],
 				);
 			}
 

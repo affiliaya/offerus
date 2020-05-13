@@ -257,9 +257,9 @@ function tve_leads_get_random_index( $total, $multiplier = 1000 ) {
 /**
  * get a list of all available triggers (optional) grouped by a specific form type
  *
- * @param string|null $form_type , if present, it will only return triggers that apply to that specific form type
+ * @param string|null $form_type    , if present, it will only return triggers that apply to that specific form type
  *
- * @param bool $get_as_array whether or not to get the results as array instead of Trigger objects
+ * @param bool        $get_as_array whether or not to get the results as array instead of Trigger objects
  *
  * @return array the list of triggers
  */
@@ -676,18 +676,22 @@ function tve_leads_shortcode_lock_render( $attributes, $content ) {
  * Render the button / link etc contents that will trigger the opening of the lightbox
  * register the lightbox to be output in the footer (or just a placeholder in case AJAX-loading of forms is enabled)
  *
- * @param array $attributes
+ * @param array  $attributes
  * @param string $content
  *
  * @return string
  */
 function tve_leads_two_step_render( $attributes, $content ) {
-	if ( class_exists( 'PostGridHelper' ) && PostGridHelper::$render_post_grid === false ) {
-		return '';
-	}
-
 	if ( empty( $attributes['id'] ) ) {
 		return __( 'Invalid shortcode attributes', 'thrive-leads' );
+	}
+	/**
+	 * Filter to check if we want to show the two step lightbox
+	 *
+	 * @param $attributes['id'] - the id of the two step lightbox
+	 */
+	if ( apply_filters( 'tve_leads_do_not_show_two_step', false, $attributes['id'] ) ) {
+		return '';
 	}
 
 	$two_step = tve_leads_get_form_type( $attributes['id'], array( 'get_variations' => false ) );
@@ -1139,9 +1143,9 @@ function tve_leads_get_default_animation( $form_type ) {
  *
  * @param        $handle
  * @param string $src
- * @param array $deps
- * @param bool $ver
- * @param bool $in_footer
+ * @param array  $deps
+ * @param bool   $ver
+ * @param bool   $in_footer
  */
 function tve_leads_enqueue_script( $handle, $src = false, $deps = array(), $ver = false, $in_footer = false ) {
 	if ( $ver === false ) {
@@ -1161,10 +1165,10 @@ function tve_leads_enqueue_script( $handle, $src = false, $deps = array(), $ver 
  * it will add the plugin version to the style link if no version is specified
  *
  * @param             $handle
- * @param string $src
- * @param array $deps
+ * @param string      $src
+ * @param array       $deps
  * @param bool|string $ver
- * @param string $media
+ * @param string      $media
  */
 function tve_leads_enqueue_style( $handle, $src = false, $deps = array(), $ver = false, $media = 'all' ) {
 	if ( $ver === false ) {
@@ -1265,7 +1269,7 @@ function tve_leads_get_screen_data() {
  * it ensures the option is prefixed with "tve_leads_" prefix
  *
  * @param string $name
- * @param mixed $value
+ * @param mixed  $value
  *
  * @return bool
  */
@@ -1279,7 +1283,7 @@ function tve_leads_update_option( $name, $value ) {
  * get all form types that are to be shown on a page based on the $lead_group
  *
  * @param WP_Post $lead_group
- * @param bool $skip_group_tests whether or not to take into account any tests that are running at group level
+ * @param bool    $skip_group_tests whether or not to take into account any tests that are running at group level
  *
  * @return array
  */
@@ -1405,7 +1409,7 @@ function tve_leads_inline_cookies( $cookies ) {
 /**
  * output the JS code required for a trigger associated with a variation
  *
- * @param array $variation
+ * @param array  $variation
  * @param string $form_id
  * @param string $form_type
  */
@@ -1433,7 +1437,7 @@ function tve_leads_output_trigger_js( $variation, $form_id, $form_type ) {
  * this is also solved with a cookie, and also handled here
  *
  * @param WP_Post $form_type
- * @param bool $skip_cookie_check whether or not to skip the cookie check in case of an active test running
+ * @param bool    $skip_cookie_check whether or not to skip the cookie check in case of an active test running
  *
  * @return array|null the form variation or empty for failure
  */
@@ -1592,10 +1596,10 @@ function tve_leads_is_editor_page() {
 /**
  * check if a conversion has been registered for this variation and, if so, we need to check if there is an "Already subscribed" state defined and show that instead
  *
- * @param array $variation the main variation where the "Already Subscribed" state should have been setup
- * @param string $type type of form
- * @param bool $skip_inbound_link_check whether or not to skip the check for 'already_subscribed' state from the inbound link params
- * @param bool $for_shortcode whether the current call is done for a shortcode. if true and $skip_inbound_link_check is false, it checks that the "subscribed" state is checked for inbound links and all forms are targeted
+ * @param array  $variation               the main variation where the "Already Subscribed" state should have been setup
+ * @param string $type                    type of form
+ * @param bool   $skip_inbound_link_check whether or not to skip the check for 'already_subscribed' state from the inbound link params
+ * @param bool   $for_shortcode           whether the current call is done for a shortcode. if true and $skip_inbound_link_check is false, it checks that the "subscribed" state is checked for inbound links and all forms are targeted
  *
  * @return string
  */
@@ -1663,8 +1667,8 @@ function tve_leads_ajax_already_subscribed_state( $output_variations ) {
  * used in all form types except for lightboxes
  *
  * @param string $form_html
- * @param array $variation
- * @param array $control used to control pieces of html
+ * @param array  $variation
+ * @param array  $control used to control pieces of html
  *
  * @return string
  */
@@ -1804,12 +1808,12 @@ function tve_get_current_screen() {
 /**
  * Returns readable information for reporting table of the screen from where the log was made
  *
- * @see tve_get_current_screen()
- *
  * @param $screen_type
  * @param $screen_id
  *
  * @return array Array with url, type and name of the page
+ * @see tve_get_current_screen()
+ *
  */
 function tve_get_current_screen_for_reporting_table( $screen_type, $screen_id ) {
 	global $wp_rewrite;
@@ -1982,7 +1986,7 @@ function tve_leads_get_downloaded_templates( $form_type ) {
  * save the list of downloaded templates into the wp_option used for these
  *
  * @param string $form_type
- * @param array $templates
+ * @param array  $templates
  */
 function tve_leads_save_downloaded_templates( $form_type, $templates ) {
 	update_option( 'tve_leads_' . $form_type . '_downloaded_templates', $templates );
@@ -2142,7 +2146,7 @@ function tve_leads_is_v2_template( $template_key ) {
  * The CSS can either be stored locally, for the blank template, or downloaded from the cloud, stored in a file in the wp-uploads folder
  *
  * @param string $template_key
- * @param array $template_config
+ * @param array  $template_config
  *
  * @return string
  */

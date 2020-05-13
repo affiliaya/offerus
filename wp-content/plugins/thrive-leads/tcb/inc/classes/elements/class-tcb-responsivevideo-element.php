@@ -83,10 +83,10 @@ class TCB_Responsivevideo_Element extends TCB_Element_Abstract {
 							'default' => 'rv_style_none',
 						),
 					),
-					'ExternalFields'     => array(
+					'ExternalFields'  => array(
 						'config'  => array(
-							'key' => 'video',
-							'shortcode_element' => 'video.tcb-responsive-video',
+							'key'               => 'video',
+							'shortcode_element' => '.tcb-responsive-video',
 						),
 						'extends' => 'CustomFields',
 					),
@@ -108,13 +108,6 @@ class TCB_Responsivevideo_Element extends TCB_Element_Abstract {
 						'config'  => array(
 							'name'  => '',
 							'label' => __( 'Custom aspect ratio & orientation', 'thrive-cb' ),
-						),
-						'extends' => 'Switch',
-					),
-					'floating'        => array(
-						'config'  => array(
-							'name'  => '',
-							'label' => __( 'Floating video', 'thrive-cb' ),
 						),
 						'extends' => 'Switch',
 					),

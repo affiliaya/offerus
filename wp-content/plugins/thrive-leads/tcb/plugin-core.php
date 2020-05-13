@@ -101,6 +101,7 @@ require_once TVE_TCB_ROOT_PATH . 'inc/classes/post-list/pagination/class-tcb-pag
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/post-list/pagination/class-tcb-pagination-none.php';
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/post-list/pagination/class-tcb-pagination-numeric.php';
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/logo/class-tcb-logo.php';
+require_once TVE_TCB_ROOT_PATH . 'inc/classes/class-tcb-woo.php';
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/symbols/class-tcb-symbols-post-type.php';
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/symbols/class-tcb-symbol-template.php';
 require_once TVE_TCB_ROOT_PATH . 'inc/classes/symbols/class-tcb-symbols-dashboard.php';
@@ -365,11 +366,21 @@ add_action( 'wp_head', function () {
  * Backwards compatibility
  * Replace #tve_editor with the new selector
  *
+ * Also checks if the disable css option is checked from Thrive Dashboard.
+ * If so, we strip the import statements from the css string
+ *
+ * Gets called from all products that have TAR as a dependency
+ *
  * @param $css
  *
- * @return mixed
+ * @return string
  */
 function tcb_custom_css( $css ) {
+
+	if ( tve_dash_is_google_fonts_blocked() ) {
+		$css = preg_replace( '/@import url\(\"\/\/fonts\.(googleapis|gstatic)\.com([^)]*)\);/', '', $css );
+	}
+
 	return str_replace( '#tve_editor', tcb_selection_root(), $css );
 }
 
@@ -486,4 +497,13 @@ function tve_frontend_data( $frontend_options ) {
 	}
 
 	return $frontend_options;
+}
+
+add_action( 'after_switch_theme', 'tve_reset_cloud_templates' );
+
+/**
+ * On theme switch we delete the Cloud Template Cache from transients
+ */
+function tve_reset_cloud_templates() {
+	delete_transient( tve_get_cloud_templates_transient_name() );
 }
