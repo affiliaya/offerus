@@ -1,0 +1,20 @@
+<div class="thrv_wrapper thrv-page-section" data-css="tve-u-1640e20d04b">
+<div class="tve-page-section-out" data-css="tve-u-1640e1adaf4"></div>
+<div class="tve-page-section-in tve_empty_dropzone" data-css="tve-u-1640e20e419"><div class="thrv_wrapper thrv-plain-text"><div class="tcb-plain-text" data-css="tve-u-1640e210871">your<strong>LOGO</strong></div></div></div>
+</div><div class="thrv_wrapper thrv-page-section on_hover" data-css="tve-u-1640e24c8ea">
+<div class="tve-page-section-out" data-css="tve-u-1640e1af0a0"></div>
+<div class="tve-page-section-in tve_empty_dropzone" data-css="tve-u-1640e1a3dae"><div class="thrv_wrapper thrv-columns"><div class="tcb-flex-row tcb-resized tcb--cols--2 v-2 m-edit tcb-mobile-wrap tcb-row-reversed-mobile" data-css="tve-u-1640e337b82"><div class="tcb-flex-col" data-css="tve-u-1640e202f38" style=""><div class="tcb-col tve_empty_dropzone"><div class="thrv_wrapper thrv_contentbox_shortcode thrv-content-box" data-css="tve-u-1640e251d34">
+<div class="tve-content-box-background" data-css="tve-u-1640e26fa45"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1000 78" preserveAspectRatio="none" decoration-type="waves" class="svg-shape-top" data-css="tve-u-1640e255f49"><path d="M0,0v60c51.1-27,123.1-42,216-45c122-4,207.4,27.3,443,38c72.6,3.3,186.3-4.4,341-23V0H0z"></path><path opacity="0.6" d="M1,1v60c23.1-17,81.1-27,174-30c122-4,169.4,32.3,405,43c72.6,3.3,213-11,421-43V1H1z"></path><path opacity="0.2" d="M1,0v62c17.8-9,73.1-15,166-18c122-4,188,18,366,18c62,0,147.7-9,314-9     c32.1,0,83.4,6,154,18V0H1z"></path></svg></div>
+<div class="tve-cb tve_empty_dropzone" data-css="tve-u-1640e2268e0"><div class="thrv_wrapper thrv_text_element tve_empty_dropzone" data-css="tve-u-1640e28e89b"><p data-css="tve-u-1640e281037">Your Report Name Here</p></div><div class="thrv_wrapper thrv_text_element tve_empty_dropzone"><p data-css="tve-u-1640e28d146">brought to you by Name</p></div></div>
+</div></div></div><div class="tcb-flex-col" data-css="tve-u-1640e202f44" style=""><div class="tcb-col tve_empty_dropzone" data-css="tve-u-1640e1cf287"><div class="thrv_wrapper thrv_contentbox_shortcode thrv-content-box" data-css="tve-u-1640e29e41a">
+<div class="tve-content-box-background"></div>
+<div class="tve-cb tve_empty_dropzone"><div class="thrv_wrapper thrv_text_element tve_empty_dropzone"><p data-css="tve-u-1640e1d43db"><strong>Controversial FREE Report Reveals</strong></p></div><div class="thrv_wrapper thrv_heading" data-tag="h1" data-css="tve-u-1640e202414"><h1>5 Simple Steps to <strong>Doubling</strong> Your Conversion Rates</h1></div><div class="thrv_wrapper thrv_text_element tve_empty_dropzone" data-css="tve-u-1640e31af61"><p>Exclusive to our newsletter subscribers: we reveal the 5 steps we've used to optimize landing pages and achieve dramatically improved conversion rates. Click below to sign up:</p></div><div class="thrv_wrapper thrv-button tve_ea_thrive_lightbox" data-css="tve-u-1640e2d1384" data-button-size="l" data-tcb_hover_state_parent="">
+<a href="" class="tcb-button-link tve_evt_manager_listen tve_et_click" data-tcb-events="__TCB_EVENT_[{&quot;config&quot;:{&quot;l_anim&quot;:&quot;instant&quot;,&quot;l_id&quot;:4313},&quot;a&quot;:&quot;thrive_lightbox&quot;,&quot;t&quot;:&quot;click&quot;}]_TNEVE_BCT__">
+<span class="tcb-button-texts"><span class="tcb-button-text thrv-inline-text">Join &amp; Get the Bonus Report</span></span>
+</a>
+</div></div>
+</div></div></div></div></div></div>
+</div><div class="thrv_wrapper thrv-page-section" data-css="tve-u-1640e1a25fe">
+<div class="tve-page-section-out" data-css="tve-u-1640e1b0c64"></div>
+<div class="tve-page-section-in tve_empty_dropzone" data-css="tve-u-1640e30b250"><div class="thrv_wrapper thrv_text_element tve_empty_dropzone"><p>Copyright 2018, Company Name - <a href="#">Disclaimer</a></p></div></div>
+</div>
