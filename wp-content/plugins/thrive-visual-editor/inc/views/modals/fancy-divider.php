@@ -9,8 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Silence is golden
 }
 ?>
-
-<h2 class="tcb-modal-title"><?php echo __( 'Choose', 'thrive-cb' ); ?> <span class="element-name"></span></h2>
+<div class="tcb-modal-header flex-center space-between">
+	<h2 class="tcb-modal-title"><?php echo __( 'Choose', 'thrive-cb' ); ?> <span class="element-name"></span></h2>
+	<span data-fn="clearCache" class="tcb-refresh mr-30 click flex-center">
+		<span class="mr-10"><?php tcb_icon( 'sync-regular' ); ?></span>
+		<span class="mr-10"><?php echo __( 'Refresh from cloud', 'thrive-cb' ); ?></span>
+	</span>
+</div>
 <div class="tve-templates-wrapper">
 	<div id="cloud-templates" class="content-templates tve-templates-container pb-10"></div>
 </div>

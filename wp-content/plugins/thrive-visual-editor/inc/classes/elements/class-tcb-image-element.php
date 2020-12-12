@@ -60,18 +60,17 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 		return array(
 			'image'         => array(
 				'config' => array(
-					'StyleChange'       => array(
+					'StyleChange'    => array(
 						'config' => array(
 							'label' => __( 'Image Style', 'thrive-cb' ),
 						),
 					),
-					'ImagePicker'       => array(
+					'ImagePicker'    => array(
 						'config' => array(
 							'label' => __( 'Replace Image', 'thrive-cb' ),
 						),
-						//						'to'     => 'img',
 					),
-					'ExternalFields'    => array(
+					'ExternalFields' => array(
 						'config'  => array(
 							'main_dropdown'     => array(
 								''         => __( 'Select A Source', 'thrive-cb' ),
@@ -84,7 +83,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'CustomFields',
 					),
-					'ImageSize'         => array(
+					'ImageSize'      => array(
 						'config'  => array(
 							'default'  => 'auto',
 							'min'      => '30',
@@ -96,18 +95,18 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'Slider',
 					),
-					'ImageHeight'       => array(
+					'ImageHeight'    => array(
 						'config'  => array(
 							'default' => 'auto',
 							'min'     => '5',
 							'max'     => '300',
 							'label'   => __( 'Height', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'height',
 						),
 						'extends' => 'Slider',
 					),
-					'StylePicker'       => array(
+					'StylePicker'    => array(
 						'config' => array(
 							'label'   => __( 'Choose image style', 'thrive-cb' ),
 							'items'   => array(
@@ -124,19 +123,19 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'default' => 'no_style',
 						),
 					),
-					'ImageTitle'        => array(
+					'ImageTitle'     => array(
 						'config'  => array(
 							'label' => __( 'Title', 'thrive-cb' ),
 						),
 						'extends' => 'LabelInput',
 					),
-					'ImageAltText'      => array(
+					'ImageAltText'   => array(
 						'config'  => array(
 							'label' => __( 'Alt Text', 'thrive-cb' ),
 						),
 						'extends' => 'LabelInput',
 					),
-					'ImageCaption'      => array(
+					'ImageCaption'   => array(
 						'config'  => array(
 							'name'    => '',
 							'label'   => __( 'Add caption text', 'thrive-cb' ),
@@ -144,7 +143,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'Switch',
 					),
-					'ImageFullSize'     => array(
+					'ImageFullSize'  => array(
 						'config'  => array(
 							'name'    => '',
 							'label'   => __( 'Open full size image on click', 'thrive-cb' ),
@@ -164,7 +163,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '100',
 							'label'   => __( 'Greyscale', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -175,7 +174,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '1',
 							'max'     => '100',
 							'label'   => __( 'Opacity', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'opacity',
 						),
 						'extends' => 'Slider',
@@ -197,7 +196,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '300',
 							'label'   => __( 'Brightness', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -208,7 +207,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '300',
 							'label'   => __( 'Contrast', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -219,7 +218,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '100',
 							'label'   => __( 'Sepia', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -230,7 +229,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '100',
 							'label'   => __( 'Invert', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -241,7 +240,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 							'min'     => '0',
 							'max'     => '300',
 							'label'   => __( 'Saturate', 'thrive-cb' ),
-							'um'      => array(),
+							'um'      => array( '' ),
 							'css'     => 'filter',
 						),
 						'extends' => 'Slider',
@@ -315,6 +314,6 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 }

@@ -118,11 +118,65 @@ class TCB_Post_List_Featured_Image {
 	 * @return array
 	 */
 	public static function filter_available_sizes() {
-		return apply_filters( 'image_size_names_choose', array(
+		$sizes = apply_filters( 'image_size_names_choose', array(
 			'thumbnail' => __( 'Thumbnail', 'thrive-cb' ),
 			'medium'    => __( 'Medium', 'thrive-cb' ),
 			'large'     => __( 'Large', 'thrive-cb' ),
 			'full'      => __( 'Full Size', 'thrive-cb' ),
 		) );
+
+		/* MailPoet 3 adds an extra image size, but we're not using it in our products so we must remove it */
+		if ( ! empty( $sizes['mailpoet_newsletter_max'] ) ) {
+			unset ( $sizes['mailpoet_newsletter_max'] );
+		}
+
+		return $sizes;
+	}
+
+	/**
+	 * Returns a normalized list of all currently registered image sub-sizes.
+	 * wp_get_registered_image_subsizes it's available only from 5.3 so we are offering an alternative if the function it's not available
+	 *
+	 * @return array
+	 */
+	public static function get_registered_image_subsizes() {
+		$sizes = array();
+
+		if ( function_exists( 'wp_get_registered_image_subsizes' ) ) {
+			$sizes = wp_get_registered_image_subsizes();
+		} else {
+			$additional_sizes = wp_get_additional_image_sizes();
+
+			foreach ( get_intermediate_image_sizes() as $size_name ) {
+				$size_data = array(
+					'width'  => 0,
+					'height' => 0,
+					'crop'   => false,
+				);
+
+				if ( isset( $additional_sizes[ $size_name ]['width'] ) ) {
+					// For sizes added by plugins and themes.
+					$size_data['width'] = intval( $additional_sizes[ $size_name ]['width'] );
+				} else {
+					// For default sizes set in options.
+					$size_data['width'] = intval( get_option( "{$size_name}_size_w" ) );
+				}
+
+				if ( isset( $additional_sizes[ $size_name ]['height'] ) ) {
+					$size_data['height'] = intval( $additional_sizes[ $size_name ]['height'] );
+				} else {
+					$size_data['height'] = intval( get_option( "{$size_name}_size_h" ) );
+				}
+
+				if ( empty( $size_data['width'] ) && empty( $size_data['height'] ) ) {
+					// This size isn't set.
+					continue;
+				}
+
+				$sizes[ $size_name ] = $size_data;
+			}
+		}
+
+		return $sizes;
 	}
 }

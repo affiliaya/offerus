@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="tvd-input-field">
 				<label class="tcb-save-as-label tcb-input-name"><?php echo __( 'Template Name', 'thrive-cb' ); ?></label>
-				<input class="keydown tvd-active" type="text" id="content-title" name="title" data-source="search" data-fn="filter">
+				<input class="keydown tvd-active content-title" type="text" name="title" data-source="search" data-fn="filter">
 				<img class="tve-lazy-img tcb-input-loader" src="<?php echo tve_editor_css(); ?>/images/loading-spinner-large.gif" alt="">
 				<label class="tvd-active tcb-ct-symbol-message"></label>
 			</div>
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="tvd-input-field">
 		<label class="tcb-save-as-label tcb-input-name"><?php echo __( 'Template Name', 'thrive-cb' ); ?></label>
-		<input class="keydown tvd-active" type="text" id="content-title" name="title" data-source="search" data-fn="filter">
+		<input class="keydown tvd-active content-title" type="text" name="title" data-source="search" data-fn="filter">
 	</div>
 
 	<div class="tcb-relative">

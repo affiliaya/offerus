@@ -42,6 +42,10 @@ if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 	add_filter( 'thrive_display_options_get_template', 'tve_leads_filter_display_settings_get_template', 10, 2 );
 }
 
+add_action( 'tve_dash_add_menu_item', function () {
+	add_submenu_page( null, 'Thrive Leads Data Upgrade', '', 'manage_options', 'thrive_leads_update', 'tve_leads_data_updates' );
+} );
+
 require_once plugin_dir_path( __FILE__ ) . 'inc/helpers.php';
 
 /**
@@ -49,25 +53,7 @@ require_once plugin_dir_path( __FILE__ ) . 'inc/helpers.php';
  */
 function tve_leads_admin_init() {
 	add_action( 'wp_ajax_thrive_leads_backend_ajax', 'thrive_leads_backend_ajax' );
-
-	if ( ! tve_leads_check_tcb_version() ) {
-		add_action( 'admin_notices', 'tve_leads_admin_notice_wrong_tcb_version' );
-	}
-}
-
-/**
- * the TCB version is not compatible with the current TL version
- */
-function tve_leads_admin_notice_wrong_tcb_version() {
-	$screen = get_current_screen();
-	if ( $screen && $screen->parent_base === 'thrive_leads_dashboard' ) {
-		return;
-	}
-	$html = '<div class="error"><p>%s</p></div>';
-	$text = sprintf( __( 'Current version of Thrive Leads is not compatible with the current version of Thrive Architect. Please update both plugins to the latest versions.', 'thrive-leads' ) );
-	$text .= ' <a href="' . network_admin_url( 'plugins.php' ) . '">' . __( 'Manage plugins', 'thrive-leads' ) . '</a>';
-
-	echo sprintf( $html, $text );
+	require TVE_LEADS_PATH . 'admin/inc/classes/class-thrive-leads-data-updater.php';
 }
 
 /**
@@ -80,7 +66,7 @@ function thrive_leads_backend_ajax() {
 
 	$response = Thrive_Leads_Ajax_Controller::instance()->handle();
 
-	echo json_encode( $response );
+	echo wp_json_encode( $response );
 	exit();
 }
 
@@ -101,7 +87,7 @@ function tve_leads_admin_enqueue( $hook ) {
 	}
 
 	/* load scripts only on our dashboard page, the entry point for the backbone app */
-	if ( ! in_array( $hook, array( TL_DASHBOARD_PAGE, TL_REPORTING_PAGE, TL_CONTACTS_PAGE, TL_ASSETS_PAGE ) ) ) {
+	if ( ! in_array( $hook, array( TL_DASHBOARD_PAGE, TL_REPORTING_PAGE, TL_CONTACTS_PAGE, TL_ASSETS_PAGE, 'admin_page_thrive_leads_update' ) ) ) {
 		return;
 	}
 
@@ -430,30 +416,26 @@ function thrive_leads_dashboard() {
 	global $tvedb;
 
 	$dashboard_data = array(
-		'global_settings'            => array(
+		'global_settings'   => array(
 			'ajax_load' => tve_leads_get_option( 'ajax_load' ),
 		),
-		'groups'                     => tve_leads_get_groups( array( 'no_content' => true ) ),
-		'shortcodes'                 => tve_leads_get_shortcodes( array(
+		'groups'            => tve_leads_get_groups( array( 'no_content' => true ) ),
+		'shortcodes'        => tve_leads_get_shortcodes( array(
 			'active_test'    => true,
 			'tracking_data'  => true,
 			'get_variations' => true,
 		) ),
-		'two_step_lightbox'          => tve_leads_get_two_step_lightboxes( array(
+		'two_step_lightbox' => tve_leads_get_two_step_lightboxes( array(
 			'active_test'    => true,
 			'tracking_data'  => true,
 			'get_variations' => true,
 		) ),
-		'one_click_signup'           => tve_leads_get_one_click_signups(),
-		'summary'                    => array(
-			'impressions' => tve_leads_get_tracking_data( TVE_LEADS_UNIQUE_IMPRESSION, array(
-				'date'      => 'today',
-				'is_unique' => 1,
-			) ),
-			'conversions' => tve_leads_get_tracking_data( TVE_LEADS_CONVERSION, array( 'date' => 'today' ) ),
+		'one_click_signup'  => tve_leads_get_one_click_signups(),
+		'summary'           => array(
+			'impressions' => $tvedb->get_summary_count( 'unique_visitor', array( 'date' => 'today' ) ),
+			'conversions' => $tvedb->get_summary_count( 'conversion', array( 'date' => 'today' ) ),
 		),
-		'has_non_unique_impressions' => $tvedb->count_non_unique_impressions(),
-		'breadcrumbs'                => tve_leads_get_screen_data(),
+		'breadcrumbs'       => tve_leads_get_screen_data(),
 	);
 	include dirname( __FILE__ ) . '/views/dashboard.php';
 }
@@ -496,6 +478,7 @@ function thrive_leads_reporting() {
 			array( 'active_test' => false )
 		),
 	);
+
 	include dirname( __FILE__ ) . '/views/reporting.php';
 }
 

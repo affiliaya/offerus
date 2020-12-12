@@ -1,9 +1,11 @@
+<div style="position: absolute;top: 0;" id="edit-mode-drop-panels"></div>
 <div class="tcb-em-drag">
 	<span class="em-drag-handle"></span>
 	<span class="em-drag-handle"></span>
 </div>
 <div class="tcb-element-name"></div>
-<select class="tve-select change" data-fn="state_changed"></select>
+<div class="click tve-reset" data-fn="reset"><?php tcb_icon( 'sync-regular' ); ?> <span><?php echo __( 'RESET', 'thrive-cb' ); ?></span></div>
+<select class="tve-select change mouseover" data-fn="state_changed" data-fn-mouseover="mouseOverState"></select>
 <button id='add_jump' class="tve-button grey click tcb-hide" data-fn="f:jumplinks.addJumplink" disabled><?php echo __( 'Add Jumplink', 'thrive-cb' ); ?></button>
 <button id='exit_jump' class="tve-button grey click tcb-hide" data-fn="f:jumplinks.cancel"><?php echo __( 'Exit', 'thrive-cb' ); ?></button>
 <button id='exit_edit' class="tve-button orange click" data-fn="exit"><?php echo __( 'DONE', 'thrive-cb' ); ?></button>

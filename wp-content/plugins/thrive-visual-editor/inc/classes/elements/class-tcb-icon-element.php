@@ -42,7 +42,7 @@ class TCB_Icon_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function identifier() {
-		return '.thrv_icon:not(.tve_lg_input_container .thrv_icon)';
+		return '.tve_lg_file .thrv_icon,.thrv_icon:not(.tve_lg_input_container .thrv_icon, .tve-login-form-input .thrv_icon)';
 	}
 
 	/**
@@ -56,14 +56,15 @@ class TCB_Icon_Element extends TCB_Element_Abstract {
 						'css_prefix' => tcb_selection_root() . ' ',
 						'css_suffix' => ' > :first-child',
 						'config'     => array(
-							'label' => __( 'Color', 'thrive-cb' ),
+							'label'   => __( 'Color', 'thrive-cb' ),
+							'options' => array( 'noBeforeInit' => false ),
 						),
 					),
 					'Slider'      => array(
 						'config' => array(
 							'default' => '30',
-							'min'     => '8',
-							'max'     => '1024',
+							'min'     => '12',
+							'max'     => '200',
 							'label'   => __( 'Size', 'thrive-cb' ),
 							'um'      => array( 'px' ),
 							'css'     => 'fontSize',
@@ -74,6 +75,30 @@ class TCB_Icon_Element extends TCB_Element_Abstract {
 							'label' => __( 'Icon link', 'thrive-cb' ),
 							'class' => 'thrv_icon',
 						),
+					),
+					'StylePicker' => array(
+						'config' => array(
+							'label' => __( 'Choose icon style', 'thrive-cb' ),
+							'items' => array(
+								'circle_outlined'  => 'Circle Outlined',
+								'circle_shaded'    => 'Circle Shaded',
+								'circle_inverted'  => 'Circle Inverted',
+								'rounded_outlined' => 'Rounded Outlined',
+								'rounded_shaded'   => 'Rounded Shaded',
+								'rounded_inverted' => 'Rounded Inverted',
+								'square_outlined'  => 'Square Outlined',
+								'square_shaded'    => 'Square Shaded',
+								'square_inverted'  => 'Square Inverted',
+							),
+						),
+					),
+					'IconPicker'  => array(
+						'config'  => array(
+							'label_style' => __( 'Change style', 'thrive-cb' ),
+							'label_modal' => __( 'Change icon', 'thrive-cb' ),
+							'label'       => __( 'Icon and style', 'thrive-cb' ),
+						),
+						'extends' => 'ModalStylePicker',
 					),
 				),
 			),

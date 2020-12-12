@@ -245,12 +245,15 @@
 			<div class="tve-control mt-5" data-key="ParallaxPreview" data-extends="Switch" data-label="<?php esc_attr_e( 'Parallax Preview', 'thrive-cb' ); ?>"></div>
 		</div>
 		<div class="if-sticky">
+			<div class="tve-control mb-10" data-extends="ButtonGroup" data-key="stickyPosition" data-name="<?php esc_attr_e( 'Stick to screen', 'thrive-cb' ); ?>"></div>
 			<div class="tve-control" data-extends="Slider" data-key="top"
 				 data-label="<?php echo __( 'Distance from the top of the screen', 'thrive-cb' ); ?>"></div>
 			<div class="tve-control no-space" data-extends="Select" data-key="until" data-label="<?php echo __( 'Sticky until', 'thrive-cb' ); ?>"></div>
 			<div class="tve-control no-space if-until-element padding-top-10" data-extends="LabelInput" data-key="element_id"
 				 data-label="<?php echo __( 'Element ID', 'thrive-cb' ); ?>"></div>
 			<div class="info-text if-until-element"><?php echo __( 'You can set the ID of an element from the "HTML Attributes" section', 'thrive-cb' ); ?></div>
+			<div class="tve-control mt-10" data-extends="Switch" data-key="switchOnScroll" data-label="<?php echo __( 'Switch on scroll', 'thrive-cb' ); ?>"></div>
+			<div class="tve-control no-space" data-extends="Slider" data-key="switchAfter" data-label="<?php echo __( 'Switch after', 'thrive-cb' ); ?>"></div>
 		</div>
 	</div>
 </div>
@@ -263,13 +266,17 @@
 	<div class="dropdown-content">
 
 		<div class="control-grid no-space">
-			<div class="label tve-control no-space" data-key="preview" data-initializer="preview_style_control"></div>
+			<span class="tcb-style-icon">
+				<?php tcb_icon( 'paint-brush-regular' ); ?>
+			</span>
 
-			<div class="shared-styles-actions ml-5" data-state="0">
-				<div class="tve-control ml-5" data-key="global_style" data-initializer="global_style_control"></div>
+			<div class="label tve-control no-space" data-key="preview" data-truncate="false" data-initializer="preview_style_control"></div>
+
+			<div class="shared-styles-actions shared-styles-icon" data-state="0">
+				<div class="tve-control" data-key="global_style" data-initializer="global_style_control"></div>
 			</div>
 
-			<div class="shared-styles-actions ml-5" data-state="1">
+			<div class="shared-styles-actions" data-state="1">
 				<a href="javascript:void(0)" class="click" data-fn="edit_style" data-side="top" data-tooltip="<?php echo __( 'Edit Global Style', 'thrive-cb' ); ?>">
 					<?php tcb_icon( 'edit' ); ?>
 				</a>
@@ -291,6 +298,10 @@
 				</span>
 			</div>
 
+			<span class="tcb-style-icon trigger">
+				<?php tcb_icon( 'arrow-down' ); ?>
+			</span>
+
 			<ul class="shared-styles-drop-content tcb-hide">
 				<li class="click" data-fn="rename">
 					<a href="javascript:void(0)"><?php echo __( 'Rename', 'thrive-cb' ) ?></a>
@@ -300,11 +311,11 @@
 				</li>
 			</ul>
 		</div>
-		<div class="control-grid pt-5 no-space shared-styles-actions" data-state="1">
-			<span class="global-edit-warning">
-					<?php echo __( 'This element has a Global Style applied: some of its properties are not editable at the instance level (e.g. Typography, Background, Borders etc). You can modify these by clicking on the pencil icon above.', 'thrive-cb' ); ?>
-			</span>
-		</div>
+	</div>
 
+	<div class="control-grid pt-5 no-space shared-styles-actions" data-state="1">
+		<span class="global-edit-warning">
+			<?php echo __( 'This element has a Global Style applied: some of its properties are not editable at the instance level (e.g. Typography, Background, Borders etc). You can modify these by clicking on the pencil icon above.', 'thrive-cb' ); ?>
+		</span>
 	</div>
 </div>

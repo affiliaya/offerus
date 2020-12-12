@@ -48,7 +48,7 @@ class TCB_ContentBox_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function identifier() {
-		return '.thrv_contentbox_shortcode, .thrv-content-box';
+		return '.thrv_contentbox_shortcode, .thrv-content-box:not(.tve_lg_file)';
 	}
 
 	/**
@@ -202,7 +202,7 @@ class TCB_ContentBox_Element extends TCB_Element_Abstract {
 			),
 		);
 
-		return array_merge( $content_box, $this->shared_styles_component() );
+		return array_merge( $content_box, $this->shared_styles_component(), $this->group_component() );
 	}
 
 	/**
@@ -218,6 +218,6 @@ class TCB_ContentBox_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 }

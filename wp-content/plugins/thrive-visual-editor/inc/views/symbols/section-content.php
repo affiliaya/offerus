@@ -13,6 +13,14 @@
 <?php $symbol_vars = TCB_Symbol_Template::get_edit_symbol_vars(); ?>
 <?php $type = ucfirst( $symbol_vars['type'] ); ?>
 <?php $data_attr = TCB_Symbol_Template::data_attr( $symbol_id ); ?>
+<?php
+$shortcode_class = '';
+if ( $symbol_vars['css_class'] === 'thrv_header' ) {
+	$symbol_vars['css_class'] .= ' tve-default-state';
+	$shortcode_class          = 'tve-default-state';
+}
+?>
+
 <?php TCB_Symbol_Template::body_open(); ?>
 <div class="tve-leads-conversion-object">
 	<div id="tve-leads-editor-replace">
@@ -26,7 +34,7 @@
 				<?php } ?>
 				<div id="tve_editor">
 					<div class="tve_editable thrv_symbol <?php echo $symbol_vars['css_class'] ?> thrv_symbol_<?php echo $symbol_id ?>" data-id="<?php echo $symbol_id ?>">
-						<div class="thrive-symbol-shortcode"<?php echo $data_attr; ?>>
+						<div class="thrive-symbol-shortcode <?php echo $shortcode_class ?>"<?php echo $data_attr; ?>>
 							<?php if ( empty( $content ) ) { ?>
 								<div class="symbol-section-out"></div>
 								<div class="symbol-section-in"></div>

@@ -101,6 +101,35 @@ class Thrive_Dash_Api_Drip {
 		return empty( $res ) ? false : $res;
 	}
 
+	/**
+	 * Does a request to Drip for custom fields added by the user
+	 *
+	 * @param $params
+	 *
+	 * @return array|false
+	 * @throws Exception
+	 */
+	public function get_custom_fields( $params ) {
+
+		if ( empty( $params['account_id'] ) ) {
+			return false;
+		}
+
+		$account_id = $params['account_id'];
+		unset( $params['account_id'] ); // clear it from the params
+
+		$api_action = "/$account_id/custom_field_identifiers";
+		$url        = $this->api_end_point . $api_action;
+
+		try {
+			$res = $this->make_request( $url );
+		} catch ( Exception $e ) {
+			return false;
+		}
+
+		return empty( $res ) ? false : $res['custom_field_identifiers'];
+	}
+
 
 	public function delete_subscriber( $params ) {
 		if ( empty( $params['account_id'] ) ) {
@@ -110,13 +139,13 @@ class Thrive_Dash_Api_Drip {
 		$account_id = $params['account_id'];
 		unset( $params['account_id'] ); // clear it from the params
 
-		$api_action = "/$account_id/subscribers/" . $params['email'];
+		$api_action = "$account_id/subscribers/" . $params['email'] . '/remove';
 		$url        = $this->api_end_point . $api_action;
 
 		// The API wants the params to be JSON encoded
 		$req_params = array( 'subscribers' => array( $params ) );
 
-		return $this->make_request( $url, $req_params, self::DELETE );
+		return $this->make_request( $url, $req_params, self::POST );
 	}
 
 	/**
@@ -124,8 +153,8 @@ class Thrive_Dash_Api_Drip {
 	 *
 	 * @param array $params
 	 *
-	 * @throws Exception
 	 * @return mixed
+	 * @throws Exception
 	 */
 	public function subscribe_subscriber( $params ) {
 		if ( empty( $params['account_id'] ) ) {
@@ -170,8 +199,8 @@ class Thrive_Dash_Api_Drip {
 	 *
 	 * @param array $params
 	 *
-	 * @throws Exception
 	 * @return bool
+	 * @throws Exception
 	 */
 	public function record_event( $params ) {
 		if ( empty( $params['account_id'] ) ) {
@@ -196,9 +225,9 @@ class Thrive_Dash_Api_Drip {
 	}
 
 	/**
-	 * @param $url
+	 * @param       $url
 	 * @param array $params
-	 * @param int $req_method
+	 * @param int   $req_method
 	 *
 	 * @return array
 	 * @throws Thrive_Dash_Api_Drip_Exception
@@ -234,7 +263,7 @@ class Thrive_Dash_Api_Drip {
 		}
 
 		$http_code = $result['response']['code'];
-		$body     = json_decode( $result['body'], true );
+		$body      = json_decode( $result['body'], true );
 
 		if ( $http_code == '422' ) {
 			throw new Thrive_Dash_Api_Drip_Exception_Unsubscribed( 'API call failed. Server returned status code ' . $http_code . ' with message: <b>' . $body['errors'][0]['message'] . '</b>' );
@@ -269,7 +298,7 @@ class Thrive_Dash_Api_Drip {
 
 		$params = array(
 			'email' => $email,
-			'tag' => $tag,
+			'tag'   => $tag,
 		);
 
 		// The API wants the params to be JSON encoded

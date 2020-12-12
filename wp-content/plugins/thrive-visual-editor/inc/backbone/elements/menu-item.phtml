@@ -1,10 +1,10 @@
 <li class="menu-item menu-item-<#=item.id#><#=(item.children && item.children.length) ? ' menu-item-has-children' : '' #> lvl-<#=level#>" data-id="<#=item.id#>"<#=item.old_id ? ' id="' + item.old_id + '"' : ''#>>
-<a class="menu-item menu-item-<#=item.id#>-a menu-item-<#=item.id#> <#= item.hasDynamicLink ? 'tve-dynamic-link' : '' #>" href="<#=item.href||''#>"
+<a class="menu-item menu-item-<#=item.id#>-a menu-item-<#=item.id#> <#= item['data-dynamic-link'] ? 'tve-dynamic-link' : '' #>" href="<#=item.href||''#>"
 <#=(item.target ? ' target="' + item.target + '"' : '')#>
 <#=(item.rel ? ' rel="' + item.rel + '"' : '')#>
 <#=(item['jump-animation'] ? ' jump-animation="' + item['jump-animation'] + '"' : '')#>
 <#=(item['data-shortcode-id'] ? ' data-shortcode-id="' + item['data-shortcode-id'] + '"' : '')#>
-<#=(item.hasDynamicLink ? ' data-dynamic-link="' + item['data-dynamic-link'] + '"' : '')#>>
+<#=(item['data-dynamic-link'] ? ' data-dynamic-link="' + item['data-dynamic-link'] + '"' : '')#>>
 <# if ( config.type === 'mega' && level === 1 ) { #><span class="tcb-mm-text"><# } #><span class="tve-disabled-text-inner"><#=item.label#></span><#if (item.children && item.children.length) { #><span class="tve-item-dropdown-trigger"><#=dropdown_icon#></span><#}#></span></a>
 
 <# if ( config.type === 'mega' && level === 1 && menuDescriptions[ item.id ] ) { #><#= menuDescriptions[ item.id ] #><# } #>

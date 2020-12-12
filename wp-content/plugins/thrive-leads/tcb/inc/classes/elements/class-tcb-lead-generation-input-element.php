@@ -26,11 +26,11 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 	public function own_components() {
 		$prefix_config                = tcb_selection_root();
 		$controls_default_config      = array(
-			'css_suffix' => array( ' input', ' select', ' textarea' ),
+			'css_suffix' => array( ' input', ' textarea' ),
 			'css_prefix' => $prefix_config . ' ',
 		);
 		$controls_default_config_text = array(
-			'css_suffix' => array( ' input', ' select', ' textarea', ' ::placeholder' ),
+			'css_suffix' => array( ' input', ' textarea', ' ::placeholder' ),
 			'css_prefix' => $prefix_config . ' ',
 		);
 
@@ -53,7 +53,6 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 					'icon_side'   => array(
 						'rem_ic_css_suf' => $controls_default_config['css_suffix'], //Remove Icon Css Suffix
 						'css_suffix'     => ' .thrv_icon',
-						'css_prefix'     => $prefix_config . ' ',
 						'config'         => array(
 							'name'    => __( 'Icon Side', 'thrive-cb' ),
 							'buttons' => array(
@@ -69,10 +68,11 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 						),
 					),
 					'required'    => array(
-						'config' => array(
+						'config'  => array(
 							'default' => false,
 							'label'   => __( 'Required field' ),
 						),
+						'extends' => 'Switch',
 					),
 				),
 			),
@@ -97,7 +97,11 @@ class TCB_Lead_Generation_Input_Element extends TCB_Element_Abstract {
 					'hr',
 				),
 				'config'            => array(
-					'MarginAndPadding' => $controls_default_config,
+					'MarginAndPadding' => array(
+						'margin_suffix'  => '',
+						'padding_suffix' => array(' input', ' textarea'),
+						'css_prefix' => $prefix_config . ' ',
+					),
 				),
 			),
 			'borders'               => array(

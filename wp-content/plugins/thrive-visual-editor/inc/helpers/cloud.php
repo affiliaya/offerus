@@ -55,6 +55,8 @@ function tve_get_cloud_content_templates( $tag, $args = array() ) {
 
 	if ( $do_not_use_cache || ! ( $templates = get_transient( $transient ) ) ) {
 
+		delete_transient( $transient );
+
 		require_once tve_editor_path( 'inc/classes/content-templates/class-tcb-content-templates-api.php' );
 
 		try {
@@ -164,13 +166,18 @@ function tve_get_cloud_templates_transient_name( $filters = array() ) {
  *
  *
  * @param array $filters filtering options
+ * @param array $args
  *
  * @return array
  */
-function tve_get_cloud_templates( $filters = array() ) {
+function tve_get_cloud_templates( $filters = array(), $args = array() ) {
 	$transient_name = tve_get_cloud_templates_transient_name( $filters );
 
-	if ( defined( 'TCB_CLOUD_DEBUG' ) && TCB_CLOUD_DEBUG ) {
+	$args = wp_parse_args( $args, array(
+		'nocache' => false,
+	) );
+
+	if ( ( defined( 'TCB_CLOUD_DEBUG' ) && TCB_CLOUD_DEBUG ) || $args['nocache'] ) {
 		delete_transient( $transient_name );
 	}
 
@@ -261,6 +268,22 @@ function tve_ajax_landing_page_cloud() {
 
 	if ( ! isset( $error ) ) {
 
+		/**
+		 * Post Constants - similar with tve_globals but do not depend on the Landing Page Key
+		 *
+		 * Usually stores flags for a particular post
+		 */
+		if ( ! empty( $_POST['tve_post_constants'] ) && is_array( $_POST['tve_post_constants'] ) && ! empty( $_POST['post_id'] ) ) {
+			update_post_meta( $_POST['post_id'], '_tve_post_constants', $_POST['tve_post_constants'] );
+		}
+
+		if ( isset( $_POST['header'] ) ) {
+			update_post_meta( $_POST['post_id'], '_tve_header', (int) $_POST['header'] );
+		}
+		if ( isset( $_POST['footer'] ) ) {
+			update_post_meta( $_POST['post_id'], '_tve_footer', (int) $_POST['footer'] );
+		}
+
 		try {
 			switch ( $_POST['task'] ) {
 				case 'download':
@@ -305,4 +328,25 @@ function tve_is_cloud_template( $lp_template ) {
 	 * @param bool $is_cloud_template whether or not the current page has a cloud template applied
 	 */
 	return apply_filters( 'tcb_is_cloud_template', array_key_exists( $lp_template, $templates ) );
+}
+
+/**
+ * Delete stored cloud templates & clear transients too
+ */
+function tve_delete_cloud_saved_data() {
+
+	tvd_reset_transient();
+
+	$query    = new WP_Query( array(
+			'post_type'      => array(
+				TCB_CT_POST_TYPE,
+			),
+			'posts_per_page' => '-1',
+			'fields'         => 'ids',
+		)
+	);
+	$post_ids = $query->posts;
+	foreach ( $post_ids as $id ) {
+		wp_delete_post( $id, true );
+	}
 }

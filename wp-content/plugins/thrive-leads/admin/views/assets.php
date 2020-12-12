@@ -87,6 +87,7 @@
 		} ?>>
 			<div class="tvd-row">
 				<div class="tvd-col tvd-s12">
+					<?php tve_leads_check_data_updates(); ?>
 					<h3 class="tvd-left tvd-title tvd-margin-right">
 						<?php echo __( 'Asset Groups', 'thrive-leads' ); ?>
 					</h3>

@@ -124,7 +124,7 @@ class Thrive_Dash_List_Connection_MailRelayEmail extends Thrive_Dash_List_Connec
 		);
 
 		try {
-			$mr->send_email( $args );
+			$mr->sendEmail( $args );
 		} catch ( Thrive_Dash_Api_MailRelay_Exception $e ) {
 			return $e->getMessage();
 		}
@@ -210,10 +210,32 @@ class Thrive_Dash_List_Connection_MailRelayEmail extends Thrive_Dash_List_Connec
 				'emails'  => $to,
 			);
 
-			$mr->send_email( $message );
+			$mr->sendEmail( $message );
 
 		} catch ( Exception $e ) {
 			return $e->getMessage();
+		}
+
+		if ( ! empty( $data['send_confirmation'] ) ) {
+			try {
+
+				$message = array(
+					'html'    => empty ( $data['confirmation_html'] ) ? '' : $data['confirmation_html'],
+					'subject' => $data['confirmation_subject'],
+					'emails'  => array(
+						array(
+							'email' => $data['sender_email'],
+							'name'  => '',
+						),
+					),
+				);
+
+				$mr->sendEmail( $message );
+
+			} catch ( Exception $e ) {
+				return $e->getMessage();
+			}
+
 		}
 
 		return true;
@@ -224,9 +246,9 @@ class Thrive_Dash_List_Connection_MailRelayEmail extends Thrive_Dash_List_Connec
 	 *
 	 * @param $post_data
 	 *
+	 * @return bool|string
 	 * @throws Exception
 	 *
-	 * @return bool|string
 	 */
 	public function sendEmail( $post_data ) {
 		$mr = $this->getApi();
@@ -301,11 +323,17 @@ class Thrive_Dash_List_Connection_MailRelayEmail extends Thrive_Dash_List_Connec
 	 * @return mixed
 	 */
 	protected function _apiInstance() {
-		return new Thrive_Dash_Api_MailRelay( array(
+
+		if ( false !== strpos( $this->param( 'domain' ), 'ipzmarketing' ) ) {
+			$instance = new Thrive_Dash_Api_MailRelayV1( $this->param( 'domain' ), $this->param( 'key' ) );
+		} else {
+			$instance = new Thrive_Dash_Api_MailRelay( array(
 				'host'   => $this->param( 'domain' ),
 				'apiKey' => $this->param( 'key' ),
-			)
-		);
+			) );
+		}
+
+		return $instance;
 	}
 
 	/**

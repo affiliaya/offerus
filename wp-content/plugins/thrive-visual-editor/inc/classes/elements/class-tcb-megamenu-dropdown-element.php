@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Silence is golden!
 }
 
-require_once plugin_dir_path( __FILE__ ) . '/class-tcb-menu-dropdown-element.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-tcb-menu-dropdown-element.php';
 
 /**
  * Class TCB_Menu_Child_Element
@@ -112,6 +112,16 @@ class TCB_Megamenu_Dropdown_Element extends TCB_Element_Abstract {
 						'max'   => '150',
 						'label' => __( 'Verical Spacing', 'thrive-cb' ),
 						'um'    => array( 'px' ),
+					),
+					'extends' => 'Slider',
+				),
+				'MaxWidth'        => array(
+					'config'  => array(
+						'min'   => '0',
+						'max'   => '2000',
+						'label' => __( 'Dropdown max width', 'thrive-cb' ),
+						'um'    => array( '%', 'px' ),
+						'css'   => 'max-width',
 					),
 					'extends' => 'Slider',
 				),

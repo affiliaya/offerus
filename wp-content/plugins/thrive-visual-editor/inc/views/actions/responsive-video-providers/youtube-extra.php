@@ -1,22 +1,47 @@
-<div class="inline-checkboxes">
-	<label class="tcb-checkbox">
-		<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="autoplay" data-elem-attr-val="1" data-elem-attr-val-unchecked="0"><span><?php echo __( 'Autoplay', 'thrive-cb' ) ?></span>
-	</label>
-	<?php if( 1 === 2 ): ?>
-		<label class="tcb-checkbox">
-			<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="showinfo" data-elem-attr-val="0" data-elem-attr-val-unchecked="1"><span><?php echo __( 'Hide title', 'thrive-cb' ) ?></span>
-		</label>
-	<?php endif;?>
-	<label class="tcb-checkbox">
-		<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="modestbranding" data-elem-attr-val="1" data-elem-attr-val-unchecked="0"><span><?php echo __( 'Hide logo', 'thrive-cb' ) ?></span>
-	</label>
-	<label class="tcb-checkbox">
-		<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="rel" data-elem-attr-val="0" data-elem-attr-val-unchecked="1"><span><?php echo __( 'Optimize related', 'thrive-cb' ) ?></span>
-	</label>
-	<label class="tcb-checkbox">
-		<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="controls" data-elem-attr-val="0" data-elem-attr-val-unchecked="1"><span><?php echo __( 'Hide controls', 'thrive-cb' ) ?></span>
-	</label>
-	<label class="tcb-checkbox">
-		<input type="checkbox" class="change" data-fn="extra_settings_changed" data-elem-attr="fs" data-elem-attr-val="0" data-elem-attr-val-unchecked="1"><span><?php echo __( 'Hide full-screen', 'thrive-cb' ) ?></span>
-	</label>
-</div>
+<?php
+$settings = array(
+	array(
+		'setting'       => 'autoplay',
+		'checked_val'   => 1,
+		'unchecked_val' => 0,
+		'label'         => __( 'Autoplay', 'thrive-cb' ),
+	),
+	array(
+		'setting'       => 'no-cookie',
+		'checked_val'   => 1,
+		'unchecked_val' => 0,
+		'label'         => __( 'Disable YouTube cookies', 'thrive-cb' ),
+		'info'          => true,
+		'info_fn'       => 'cookieTooltip',
+	),
+	array(
+		'setting'       => 'rel',
+		'checked_val'   => 0,
+		'unchecked_val' => 1,
+		'label'         => __( 'Optimize related videos', 'thrive-cb' ),
+	),
+	array(
+		'setting'            => 'controls',
+		'checked_val'        => 0,
+		'unchecked_val'      => 1,
+		'label'              => __( 'Hide player controls', 'thrive-cb' ),
+		'disable_option'     => 'modestbranding,fs',
+		'disable_option_val' => 0,
+	),
+	array(
+		'setting'       => 'fs',
+		'checked_val'   => 0,
+		'unchecked_val' => 1,
+		'label'         => __( 'Hide full-screen', 'thrive-cb' ),
+	),
+	array(
+		'setting'       => 'modestbranding',
+		'checked_val'   => 1,
+		'unchecked_val' => 0,
+		'label'         => __( 'Hide logo', 'thrive-cb' ),
+	),
+);
+
+foreach ( $settings as $setting ) {
+	tcb_template( 'actions/responsive-video-providers/provider-extra', $setting );
+}

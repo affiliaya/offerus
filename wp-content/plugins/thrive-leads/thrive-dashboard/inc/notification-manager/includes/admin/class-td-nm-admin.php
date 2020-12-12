@@ -50,7 +50,11 @@ class TD_NM_Admin {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'backbone' );
 
-			tve_dash_enqueue_script( 'td-nm-admin', TD_NM()->url( 'assets/js/admin/backbone.min.js' ), array( 'jquery', 'backbone' ), false, true );
+			tve_dash_enqueue_script( 'td-nm-admin', TD_NM()->url( 'assets/js/admin/backbone.min.js' ), array(
+				'tve-dash-main-js',
+				'jquery',
+				'backbone',
+			), false, true );
 
 			$params = array(
 				't'                  => include TD_NM()->path( 'i18n.php' ),
@@ -360,7 +364,8 @@ class TD_NM_Admin {
 
 			foreach ( $results as $post ) {
 				$post_meta_value = get_post_meta( $post['post_id'], 'td_nm_wordpress_notification', true );
-				printf( '<div data-key="%1$s" class="%2$s"><p>%3$s</p></div>', $post['post_id'], 'notice notice-success td_nm_wordpress_notice is-dismissible', $post_meta_value['message'] );
+				$message         = sanitize_textarea_field( $post_meta_value['message'] );
+				printf( '<div data-key="%1$s" class="%2$s"><p>%3$s</p></div>', $post['post_id'], 'notice notice-success td_nm_wordpress_notice is-dismissible', $message );
 			}
 		}
 	}

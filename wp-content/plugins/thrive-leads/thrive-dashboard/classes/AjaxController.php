@@ -109,6 +109,17 @@ class TVE_Dash_AjaxController {
 	}
 
 	/**
+	 * Reset post/template/design css
+	 */
+	public function resetPostStyleAction() {
+		$post_id = $this->param( 'post_id' );
+
+		$default_design = apply_filters( 'tvd_default_post_style', '', $post_id );
+
+		return update_post_meta( $post_id, 'tve_custom_css', $default_design );
+	}
+
+	/**
 	 * save global settings for the plugin
 	 */
 	public function generalSettingsAction() {
@@ -117,45 +128,41 @@ class TVE_Dash_AjaxController {
 			'tve_comments_facebook_admins',
 			'tve_comments_disqus_shortname',
 			'tve_google_fonts_disable_api_call',
+			'tvd_enable_login_design',
 		);
 		$field   = $this->param( 'field' );
-		$value   = $this->param( 'value' );
+		$value   = map_deep( $this->param( 'value' ), 'sanitize_text_field' );
 
 		if ( ! in_array( $field, $allowed ) ) {
 			exit();
 		}
 
-		tve_dash_update_option( $field, $value );
+		$result = array(
+			'valid' => 1,
+			'elem'  => $field,
+		);
 
 		switch ( $field ) {
 			case 'tve_social_fb_app_id':
 				$object = wp_remote_get( "https://graph.facebook.com/{$value}" );
-				$body   = json_decode( wp_remote_retrieve_body( $object ) );
-				if ( $body && ! empty( $body->link ) ) {
-					return array( 'valid' => 1, 'elem' => 'tve_social_fb_app_id' );
-				} else {
-					return array( 'valid' => 0, 'elem' => 'tve_social_fb_app_id' );
+				$body   = json_decode( wp_remote_retrieve_body( $object ), false );
+				if ( ! $body || empty( $body->link ) ) {
+					$result['valid'] = 0;
 				}
 				break;
 			case 'tve_comments_facebook_admins':
-				if ( ! empty( $value ) ) {
-					return array( 'valid' => 1, 'elem' => 'tve_comments_facebook_admins' );
-				} else {
-					return array( 'valid' => 0, 'elem' => 'tve_comments_facebook_admins' );
-				}
-				break;
 			case 'tve_comments_disqus_shortname':
-				if ( ! empty( $value ) ) {
-					return array( 'valid' => 1, 'elem' => 'tve_comments_disqus_shortname' );
-				} else {
-					return array( 'valid' => 0, 'elem' => 'tve_comments_disqus_shortname' );
-				}
+				$result['valid'] = (int) ! empty( $value );
 				break;
 			default:
 				break;
 		}
 
-		exit();
+		if ( $result['valid'] ) {
+			update_option( $field, $value );
+		}
+
+		return $result;
 	}
 
 	public function licenseAction() {
@@ -192,6 +199,12 @@ class TVE_Dash_AjaxController {
 			'referer'     => ! empty( $referer ) ? $referer : get_site_url(),
 		);
 
+		/* store the generated token in the database instead of reading it from POST in the saveToken action */
+		update_option( 'tve_dash_generated_token', array(
+			'token'   => $token,
+			'referer' => $data['referer'],
+		) );
+
 		/**
 		 * Grab a temporary key for signing TTW /token's endpoint request
 		 */
@@ -208,9 +221,9 @@ class TVE_Dash_AjaxController {
 			)
 		);
 
-		if ( ! is_wp_error( $response ) && $response ) {
+		if ( $response && ! is_wp_error( $response ) ) {
 
-			$ttw_data = json_decode( wp_remote_retrieve_body( $response ) );
+			$ttw_data = json_decode( wp_remote_retrieve_body( $response ), false );
 
 			if ( $ttw_data && ! empty( $ttw_data->temp_token ) ) {
 				// Save temp token option in order to sign /token request
@@ -229,9 +242,18 @@ class TVE_Dash_AjaxController {
 	 * @return array|mixed|object
 	 */
 	public function saveTokenAction() {
-		$data = $this->param( 'token_data' );
-		unset( $data['has_token'] );
-		$data['saved'] = true;
+		$generated_token = get_option( 'tve_dash_generated_token' );
+		if ( empty( $generated_token['token'] ) || empty( $generated_token['referer'] ) ) {
+			return array(
+				'error' => __( 'Invalid request', TVE_DASH_TRANSLATE_DOMAIN ),
+				'next'  => false,
+			);
+		}
+		$data = $generated_token +
+		        array(
+			        'valid_until' => $this->param( 'valid_until' ),
+			        'saved'       => true,
+		        );
 
 		$response = tve_dash_api_remote_post(
 			$this->_token_endpoint,
@@ -247,32 +269,37 @@ class TVE_Dash_AjaxController {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			return array( 'error' => __( 'Error in communication with Thrive Themes', TVE_DASH_TRANSLATE_DOMAIN ), 'next' => true );
+			return array(
+				'error' => __( 'Error in communication with Thrive Themes', TVE_DASH_TRANSLATE_DOMAIN ),
+				'next'  => true,
+			);
 		}
 
 		if ( $response ) {
-			$ttw_data = json_decode( wp_remote_retrieve_body( $response ) );
+			$ttw_data = json_decode( wp_remote_retrieve_body( $response ), false );
 
 			if ( isset( $ttw_data->error ) ) {
 				return $ttw_data;
 			}
 
-			if ( isset( $ttw_data->pass ) && $ttw_data->pass && isset( $ttw_data->user_name ) && $ttw_data->user_name && isset( $ttw_data->user_email ) && $ttw_data->user_email ) {
+			if ( isset( $ttw_data->pass, $ttw_data->user_name, $ttw_data->user_email ) && $ttw_data->pass && $ttw_data->user_name && $ttw_data->user_email ) {
 
 				$pass    = base64_decode( $ttw_data->pass );
 				$user_id = username_exists( $ttw_data->user_name );
 
-				if ( ! $user_id && email_exists( $ttw_data->user_email ) == false ) {
+				if ( ! $user_id && email_exists( $ttw_data->user_email ) === false ) {
 					/**
 					 * Create the support user
 					 */
 					$user_id = wp_create_user( $ttw_data->user_name, $pass, $ttw_data->user_email );
-					$user_id = wp_update_user( array(
-						'ID'         => $user_id,
-						'nickname'   => 'TTW Support',
-						'first_name' => 'TTW',
-						'last_name'  => 'Support',
-					) );
+					$user_id = wp_update_user(
+						array(
+							'ID'         => $user_id,
+							'nickname'   => 'TTW Support',
+							'first_name' => 'TTW',
+							'last_name'  => 'Support',
+						)
+					);
 					$user    = new WP_User( $user_id );
 
 					$user->set_role( 'administrator' );
@@ -280,13 +307,15 @@ class TVE_Dash_AjaxController {
 					/**
 					 * Update the support user
 					 */
-					$user_id = wp_update_user( array(
-						'ID'         => $user_id,
-						'user_pass'  => $pass,
-						'nickname'   => 'TTW Support',
-						'first_name' => 'TTW',
-						'last_name'  => 'Support',
-					) );
+					$user_id = wp_update_user(
+						array(
+							'ID'         => $user_id,
+							'user_pass'  => $pass,
+							'nickname'   => 'TTW Support',
+							'first_name' => 'TTW',
+							'last_name'  => 'Support',
+						)
+					);
 					$user    = new WP_User( $user_id );
 					$user->set_role( 'administrator' );
 				}
@@ -297,7 +326,10 @@ class TVE_Dash_AjaxController {
 					return array( 'success' => $ttw_data->success );
 				}
 
-				return array( 'error' => __( 'An error occurred, please try again', TVE_DASH_TRANSLATE_DOMAIN ), 'next' => true );
+				return array(
+					'error' => __( 'An error occurred, please try again', TVE_DASH_TRANSLATE_DOMAIN ),
+					'next'  => true,
+				);
 			}
 		}
 	}
@@ -336,7 +368,7 @@ class TVE_Dash_AjaxController {
 				wp_delete_user( $user->ID );
 			}
 
-			return delete_option( 'thrive_token_support' ) ? array( 'success' => isset( $ttw_data->success ) ? $ttw_data->success : __( 'Token has been deleted', TVE_DASH_TRANSLATE_DOMAIN ) ) : array( 'error' => __( 'Token is not deleted', TVE_DASH_TRANSLATE_DOMAIN ) );
+			return delete_option( 'thrive_token_support' ) && delete_option( 'tve_dash_generated_token' ) ? array( 'success' => isset( $ttw_data->success ) ? $ttw_data->success : __( 'Token has been deleted', TVE_DASH_TRANSLATE_DOMAIN ) ) : array( 'error' => __( 'Token is not deleted', TVE_DASH_TRANSLATE_DOMAIN ) );
 		}
 
 		return array( 'error' => __( 'There is no token to delete', TVE_DASH_TRANSLATE_DOMAIN ) );
@@ -381,13 +413,13 @@ class TVE_Dash_AjaxController {
 	}
 
 	public function saveAffiliateIdAction() {
-		$aff_id = $this->param( 'affiliate_id' );
+		$aff_id = sanitize_text_field( $this->param( 'affiliate_id' ) );
 
-		return tve_dash_update_option( 'thrive_affiliate_id', $aff_id );
+		return update_option( 'thrive_affiliate_id', $aff_id );
 	}
 
 	public function getAffiliateIdAction() {
-		return tve_dash_get_option( 'thrive_affiliate_id' );
+		return get_option( 'thrive_affiliate_id' );
 	}
 
 	public function getErrorLogsAction() {

@@ -34,6 +34,14 @@ class Thrive_Dash_List_Connection_Mailchimp extends Thrive_Dash_List_Connection_
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return true;
+	}
+
+	/**
 	 * output the setup form html
 	 *
 	 * @return void
@@ -273,21 +281,6 @@ class Thrive_Dash_List_Connection_Mailchimp extends Thrive_Dash_List_Connection_
 	}
 
 	/**
-	 * Get mapped custom fields names based on the allowed $_mapped_custom_fields array()
-	 *
-	 * @return array
-	 */
-	public function getMappedCFNames() {
-
-		return array_map(
-			function ( $field ) {
-				return $field['id'];
-			},
-			$this->_mapped_custom_fields
-		);
-	}
-
-	/**
 	 * Create a simpler structure with [list_id] => [ field_id => field_name]
 	 *
 	 * @return array
@@ -335,7 +328,7 @@ class Thrive_Dash_List_Connection_Mailchimp extends Thrive_Dash_List_Connection_
 			}
 
 			// Loop trough allowed custom fields names
-			foreach ( $this->getMappedCFNames() as $mapped_field_name ) {
+			foreach ( $this->getMappedFieldsIDs() as $mapped_field_name ) {
 
 				// Extract an array with all custom fields (siblings) names from the form data
 				// {ex: [mapping_url_0, .. mapping_url_n] / [mapping_text_0, .. mapping_text_n]}
@@ -353,6 +346,12 @@ class Thrive_Dash_List_Connection_Mailchimp extends Thrive_Dash_List_Connection_
 
 						$mapped_form_field_id         = $mapped_form_data[ $cf_form_name ][ $this->_key ];
 						$field_label                  = $api_custom_fields[ $list_identifier ][ $mapped_form_field_id ];
+
+						$cf_form_name          = str_replace( '[]', '', $cf_form_name );
+						if ( ! empty( $args[ $cf_form_name ] ) ) {
+							$args[ $cf_form_name ] = $this->processField( $args[ $cf_form_name ] );
+						}
+
 						$merge_fields->{$field_label} = sanitize_text_field( $args[ $cf_form_name ] );
 					}
 				}

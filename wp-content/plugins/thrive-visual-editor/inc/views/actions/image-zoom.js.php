@@ -5,22 +5,41 @@ var $target = jQuery( this ),
 	target_h = $target.outerHeight(),
 	$element = $target,
 	sameImage = ( config.url && $element.attr( 'src' ) && $element.attr( 'src' ) === config.url ) || ( config.id && $element.attr( 'data-id' ) && $element.attr( 'data-id' ) == config.id );
+if ( config.id ) {
+	$fullSize = jQuery( "#tcb-image-zoom-" + config.id + " img" );
+	if ( $fullSize.length ) {
+		$element = $fullSize;
+	}
+}
 /* If it is the same img but set from Anim&Action work like Open full size image on click*/
-if ( ! sameImage || (sameImage && config.sizeChanged)) {
+if ( ! sameImage || ( sameImage && config.sizeChanged ) ) {
 	if ( config.id ) {
 		$element = jQuery( "#tcb-image-zoom-" + config.id + " img" )
 	} else if ( $element.find( "img" ).length ) {
 		$element = $element.find( "img" )
 	}
 }
+$element = $element.first();
 
-var image_src = $element.attr( "src" ),
+var imageSrc = $element.attr( "data-opt-src" ) || $element.attr( "src" ),
+	imgAlt = $target.attr( 'alt' ) || '',
 	$lightbox = jQuery( '#tve_zoom_lightbox' ),
 	$overlay = jQuery( '#tve_zoom_overlay' ),
 	windowWidth = window.innerWidth,
 	windowHeight = window.innerHeight,
 	img_size = $element.data( "tve-zoom-clone" ),
 	resizeScale = windowWidth < 600 ? 0.8 : 0.9;
+
+if ( imageSrc.indexOf( 'data:image' ) !== - 1 && $element.attr( 'data-src' ) ) {
+	imageSrc = $element.attr( 'data-src' );
+}
+
+/**
+ * Force lazy load of the image
+ */
+if ( window.lazySizes ) {
+	lazySizes.loader.unveil( $element[ 0 ] );
+}
 
 if ( typeof img_size === 'undefined' ) {
 	var $clone = $element.clone()
@@ -32,9 +51,24 @@ if ( typeof img_size === 'undefined' ) {
 		                     top: "-8000px"
 	                     } ).removeAttr( "width height" );
 	$clone.appendTo( "body" );
-	$clone.on( 'load', function () {
-		const height = parseFloat( $element.attr( 'height' ) || $element.height()),
-			width = parseFloat( $element.attr( 'width' ) || $element.width() );
+	/**
+	 * `.one()` ensures this will not get executed multiple times.
+	 */
+	$clone.one( 'load', function () {
+		var $parent = $element.parent(),
+			height = parseFloat( $element.attr( 'data-init-height' ) ) || parseFloat( $element.attr( 'height' ) || $element.height() ),
+			width = parseFloat( $element.attr( 'data-init-width' ) ) || parseFloat( $element.attr( 'width' ) || $element.width() );
+
+		/**
+		 * If we cant get the size try to make the parent visible until we get img props
+		 */
+		if ( ! ( height && width ) ) {
+			$parent.css( {display: 'block', visibility: 'hidden'} );
+			height = $element.height();
+			width = $element.width();
+			$parent.css( {display: 'hidden', visibility: ''} );
+		}
+
 		img_size = {
 			"originalWidth": width,
 			"width": width,
@@ -57,6 +91,25 @@ if ( typeof img_size === 'undefined' ) {
 
 		show_lightbox();
 	} );
+	/**
+	 * Firefox doesnt trigger load event for the clone when is open full size image
+	 */
+	if ( TCB_Front.browser.mozilla && ( sameImage || typeof sameImage === 'undefined' ) ) {
+		$clone.trigger( 'load' );
+	} else if ( imageSrc.includes( '.optimole.com/' ) ) {
+		/**
+		 * Optimole w/ lazy-load will actually trigger loading of this image URL earlier.
+		 * Image is already loaded at this point. Just need to trigger the load event manually
+		 */
+		$clone.trigger( 'load' );
+	} else {
+		/**
+		 * Finally, some failsafe mechanism, trigger the load event with a delay. There have been cases reported where it does not "always" work.
+		 */
+		setTimeout( function () {
+			$clone.trigger( 'load' );
+		}, 500 );
+	}
 } else {
 	show_lightbox();
 }
@@ -67,7 +120,7 @@ function show_lightbox() {
 	if ( $lightbox.length ) {
 		$lightbox.show();
 	} else {
-		$lightbox = jQuery( "<div id='tve_zoom_lightbox'><div class='tve_close_lb thrv-icon-cross'></div><div id='tve_zoom_image_content'></div></div>" )
+		$lightbox = jQuery( "<div id='tve_zoom_lightbox'><div class='tve_close_lb thrv-svg-icon'>" + TCB_Front.icons.get('cross') + "</div><div id='tve_zoom_image_content'></div></div>" )
 			.appendTo( 'body' );
 		$overlay = jQuery( "<div id='tve_zoom_overlay'></div>" ).hide()
 		                                                        .appendTo( 'body' );
@@ -108,7 +161,7 @@ function show_lightbox() {
 
 	$lightbox.data( "data-sizes", img_size );
 
-	jQuery( "#tve_zoom_image_content" ).html( "<img src='" + image_src + "'/>" );
+	jQuery( "#tve_zoom_image_content" ).html( "<img src='" + imageSrc + "' alt='" + imgAlt + "'/>" );
 
 	$lightbox.css( {
 		left: offset.left + target_w / 2,

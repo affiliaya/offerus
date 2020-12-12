@@ -34,6 +34,9 @@ class TD_NM_Ajax {
 	 * Dies with json response
 	 */
 	public static function admin_controller() {
+		if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+			wp_die( '' );
+		}
 		include_once TD_NM()->path( 'includes/admin/class-td-nm-admin-ajax-controller.php' );
 		$response = TD_NM_Admin_Ajax_Controller::instance()->handle();
 		wp_send_json( $response );

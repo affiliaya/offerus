@@ -3,13 +3,19 @@
 add_action( "wp_ajax_tve_dash_display_font_manager", "tve_dash_display_font_options" );
 /* Load font manager view in admin */
 function tve_dash_display_font_options() {
-	include 'views/admin-font-options.php';
+	if ( current_user_can( TVE_DASH_CAPABILITY ) ) {
+		include 'views/admin-font-options.php';
+	}
 	die;
 }
 
 add_action( "wp_ajax_tve_dash_font_manager_delete", "tve_dash_font_manager_delete" );
 /* Delete font from font manager AJAX REQUEST */
 function tve_dash_font_manager_delete() {
+	check_ajax_referer( 'tve-dash' );
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$font_id     = $_REQUEST['font_id'];
 	$old_options = json_decode( get_option( 'thrive_font_manager_options' ), true );
 	$delete_key  = - 1;
@@ -29,6 +35,10 @@ function tve_dash_font_manager_delete() {
 add_action( "wp_ajax_tve_dash_font_manager_add", "tve_dash_font_manager_add" );
 /* Add new font in font manager */
 function tve_dash_font_manager_add() {
+	check_ajax_referer( 'tve-dash' );
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$data = $_REQUEST;
 
 	$options = get_option( 'thrive_font_manager_options' );
@@ -61,6 +71,10 @@ function tve_dash_font_manager_add() {
 add_action( "wp_ajax_tve_dash_font_manager_edit", "tve_dash_font_manager_edit" );
 /* Edit saved font from font manager */
 function tve_dash_font_manager_edit() {
+	check_ajax_referer( 'tve-dash' );
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$data = $_REQUEST;
 
 	$old_options = json_decode( get_option( 'thrive_font_manager_options' ), true );
@@ -85,6 +99,10 @@ function tve_dash_font_manager_edit() {
 add_action( "wp_ajax_tve_dash_font_manager_duplicate", "tve_dash_font_manager_duplicate" );
 
 function tve_dash_font_manager_duplicate() {
+	check_ajax_referer( 'tve-dash' );
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$font_id     = $_REQUEST['font_id'];
 	$old_options = json_decode( get_option( 'thrive_font_manager_options' ), true );
 	$option      = null;
@@ -155,6 +173,10 @@ function tve_dash_font_manager_include_scripts( $hook ) {
 add_action( "wp_ajax_tve_dash_font_manager_update_posts_fonts", "tve_dash_font_manager_update_posts_fonts" );
 
 function tve_dash_font_manager_update_posts_fonts() {
+	check_ajax_referer( 'tve-dash' );
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$posts = get_posts( array( 'posts_per_page' => - 1 ) );
 
 	foreach ( $posts as $post ) {

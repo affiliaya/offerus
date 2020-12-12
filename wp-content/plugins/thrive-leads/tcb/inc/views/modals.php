@@ -4,7 +4,10 @@
 			<div class="tcb-modal-content">
 				<?php include $file; ?>
 			</div>
-			<span class="click tcb-modal-close"><?php tcb_icon( 'close2' ); ?></span>
+			<span class="click tcb-modal-close"><?php tcb_icon( 'modal-close' ); ?></span>
+			<div class="tve-modal-loader tcb-hidden">
+				<span class="click tcb-modal-refresh"><?php tcb_icon( 'refresh-icon' ); ?></span>
+			</div>
 		</div>
 	<?php endforeach; ?>
 </div>

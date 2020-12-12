@@ -13,29 +13,18 @@ var TL_Editor_Page = {};
 /**
  * Extensions added to the TCB editor
  */
-(function ( $ ) {
+( function ( $ ) {
 	window.parent.TL_Editor_Page = TL_Editor_Page;
 
 	TL_Editor_Page.handle_state_response = function ( response ) {
 		var tve_leads_page_data = window.parent.tve_leads_page_data;
 
 		/** custom CSS */
-		$( '.tve_custom_style,.tve_user_custom_style' ).remove();
+		$( '.tve_custom_style,.tve_user_custom_style,.tve_global_style' ).remove();
 		TVE.CSS_Rule_Cache.clear();
 
-		/**
-		 * Clear also the Global Rules
-		 */
-		TVE.USE_GLOBALSHEET = true;
-		TVE.CSS_Rule_Cache.clear();
-		TVE.USE_GLOBALSHEET = false;
-
-		$( 'head' ).append( response.custom_css );
-
-		/**
-		 * Refresh the style node
-		 */
-		TVE.Editor_Page.content_manager.refresh_global_style_node();
+		$( 'head' ).append( response.custom_css )
+		           .append( response.global_css );
 
 		/** template-related CSS and fonts */
 		if ( ! response.css.thrive_events ) {
@@ -113,4 +102,4 @@ var TL_Editor_Page = {};
 		return $html;
 	};
 
-})( jQuery );
+} )( jQuery );

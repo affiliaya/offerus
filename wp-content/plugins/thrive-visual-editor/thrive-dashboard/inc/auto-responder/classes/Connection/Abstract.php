@@ -209,9 +209,14 @@ abstract class Thrive_Dash_List_Connection_Abstract {
 	 * disconnect (remove) this API connection
 	 */
 	public function disconnect() {
-		$this->beforeDisconnect();
-		$this->setCredentials( array() );
-		Thrive_Dash_List_Manager::save( $this );
+
+		$disconnect = apply_filters( 'tve_dash_disconnect_' . $this->getKey(), true );
+
+		if ( true === $disconnect ) {
+			$this->beforeDisconnect();
+			$this->setCredentials( array() );
+			Thrive_Dash_List_Manager::save( $this );
+		}
 
 		return $this;
 	}
@@ -385,6 +390,9 @@ abstract class Thrive_Dash_List_Connection_Abstract {
 			'type'            => $this->getType(),
 			'logoUrl'         => $this->getLogoUrl(),
 			'success_message' => $this->customSuccessMessage(),
+			'can_test'        => $this->canTest(),
+			'can_delete'      => $this->canDelete(),
+			'can_edit'        => $this->canEdit(),
 		);
 
 		$properties['notification'] = TVE_Dash_InboxManager::instance()->get_by_slug( $this->getKey() );
@@ -696,27 +704,42 @@ abstract class Thrive_Dash_List_Connection_Abstract {
 	 */
 	protected function _setMappingCustomFields() {
 
-		$this->_mapped_custom_fields = array(
+		$this->_mapped_custom_fields = apply_filters(
+			'tve_dash_mapped_custom_fields',
 			array(
-				'id'          => 'mapping_text',
-				'placeholder' => __( 'Text', TVE_DASH_TRANSLATE_DOMAIN ),
-			),
-			array(
-				'id'          => 'mapping_url',
-				'placeholder' => __( 'URL', TVE_DASH_TRANSLATE_DOMAIN ),
-			),
-//			array(
-//				'id'          => 'mapping_radio',
-//				'placeholder' => __( 'Radio', TVE_DASH_TRANSLATE_DOMAIN ),
-//			),
-			array(
-				'id'          => 'mapping_hidden',
-				'placeholder' => __( 'Hidden', TVE_DASH_TRANSLATE_DOMAIN ),
-			),
-			array(
-				'id'          => 'mapping_textarea',
-				'placeholder' => __( 'Textarea', TVE_DASH_TRANSLATE_DOMAIN ),
-			),
+				array(
+					'id'          => 'mapping_text',
+					'placeholder' => __( 'Text', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_url',
+					'placeholder' => __( 'URL', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_radio',
+					'placeholder' => __( 'Radio', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_select',
+					'placeholder' => __( 'Dropdown', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_checkbox',
+					'placeholder' => __( 'Checkbox', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_textarea',
+					'placeholder' => __( 'Textarea', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_file',
+					'placeholder' => __( 'File upload', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+				array(
+					'id'          => 'mapping_hidden',
+					'placeholder' => __( 'Hidden', TVE_DASH_TRANSLATE_DOMAIN ),
+				),
+			)
 		);
 	}
 
@@ -756,6 +779,133 @@ abstract class Thrive_Dash_List_Connection_Abstract {
 		$custom_fields = tve_sanitize_data_recursive( $custom_fields );
 
 		return set_transient( $this->_custom_fields_transient, $custom_fields );
+	}
+
+	public function processField( $field ) {
+		if ( is_array( $field ) ) {
+			$field = join( ", ", $field );
+		}
+
+		return stripslashes( $field );
+	}
+
+	/**
+	 * Whether or not the integration supports tags
+	 *
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return false;
+	}
+
+	/**
+	 * Get tags key for the api
+	 *
+	 * @return string
+	 */
+	protected function getTagsKey() {
+
+		return $this->_key . '_tags';
+	}
+
+	/**
+	 * Get tags key for the api
+	 *
+	 * @return array
+	 */
+	protected function getMappedFieldsIDs() {
+
+		$mapped_fields = array_map(
+			function ( $field ) {
+				return $field['id'];
+			},
+			$this->_mapped_custom_fields
+		);
+
+		array_push( $mapped_fields, 'user_consent' );
+
+		return $mapped_fields;
+	}
+
+	/**
+	 * Push external tags in $data, EX: adds tags from tqb
+	 *
+	 * @param array|string $tags
+	 * @param array        $data
+	 *
+	 * @return array
+	 */
+	public function pushTags( $tags, $data = array() ) {
+
+		if ( ! $this->hasTags() && ( ! is_array( $tags ) || ! is_string( $tags ) ) ) {
+			return $data;
+		}
+
+		$_key = $this->getTagsKey();
+
+		if ( ! isset( $data[ $_key ] ) ) {
+			$data[ $_key ] = '';
+		}
+
+		if ( is_array( $tags ) ) {
+			$tags = implode( ', ', $tags );
+		}
+
+		$data[ $_key ] = empty( $data[ $_key ] )
+			? $tags
+			: $data[ $_key ] . ', ' . $tags;
+
+		$data[ $_key ] = trim( $data[ $_key ] );
+
+		return $data;
+	}
+
+	/**
+	 * Whether or not this connection can be edited
+	 *
+	 * @return bool
+	 */
+	public function canEdit() {
+		return true;
+	}
+
+	/**
+	 * Whether or not this connection can be deleted
+	 *
+	 * @return bool
+	 */
+	public function canDelete() {
+		return true;
+	}
+
+	/**
+	 * Whether or not this connection can be tested to validate that the stored credentials are correct
+	 *
+	 * @return bool
+	 */
+	public function canTest() {
+		return true;
+	}
+
+	/**
+	 * Get localization data needed for setting up this connection within a form
+	 *
+	 * @return array
+	 */
+	public function getDataForSetup() {
+		return array();
+	}
+
+	/**
+	 * get relevant data from webhook trigger
+	 *
+	 * @param $request WP_REST_Request
+	 *
+	 * @return array
+	 */
+	public function getWebhookdata( $request ) {
+		return array();
 	}
 }
 

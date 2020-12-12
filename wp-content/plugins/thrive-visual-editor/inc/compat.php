@@ -30,10 +30,11 @@ if ( function_exists( 'is_plugin_active' ) && is_plugin_active( 'surveyfunnel/su
 }
 
 /**
- * Compatibility with Total Themes.
+ * Compatibility with Total Themes & Advanced Custom Fields
  */
 if ( isset( $_GET['tve'] ) && 'true' == $_GET['tve'] ) {
 	add_filter( 'wpex_toggle_bar_active', '__return_false' );
+	add_filter( 'acf/settings/enqueue_select2', '__return_false' );
 }
 
 /**
@@ -534,7 +535,7 @@ if ( function_exists( 'pmpro_wp' ) ) {
  * Event Manager compatibility
  */
 function tve_em_remove_content_filter() {
-	if ( get_post_type() === 'event' AND is_singular() ) {
+	if ( get_post_type() === 'event' and is_singular() ) {
 		remove_filter( 'the_content', 'tve_editor_content', 10 );
 	}
 }
@@ -710,3 +711,61 @@ add_action( 'wp_head', function () {
 		wp_dequeue_script( 'remote_sdk' );
 	}
 }, PHP_INT_MAX );
+
+/**
+ * Compatibility with Oliver POS - A WooCommerce Point of Sale (POS)
+ *
+ * We don't need their styles inside the editor
+ * Added in admin_enqueue_scripts because there is the place where they register their styles
+ */
+add_action( 'admin_enqueue_scripts', function () {
+	if ( is_editor_page_raw() ) {
+		wp_deregister_style( 'oliver-pos-feedback-css' );
+		wp_dequeue_style( 'oliver-pos-feedback-css' );
+	}
+}, PHP_INT_MAX );
+
+/**
+ * Fixes a compatibility issue with optimole that causes src attribute replacement to not function correctly on landing pages
+ */
+add_action( 'tcb_landing_page_template_redirect', function () {
+	if ( ! is_editor_page() && did_action( 'optml_replacer_setup' ) ) {
+		do_action( 'optml_after_setup' );
+	}
+} );
+
+/**
+ * Filter to add plugins to the TOC list.
+ *
+ * @param array TOC plugins.
+ */
+add_filter( 'rank_math/researches/toc_plugins', function ( $toc_plugins ) {
+	$toc_plugins['thrive-visual-editor/thrive-visual-editor.php'] = 'Thrive Architect';
+
+	return $toc_plugins;
+} );
+
+/**
+ * Fixes a custom menu regression that added these classes to all saved menus
+ */
+add_filter( 'tve_thrive_shortcodes', static function ( $content ) {
+	return str_replace( ' tve-custom-menu-switch-icon-tablet tve-custom-menu-switch-icon-mobile', '', $content );
+} );
+
+/**
+ * Do not generate sitemap for symbols
+ */
+add_filter( 'tve_dash_yoast_sitemap_exclude_post_types', static function ( $post_types ) {
+	$post_types[] = TCB_Symbols_Post_Type::SYMBOL_POST_TYPE;
+
+	return $post_types;
+} );
+
+/**
+ * Do not generate sitemap for symbols taxonomy
+ */
+add_filter( 'tve_dash_yoast_sitemap_exclude_taxonomies', static function ( $taxonomies ) {
+	$taxonomies[] = TCB_Symbols_Taxonomy::SYMBOLS_TAXONOMY;
+
+	return $taxonomies;
+} );

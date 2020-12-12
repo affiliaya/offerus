@@ -101,15 +101,6 @@ class TCB_Form_Submit_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'ButtonGroup',
 					),
-					'style'       => array(
-						'css_suffix' => ' button',
-						'css_prefix' => $prefix_config . ' ',
-						'config'     => array(
-							'label'   => __( 'Style', 'thrive-cb' ),
-							'items'   => array(),
-							'default' => 'default',
-						),
-					),
 				),
 			),
 			'typography'       => array(

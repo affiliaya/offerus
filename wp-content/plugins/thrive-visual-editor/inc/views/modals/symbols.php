@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <h2 class="tcb-modal-title"><?php echo __( 'Choose symbol', 'thrive-cb' ) ?></h2>
 
-<span class="click tcb-modal-close"><?php tcb_icon( 'close' ) ?></span>
+<span class="click tcb-modal-close"><?php tcb_icon( 'modal-close' ) ?></span>
 
 <div class="status tpl-ajax-status"><?php echo __('Fetching data', 'thrive-cb'); ?>...</div>
 <div class="error-container"></div>

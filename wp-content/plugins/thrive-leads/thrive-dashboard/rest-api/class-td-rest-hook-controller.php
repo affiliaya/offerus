@@ -162,6 +162,12 @@ class TD_REST_Hook_Controller extends TD_REST_Controller {
 					'tag2',
 					'tag3',
 				),
+				'message'           => array(
+					'message1',
+					'message2',
+					'message3',
+				),
+				'website'           => 'https://yourwebsite.com/',
 				'source_url'        => 'https://thrivethemes.com',
 				'thriveleads_group' => 'Group 1',
 				'thriveleads_type'  => 'Lightbox',
@@ -169,7 +175,7 @@ class TD_REST_Hook_Controller extends TD_REST_Controller {
 			),
 		);
 
-		// For CF Subscription
+		// For CF Subscription [DEPRECATED should be removed when considering that old CF forms are no longer connected on the users side]
 		if ( 'cf-optin' === $this->_hook_name ) {
 			$response_sample = array(
 				array(

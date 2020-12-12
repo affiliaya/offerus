@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php wp_head(); ?>
 	<?php do_action( 'tcb_hook_editor_head' ); ?>
 	<?php tve_load_global_variables(); ?>
-	<?php echo tve_get_shared_styles('', '300'); ?>
+	<?php echo tve_get_shared_styles( '', '300' ); ?>
 	<script>
 		var ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>';
 	</script>
@@ -68,6 +68,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php tcb_template( 'sidebar-right' ); ?>
 	<div id="main-icons">
 		<?php include TVE_TCB_ROOT_PATH . 'editor/css/fonts/control-panel.svg'; ?>
+		<svg id="tve-icon-picker" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
+			 xmlns="http://www.w3.org/2000/svg">
+			<defs></defs>
+		</svg>
 	</div>
 	<div id="inline-drop-panels"></div>
 	<div class="fr-center-toolbar bottom" id="edit-mode-tool">

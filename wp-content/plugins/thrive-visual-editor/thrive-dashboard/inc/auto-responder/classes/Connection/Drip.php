@@ -33,6 +33,14 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return true;
+	}
+
+	/**
 	 * output the setup form html
 	 *
 	 * @return void
@@ -53,7 +61,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 		$client_id = ! empty( $_POST['connection']['client_id'] ) ? $_POST['connection']['client_id'] : '';
 
 		if ( empty( $token ) || empty( $client_id ) ) {
-			return $this->error( __( 'You must provide a valid Drip token and Client ID', TVE_DASH_TRANSLATE_DOMAIN ) );
+			return $this->error( __( 'You must provide a valid Drip token and Client ID', 'thrive-dash' ) );
 		}
 
 		$this->setCredentials( $_POST['connection'] );
@@ -61,7 +69,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 		$result = $this->testConnection();
 
 		if ( $result !== true ) {
-			return $this->error( sprintf( __( 'Could not connect to Drip using the provided Token and Client ID (<strong>%s</strong>)', TVE_DASH_TRANSLATE_DOMAIN ), $result ) );
+			return $this->error( sprintf( __( 'Could not connect to Drip using the provided Token and Client ID (<strong>%s</strong>)', 'thrive-dash' ), $result ) );
 		}
 
 		/**
@@ -69,7 +77,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 		 */
 		$this->save();
 
-		return $this->success( __( 'Drip connected successfully', TVE_DASH_TRANSLATE_DOMAIN ) );
+		return $this->success( __( 'Drip connected successfully', 'thrive-dash' ) );
 	}
 
 	/**
@@ -86,7 +94,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 			$accounts = $api->get_accounts();
 
 			if ( empty( $accounts ) || ! is_array( $accounts ) ) {
-				return __( 'Drip connection could not be validated!', TVE_DASH_TRANSLATE_DOMAIN );
+				return __( 'Drip connection could not be validated!', 'thrive-dash' );
 			}
 
 			foreach ( $accounts['accounts'] as $account ) {
@@ -116,7 +124,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 		$phone = ! empty( $arguments['phone'] ) ? $arguments['phone'] : '';
 
 		$arguments['drip_optin'] = ! isset( $arguments['drip_optin'] ) ? 's' : $arguments['drip_optin'];
-		$double_optin            = isset( $arguments['drip_optin'] ) && $arguments['drip_optin'] === 's' ? false : true;
+		$double_optin            = ! ( isset( $arguments['drip_optin'] ) && 's' === $arguments['drip_optin'] );
 
 		$field_first_name = isset( $arguments['drip_first_name_field'] ) ? $arguments['drip_first_name_field'] : 'thrive_first_name';
 		$field_last_name  = isset( $arguments['drip_last_name_field'] ) ? $arguments['drip_last_name_field'] : 'thrive_last_name';
@@ -142,7 +150,7 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 
 			$tags = ! empty( $arguments['drip_tags'] ) ? explode( ',', $arguments['drip_tags'] ) : array();
 
-			if ( isset( $arguments['drip_type'] ) && $arguments['drip_type'] === 'automation' ) {
+			if ( isset( $arguments['drip_type'] ) && 'automation' === $arguments['drip_type'] ) {
 				$proprieties->thrive_referer    = $url;
 				$proprieties->thrive_ip_address = $_SERVER['REMOTE_ADDR'];
 
@@ -151,6 +159,11 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 						$proprieties->{$field} = $field_value;
 					}
 				}
+			}
+
+			if ( ! empty( $arguments['tve_mapping'] ) ) {
+				$fields      = $this->prepare_api_custom_fields( $arguments );
+				$proprieties = (object) array_merge( (array) $proprieties, $fields );
 			}
 
 			if ( ! empty( $tags ) ) {
@@ -167,33 +180,38 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 				'custom_fields' => $proprieties,
 			);
 
-			if ( isset( $arguments['drip_type'] ) && $arguments['drip_type'] === 'list' ) {
+			if ( isset( $arguments['drip_type'] ) && 'list' === $arguments['drip_type'] ) {
 				$user['double_optin'] = $double_optin;
 			}
 
 			$lead = $api->create_or_update_subscriber( $user );
 			if ( empty( $user ) ) {
-				return __( 'User could not be subscribed', TVE_DASH_TRANSLATE_DOMAIN );
+				return __( 'User could not be subscribed', 'thrive-dash' );
 			}
 
-			if ( isset( $arguments['drip_type'] ) && $arguments['drip_type'] == 'list' || ! isset( $arguments['drip_type'] ) ) {
+			if ( ! isset( $arguments['drip_field'] ) || 'list' === $arguments['drip_type'] ) {
+
 				$client = array_shift( $lead['subscribers'] );
 
-				$api->subscribe_subscriber( array(
-					'account_id'   => $this->param( 'client_id' ),
-					'campaign_id'  => $list_identifier,
-					'email'        => $client['email'],
-					'double_optin' => $double_optin,
-					'tags'         => $tags,
-				) );
+				$api->subscribe_subscriber(
+					array(
+						'account_id'   => $this->param( 'client_id' ),
+						'campaign_id'  => $list_identifier,
+						'email'        => $client['email'],
+						'double_optin' => $double_optin,
+						'tags'         => $tags,
+					)
+				);
 			}
 
-			$api->record_event( array(
-				'account_id' => $this->param( 'client_id' ),
-				'action'     => 'Submitted a Thrive Leads form',
-				'email'      => $arguments['email'],
-				'properties' => $proprieties,
-			) );
+			$api->record_event(
+				array(
+					'account_id' => $this->param( 'client_id' ),
+					'action'     => 'Submitted a Thrive Leads form',
+					'email'      => $arguments['email'],
+					'properties' => $proprieties,
+				)
+			);
 
 			return true;
 
@@ -210,7 +228,6 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 
 				return $e->getMessage();
 			}
-
 		} catch ( Exception $e ) {
 			return $e->getMessage();
 		}
@@ -292,13 +309,15 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 			/** @var Thrive_Dash_Api_Drip $api */
 			$api = $this->getApi();
 
-			$campaigns = $api->get_campaigns( array(
-				'account_id' => $this->param( 'client_id' ),
-				'status'     => 'all',
-			) );
+			$campaigns = $api->get_campaigns(
+				array(
+					'account_id' => $this->param( 'client_id' ),
+					'status'     => 'all',
+				)
+			);
 
 			if ( empty( $campaigns ) || ! is_array( $campaigns ) ) {
-				$this->_error = __( 'There is not Campaign in your Drip account to be fetched !', TVE_DASH_TRANSLATE_DOMAIN );
+				$this->_error = __( 'There is not Campaign in your Drip account to be fetched !', 'thrive-dash' );
 
 				return false;
 			}
@@ -319,5 +338,120 @@ class Thrive_Dash_List_Connection_Drip extends Thrive_Dash_List_Connection_Abstr
 
 			return false;
 		}
+	}
+
+	/**
+	 * Append custom fields to defaults
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	public function get_custom_fields( $params = array() ) {
+
+		return array_merge( parent::get_custom_fields(), $this->_mapped_custom_fields );
+	}
+
+	/**
+	 * @param      $params
+	 * @param bool $force
+	 * @param bool $get_all
+	 *
+	 * @return array|mixed
+	 * @throws Exception
+	 */
+	public function get_api_custom_fields( $params, $force = false, $get_all = false ) {
+
+		return $this->getAllCustomFields( $force );
+	}
+
+	/**
+	 * Gets a list of fields from API or from cache
+	 *
+	 * @param (bool) $force true for fresh data or false from cache
+	 *
+	 * @return array|mixed
+	 * @throws Exception
+	 */
+	public function getAllCustomFields( $force ) {
+
+		$custom_data = array();
+
+		// Serves from cache if exists and requested
+		$cached_data = $this->_get_cached_custom_fields();
+		if ( false === $force && ! empty( $cached_data ) ) {
+			return $cached_data;
+		}
+
+		/** @var Thrive_Dash_Api_Drip $api */
+		$api = $this->getApi();
+
+		// Build custom fields for every list
+		$custom_fields = $api->get_custom_fields(
+			array(
+				'account_id' => $this->param( 'client_id' ),
+			)
+		);
+
+		if ( is_array( $custom_fields ) ) {
+			foreach ( $custom_fields as $field ) {
+				$custom_data[] = $this->normalize_custom_field( $field );
+			}
+		}
+
+		$this->_save_custom_fields( $custom_data );
+
+		return $custom_data;
+	}
+
+
+	/**
+	 * Brings an API field under a known form that TAr can understand
+	 *
+	 * @param string $field
+	 *
+	 * @return array
+	 */
+	protected function normalize_custom_field( $field ) {
+
+		return array(
+			'id'    => $field,
+			'name'  => $field,
+			'type'  => $field,
+			'label' => $field,
+		);
+	}
+
+	/**
+	 * Based on custom inputs set in form and their mapping
+	 * - prepares a custom fields for Drip
+	 *
+	 * @param array $arguments POST sent by optin form
+	 *
+	 * @return array with drip custom field name as key and the value of inputs filled by the visitor
+	 */
+	public function prepare_api_custom_fields( $arguments ) {
+
+		$fields = array();
+		if ( empty( $arguments['tve_mapping'] ) ) {
+			return $fields;
+		}
+
+		$serialized = base64_decode( $arguments['tve_mapping'] );
+		$mapping    = array();
+		if ( $serialized ) {
+			$mapping = maybe_unserialize( $serialized );
+		}
+
+		foreach ( $mapping as $name => $field ) {
+			$name = str_replace( '[]', '', $name );
+			if ( ! empty( $field[ $this->_key ] ) && ! empty( $arguments[ $name ] ) ) {
+				$custom_field_name            = $field[ $this->_key ];
+				$custom_field_value           = $arguments[ $name ];
+				$fields[ $custom_field_name ] = is_array( $custom_field_value ) ? implode( ', ', $custom_field_value ) : $custom_field_value;
+			}
+		}
+
+		return $fields;
 	}
 }

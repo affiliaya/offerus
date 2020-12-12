@@ -3,7 +3,6 @@
  * Notification Manager Models
  */
 
-var TD_NM = TD_NM || {};
 TD_NM.models = TD_NM.models || {};
 TD_NM.collections = TD_NM.collections || {};
 
@@ -143,7 +142,12 @@ TD_NM.collections = TD_NM.collections || {};
 		validate: function ( attrs ) {
 			var errors = [];
 
-			this[ 'validate_' + this.get( 'type' ) ]( errors, attrs );
+			if ( this.get( 'type' ) ) {
+				this[ 'validate_' + this.get( 'type' ) ]( errors, attrs );
+			} else {
+				errors.push( TD_NM.t.select_action );
+			}
+
 
 			if ( errors.length ) {
 				return errors;

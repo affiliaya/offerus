@@ -3,7 +3,6 @@
  * Notification Manager Views
  */
 
-var TD_NM = TD_NM || {};
 TD_NM.views = TD_NM.views || {};
 
 ( function ( $ ) {

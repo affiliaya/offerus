@@ -48,7 +48,7 @@ class TCB_Responsivevideo_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function identifier() {
-		return '.thrv_responsive_video';
+		return '.thrv_responsive_video,.tve_responsive_video_container';
 	}
 
 	/**

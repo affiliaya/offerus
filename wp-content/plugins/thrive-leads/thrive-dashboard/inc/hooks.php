@@ -60,6 +60,7 @@ function tve_dash_admin_menu() {
 		'manage_options',
 		'tve-debug',
 		function () {
+			tve_dash_enqueue();
 			require_once( TVE_DASH_PATH . '/inc/plugin-updates/debug-screen.php' );
 		}
 	);
@@ -199,11 +200,12 @@ function tve_dash_enqueue() {
 		'jquery',
 		'backbone',
 	) );
-	tve_dash_enqueue_script( 'jquery-zclip', TVE_DASH_URL . '/js/util/jquery.zclip.1.1.1/jquery.zclip.js', array( 'jquery' ) );
+	wp_enqueue_script( 'jquery-zclip', TVE_DASH_URL . '/js/util/jquery.zclip.1.1.1/jquery.zclip.min.js', array( 'jquery' ) );
 	tve_dash_enqueue_style( 'tve-dash-styles-css', TVE_DASH_URL . '/css/styles.css' );
-	tve_dash_enqueue_script( 'tve-dash-api-wistia-popover', '//fast.wistia.com/assets/external/popover-v1.js', array(), '', true );
+	wp_enqueue_script( 'tve-dash-api-wistia-popover', '//fast.wistia.com/assets/external/popover-v1.js', array(), '', true );
 
 	$options = array(
+		'nonce'         => wp_create_nonce( 'tve-dash' ),
 		'dash_url'      => TVE_DASH_URL,
 		'actions'       => array(
 			'backend_ajax'        => 'tve_dash_backend_ajax',
@@ -262,6 +264,13 @@ function tve_dash_enqueue() {
 	 */
 	$token_options          = array();
 	$token_options['model'] = get_option( 'thrive_token_support' );
+	if ( ! empty( $token_options['model']['token'] ) && ! get_option( 'tve_dash_generated_token' ) ) {
+		/* Backwards-compat: store this option separately in the database */
+		update_option( 'tve_dash_generated_token', array(
+			'token'   => $token_options['model']['token'],
+			'referer' => $token_options['model']['referer'],
+		) );
+	}
 	wp_localize_script( 'tve-dash-main-js', 'TVE_Token', $token_options );
 
 	/**
@@ -281,6 +290,11 @@ function tve_dash_enqueue() {
  * passes the request to the TVE_Dash_AjaxController for processing
  */
 function tve_dash_backend_ajax() {
+	check_ajax_referer( 'tve-dash' );
+
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die( '' );
+	}
 	$response = TVE_Dash_AjaxController::instance()->handle();
 
 	wp_send_json( $response );
@@ -344,7 +358,7 @@ function tve_dash_backbone_templates() {
  * @return bool
  */
 function tve_dash_is_google_fonts_blocked() {
-	return (bool) tve_dash_get_option( 'tve_google_fonts_disable_api_call', '' );
+	return (bool) get_option( 'tve_google_fonts_disable_api_call', '' );
 }
 
 /**
@@ -422,6 +436,13 @@ function tve_dash_frontend_enqueue() {
 
 	tve_dash_enqueue_script( 'tve-dash-frontend', TVE_DASH_URL . '/js/dist/frontend.min.js', array( 'jquery' ), false, true );
 
+	$captcha_api    = Thrive_Dash_List_Manager::credentials( 'recaptcha' );
+	$show_recaptcha = ! empty( $captcha_api ) && ! empty( $captcha_api['connection'] ) && $captcha_api['connection']['version'] === 'v3' && ! empty( $captcha_api['connection']['browsing_history'] );
+
+	if ( apply_filters( 'thrive_dashboard_show_recaptcha', $show_recaptcha ) ) {
+		tve_dash_enqueue_script( 'tve-dash-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . $captcha_api['site_key'] );
+	}
+	unset( $captcha_api['secret_key'] );
 	/**
 	 * When a caching plugin is active on the user's site, we need to always send the first ajax load request - we cannot know for sure if the page will be cached for a crawler or a regular visitor
 	 */
@@ -439,6 +460,7 @@ function tve_dash_frontend_enqueue() {
 		 */
 		'is_crawler'      => $force_ajax_send !== false ? false : (bool) tve_dash_is_crawler( true ),
 		// Apply the filter to allow overwriting the bot detection. Can be used by 3rd party plugins to force the initial ajax request
+		'recaptcha'       => $captcha_api,
 	);
 	wp_localize_script( 'tve-dash-frontend', 'tve_dash_front', $data );
 }
@@ -530,11 +552,36 @@ function exclude_canvas_script( $do_not_defer ) {
  * For $post_types we add meta data that block google crawl to index the page.
  */
 function tve_dash_custom_post_no_index() {
-
-	$post_types = apply_filters( 'tve_dash_exclude_post_types_from_index', array() );
-	if ( ! empty( $post_types ) && is_singular( $post_types ) ) {
+	if ( ! tve_dash_should_index_page() ) {
 		echo '<meta name="robots" content="noindex">';
 	}
+}
+
+/**
+ * Whether or not the current page should be indexed by crawlers
+ *
+ * @return bool
+ */
+function tve_dash_should_index_page() {
+	/**
+	 * Filter a list of post types that should not be indexed by crawlers.
+	 *
+	 * @param array $post_types
+	 *
+	 * @return array
+	 */
+	$post_types = apply_filters( 'tve_dash_exclude_post_types_from_index', array() );
+
+	$should_index = empty( $post_types ) || ! is_singular( $post_types );
+
+	/**
+	 * Allows filtering whether or not the current page should be indexed.
+	 *
+	 * @param bool $should_index
+	 *
+	 * @return bool
+	 */
+	return apply_filters( 'tve_dash_should_index_page', $should_index );
 }
 
 function tve_dash_current_screen() {
@@ -588,15 +635,12 @@ add_action( 'admin_bar_menu', 'tve_dash_admin_bar_menu', 999 );
 /* Quick query to remove all of our transients */
 add_action( 'wp_ajax_tve_debug_reset_transient', function () {
 
+	check_ajax_referer( 'tve-dash' );
+
 	if ( current_user_can( 'manage_options' ) ) {
 		global $wpdb;
 
-		$wpdb->query(
-			"UPDATE $wpdb->options SET `option_value`='1' WHERE 
-						`option_name` LIKE '%transient_timeout_tcb%' OR 
-						`option_name` LIKE '%transient_timeout_tar%' OR 
-						`option_name` LIKE '%transient_timeout_ttb%'"
-		);
+		tvd_reset_transient();
 
 		if ( ! empty( $wpdb->last_error ) ) {
 			wp_die( "Error: $wpdb->last_error" );
@@ -624,3 +668,152 @@ function tvd_rocket_exclude_js( $excluded_js ) {
 
 	return $excluded_js;
 }
+
+add_action( 'admin_notices', 'tve_dash_incompatible_tar_version' );
+
+/**
+ * Unify all alerts that inform the users that certain products are not compatible with TAR version
+ */
+function tve_dash_incompatible_tar_version() {
+
+	$installed_products             = tve_dash_get_products( false );
+	$products_incompatible_with_tar = array();
+
+	/**
+	 * @var TVE_Dash_Product_Abstract $product
+	 */
+	foreach ( $installed_products as $product ) {
+		if ( $product->needs_architect() && $product->get_incompatible_architect_version() ) {
+
+			$parts = parse_url( $product->get_admin_url() );
+			parse_str( $parts['query'], $query );
+
+			$products_incompatible_with_tar[] = array(
+				'title'  => $product->getTitle(),
+				'screen' => ! empty( $query['page'] ) ? $query['page'] : '',
+			);
+		}
+	}
+
+
+	$products_counter = count( $products_incompatible_with_tar );
+
+	if ( $products_counter > 0 ) {
+
+		$titles  = array_column( $products_incompatible_with_tar, 'title' );
+		$screens = array_column( $products_incompatible_with_tar, 'screen' );
+
+		/**
+		 * @var WP_Screen
+		 */
+		$screen = get_current_screen();
+		if ( $screen && in_array( str_replace( 'thrive-dashboard_page_', '', $screen->base ), $screens, true ) ) {
+			return;
+		}
+
+		$version      = 'version';
+		$products_str = $titles[0];
+		$is_not       = 'is not';
+		if ( $products_counter > 1 ) {
+			$version = 'versions';
+			$is_not  = 'are not';
+
+			if ( $products_counter === 2 ) {
+				$products_str = implode( ' and ', $titles );
+			} elseif ( $products_counter > 2 ) {
+				$products_str = implode( ', ', $titles );
+
+				$pos = strrpos( $products_str, ', ' );
+				if ( $pos !== false ) {
+					$products_str = substr_replace( $products_str, ' and ', $pos, strlen( ', ' ) );
+				}
+			}
+		}
+
+		$text = sprintf( 'Current %s of %s %s compatible with the current version of Thrive Architect. Please update all plugins to the latest versions.', $version, $products_str, $is_not );
+
+		$text .= ' <a href="' . network_admin_url( 'plugins.php' ) . '">' . __( 'Manage plugins', TVE_DASH_TRANSLATE_DOMAIN ) . '</a>';
+
+		echo sprintf( '<div class="error"><p>%s</p></div>', $text );
+	}
+}
+
+/**
+ * Called on wp_login hook
+ *
+ * Updates the last login for a specific user & fires the login hook
+ *
+ * @param string  $user_login
+ * @param WP_User $user
+ */
+function tve_dash_on_user_login( $user_login, $user ) {
+	update_user_meta( $user->ID, 'tve_last_login', current_time( 'timestamp' ) );
+
+	$user_form_data = tvd_get_login_form_data( 'success' );
+
+	tve_trigger_core_user_login_action( $user_login, $user_form_data, $user );
+}
+
+/**
+ * Called on wp_login_failed hook
+ *
+ * @param string        $username
+ * @param WP_Error|null $error
+ */
+function tve_dash_on_user_login_failed( $username, $error = null ) {
+	$user_form_data = tvd_get_login_form_data( 'fail' );
+
+	tve_trigger_core_user_login_action( $username, $user_form_data, null );
+}
+
+/**
+ * A wrapper over the thrive_core_user_login action for the system to include only once the hook in the 3rd party developer documentation
+ *
+ * @param string       $user_login
+ * @param array        $user_form_data
+ * @param WP_User|null $user
+ */
+function tve_trigger_core_user_login_action( $user_login, $user_form_data, $user ) {
+	/**
+	 * Fires when a user logs in on the platform
+	 *
+	 * @param string Username
+	 * @param array User Form Data
+	 * @param WP_User|null WP_User object of the logged-in user.
+	 *
+	 * @api
+	 */
+	do_action( 'thrive_core_user_login',
+		$user_login,
+		$user_form_data,
+		$user
+	);
+}
+
+/**
+ * Yoast Compatibility
+ *
+ * Do not generate sitemap for some of our custom post types
+ */
+add_filter( 'wpseo_sitemap_exclude_post_type', static function ( $exclude, $post_type ) {
+
+	if ( in_array( $post_type, apply_filters( 'tve_dash_yoast_sitemap_exclude_post_types', array() ), true ) ) {
+		$exclude = true;
+	}
+
+	return $exclude;
+}, 10, 2 );
+
+/**
+ * Yoast Compatibility
+ *
+ * Do not generate sitemap for some of our custom taxonomies
+ */
+add_filter( 'wpseo_sitemap_exclude_taxonomy', static function ( $exclude, $tax_name ) {
+
+	if ( in_array( $tax_name, apply_filters( 'tve_dash_yoast_sitemap_exclude_taxonomies', array() ), true ) ) {
+		$exclude = true;
+	}
+
+	return $exclude;
+}, 10, 2 );

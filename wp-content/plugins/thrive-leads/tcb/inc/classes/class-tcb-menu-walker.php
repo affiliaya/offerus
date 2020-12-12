@@ -87,6 +87,13 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 	 */
 	protected $image_placeholder = '';
 
+	/**
+	 * Holds the index of the current item as rendered in the <ul> parent
+	 *
+	 * @var int
+	 */
+	protected $current_item_index = 0;
+
 	public function __construct() {
 		$icons                      = $this->get_config( 'icon', array() );
 		$this->positional_selectors = tcb_custom_menu_positional_selectors();
@@ -119,6 +126,10 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 
 		if ( isset( $this->icons[ $id ] ) ) {
 			return $this->icons[ $id ];
+		}
+
+		if ( $this->get_menu_type() === 'mega' && isset( $this->icons["{$id}-a"] ) ) {
+			return $this->icons["{$id}-a"];
 		}
 
 		/* check top level */
@@ -241,12 +252,24 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 	 * @inheritDoc
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+		if ( $depth === 0 ) {
+			$this->current_item_index ++;
+		}
 		if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
 			$t = '';
 		} else {
 			$t = "\t";
 		}
-		$menu_type    = $this->get_menu_type();
+		$menu_type = $this->get_menu_type();
+
+		/**
+		 * Render the logo before rendering the menu item thats after it
+		 */
+
+		if ( $depth === 0 && $menu_type === 'regular' && ( $this->current_item_index === $this->get_logo_split_breakpoint() + 1 ) ) {
+			$output .= $this->get_logo_html();
+		}
+
 		$indent       = ( $depth ) ? str_repeat( $t, $depth ) : '';
 		$classes      = empty( $item->classes ) ? array() : (array) $item->classes;
 		$link_attr    = array();
@@ -316,7 +339,9 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 		$top_cls = (array) $this->get_config( 'top_cls', array() );
 		if ( 0 === $depth && ! empty( $top_cls ) ) {
 			$unlinked_key = ! empty( $item->_tcb_pos_selector ) ? $item->_tcb_pos_selector : '.menu-item-' . $item->ID;
-			if ( ! empty( $top_cls[ $unlinked_key ] ) ) {
+			$is_unlinked  = ! empty( $this->get_config( "unlinked/$unlinked_key", array() ) );
+
+			if ( isset( $top_cls[ $unlinked_key ] ) && $is_unlinked ) {
 				$classes [] = $top_cls[ $unlinked_key ];
 			} elseif ( ! empty( $top_cls['main'] ) ) {
 				$classes [] = $top_cls['main'];
@@ -564,5 +589,33 @@ class TCB_Menu_Walker extends Walker_Nav_Menu {
 		}
 
 		return $this->image_placeholder;
+	}
+
+	/**
+	 * Render the menu-logo-split, if configured
+	 *
+	 * @return string
+	 */
+	public function get_logo_html() {
+		$html = '';
+		$logo = $this->get_config( 'logo' );
+		if ( $logo ) {
+			$html = sprintf(
+				'<li class="tcb-menu-logo-wrap %s tcb-selector-no_highlight menu-item--1" data-id="-1">%s</li>',
+				static::CLS_UNLINKED,
+				TCB_Logo::render_logo( $logo )
+			);
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Get the split-point (index after the logo item should be rendered in case of Split Logo functionality
+	 *
+	 * @return false|float
+	 */
+	public function get_logo_split_breakpoint() {
+		return (int) floor( $GLOBALS['tcb_wp_menu']['top_level_count'] / 2 );
 	}
 }

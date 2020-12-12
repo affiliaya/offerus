@@ -10,19 +10,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="tve-lead_generation_checkbox-component" class="tve-component" data-view="LeadGenerationCheckbox">
-    <div class="dropdown-header" data-prop="docked">
-		<?php echo __( 'Main Checkbox', 'thrive-cb' ); ?>
-        <i></i>
-    </div>
+	<div class="dropdown-header" data-prop="docked">
+		<?php echo __( 'Main Options', 'thrive-cb' ); ?>
+		<i></i>
+	</div>
 
-    <div class="dropdown-content">
-        <div class="control-toggle c-regular">
-            <div class="tve-control" data-key="columns_number"></div>
-            <hr>
-            <div class="tve-control" data-key="required" data-view="Checkbox"></div>
-        </div>
-        <div class="control-toggle c-consent">
-            <div class="tve-control" data-key="consent" data-view="LGConsent"></div>
-        </div>
-    </div>
+	<div class="dropdown-content">
+		<div class="tve-control" data-view="ShowLabel"></div>
+		<div class="tve-control" data-key="Required" data-view="Checkbox"></div>
+		<div class="tve-control hide-mobile hide-tablet" data-view="ColumnNumber"></div>
+		<div class="tve-control" data-view="VerticalSpace"></div>
+		<div class="tve-control hide-tablet hide-mobile" data-view="HorizontalSpace"></div>
+		<hr class="option-heading">
+		<div class="control-grid option-heading">
+				<span class="label">
+					<?php echo __( 'Options', 'thrive-cb' ); ?>
+				</span>
+			<button class="tve-button blue click" data-fn="addOption"><?php echo __( 'Add', 'thrive-cb' ); ?></button>
+		</div>
+		<div id="option-list" class="no-space"></div>
+		<div class="tve-control" data-view="AnswerTag"></div>
+	</div>
 </div>

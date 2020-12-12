@@ -16,20 +16,21 @@ class TCB_Style_Provider {
 		$defaults = array(
 			'link'       => array(
 				/* needs to be quite specific. some 3rd party themes are really specific */
-				'selector'    => ':not(.inc) .thrv_text_element a, :not(.inc) .tcb-styled-list a, :not(.inc) .tcb-numbered-list a',
-				'lp_selector' => '#tcb_landing_page .thrv_text_element a, #tcb_landing_page .tcb-styled-list a, #tcb_landing_page .tcb-numbered-list a',
+				/* also need to make the selector from _typography.scss */
+				'selector'    => ':not(.inc) .thrv_text_element a:not(.tcb-button-link), :not(.inc) .tcb-styled-list a, :not(.inc) .tcb-numbered-list a, .tve-input-option-text a',
+				'lp_selector' => '#tcb_landing_page .thrv_text_element a:not(.tcb-button-link), #tcb_landing_page .tcb-styled-list a, #tcb_landing_page .tcb-numbered-list a, #tcb_landing_page .tve-input-option-text a',
 			),
 			'p'          => array(
 				'selector'    => '.tcb-style-wrap p',
 				'lp_selector' => '#tcb_landing_page p',
 			),
 			'ul'         => array(
-				'selector'    => '.tcb-style-wrap ul, .tcb-style-wrap ol',
-				'lp_selector' => '#tcb_landing_page ul, #tcb_landing_page ol',
+				'selector'    => '.tcb-style-wrap ul:not([class*="menu"]), .tcb-style-wrap ol',
+				'lp_selector' => '#tcb_landing_page ul:not([class*="menu"]), #tcb_landing_page ol',
 			),
 			'li'         => array(
-				'selector'    => '.tcb-style-wrap li',
-				'lp_selector' => '#tcb_landing_page li',
+				'selector'    => '.tcb-style-wrap li:not([class*="menu"])',
+				'lp_selector' => '#tcb_landing_page li:not([class*="menu"])',
 			),
 			'pre'        => array(
 				'selector'    => '.tcb-style-wrap pre',

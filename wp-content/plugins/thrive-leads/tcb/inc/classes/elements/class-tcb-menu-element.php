@@ -175,6 +175,13 @@ class TCB_Menu_Element extends TCB_Cloud_Template_Element_Abstract {
 						),
 						'extends' => 'Tabs',
 					),
+					'LogoSplit'          => array(
+						'config'  => array(
+							'label'   => __( 'Split menu with logo', 'thrive-cb' ),
+							'default' => false,
+						),
+						'extends' => 'Switch',
+					),
 					'MenuState'          => array(
 						'config'  => array(
 							'buttons' => array(
@@ -262,11 +269,12 @@ class TCB_Menu_Element extends TCB_Cloud_Template_Element_Abstract {
 					'IconSize'           => array(
 						'css_suffix' => ' .tve-m-trigger .thrv_icon',
 						'config'     => array(
-							'min'   => '8',
-							'max'   => '200',
-							'label' => __( 'Icon size', 'thrive-cb' ),
-							'um'    => array( 'px' ),
-							'css'   => 'fontSize',
+							'min'       => '8',
+							'max'       => '200',
+							'label'     => __( 'Icon size', 'thrive-cb' ),
+							'um'        => array( 'px' ),
+							'css'       => 'fontSize',
+							'important' => true, // needs !important to overwrite styles coming from old templates ..
 						),
 						'extends'    => 'Slider',
 					),
@@ -303,11 +311,19 @@ class TCB_Menu_Element extends TCB_Cloud_Template_Element_Abstract {
 			'layout'     => array(
 				'disabled_controls' => array(
 					'Display',
+					'Width',
 					'Height',
 				),
 				'config'            => array(
 					'MarginAndPadding' => array(
 						'padding_suffix' => ' .tve_w_menu',
+					),
+					'Alignment'        => array(
+						'override_buttons' => array(
+							array( 'icon' => 'a_left', 'value' => 'left', 'data' => array( 'tooltip' => 'Align Left' ) ),
+							array( 'icon' => 'a_center', 'value' => 'none', 'default' => true, 'data' => array( 'tooltip' => 'Align Center' ) ),
+							array( 'icon' => 'a_right', 'value' => 'right', 'data' => array( 'tooltip' => 'Align Right' ) ),
+						),
 					),
 				),
 			),
@@ -336,8 +352,8 @@ class TCB_Menu_Element extends TCB_Cloud_Template_Element_Abstract {
 			'select_values' => array(
 				array(
 					'value'    => 'top_level',
-					'selector' => '.thrive-shortcode-html > ul > li',
-					'element'  => '.thrive-shortcode-html li',
+					'selector' => '.thrive-shortcode-html > ul > li:not(.tcb-menu-logo-wrap)',
+					'element'  => '.thrive-shortcode-html li:not(.tcb-menu-logo-wrap)',
 					'name'     => __( 'Top Level Items', 'thrive-cb' ),
 					/* Translators: %s represents index of the unlocked item */
 					'singular' => __( '-- Item %s', 'thrive-cb' ),

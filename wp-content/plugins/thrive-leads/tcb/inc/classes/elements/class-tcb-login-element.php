@@ -12,7 +12,7 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 	 * @return string
 	 */
 	public function name() {
-		return __( 'Login Form', 'thrive-cb' );
+		return esc_html__( 'Login & Registration Form', 'thrive-cb' );
 	}
 
 	/**
@@ -30,7 +30,7 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 	 * @return string
 	 */
 	public function alternate() {
-		return 'login';
+		return 'login,registration,forgot,password,register';
 	}
 
 	/**
@@ -66,17 +66,9 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 	 * @return string
 	 */
 	public function html() {
-		return tcb_template( 'elements/login.php', array(), true );
-	}
-
-
-	/**
-	 * Temporary hide login element.
-	 *
-	 * @return bool
-	 */
-	public function hide() {
-		return true;
+		return
+			'<div class="element">' . $this->html_placeholder( 'Insert Login & Registration Form' ) . '</div>' .
+			'<div class="template">' . tcb_template( 'elements/login.php', array(), true ) . '</div>';
 	}
 
 	/**
@@ -86,29 +78,48 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 	 */
 	public function own_components() {
 		$login = array(
-			'login'      => array(
+			'login'            => array(
 				'config' => array(
-					'AddRemoveLabels' => array(
-						'config'     => array(
-							'name'    => '',
-							'label'   => __( 'Labels', 'thrive-cb' ),
-							'default' => true,
-						),
-						'css_suffix' => ' .tcb-label',
-						'css_prefix' => '',
-						'extends'    => 'Switch',
+					'Palettes'         => array(
+						'config'  => array(),
+						'extends' => 'PalettesV2',
 					),
-					'RememberMe'      => array(
-						'config'     => array(
-							'name'    => '',
-							'label'   => __( 'Remember Me', 'thrive-cb' ),
-							'default' => true,
+					'formType'         => array(
+						'config' => array(
+							'name'       => __( 'Type', 'thrive-cb' ),
+							'full-width' => true,
+							'buttons'    => array(
+								array(
+									'text'    => 'Login',
+									'default' => true,
+									'value'   => 'login',
+								),
+								array(
+									'text'  => 'Register',
+									'value' => 'register',
+								),
+								array(
+									'text'  => 'Both',
+									'value' => 'both',
+								),
+							),
 						),
-						'css_suffix' => ' .tcb-remember-me-item',
-						'css_prefix' => '',
-						'extends'    => 'Switch',
 					),
-					'PassResetUrl'    => array(
+					'defaultState'     => array(
+						'config' => array(
+							'name'    => __( 'Default state', 'thrive-cb' ),
+							'options' => array(
+								'login'    => __( 'Login', 'thrive-cb' ),
+								'register' => __( 'Register', 'thrive-cb' ),
+							),
+						),
+					),
+					'hideWhenLoggedIn' => array(
+						'config' => array(
+							'label' => __( 'Hide form when user is logged in', 'thrive-cb' ),
+						),
+					),
+					'PassResetUrl'     => array(
 						'config'     => array(
 							'name'    => '',
 							'label'   => __( 'Password Reset Link', 'thrive-cb' ),
@@ -118,13 +129,64 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 						'css_prefix' => '',
 						'extends'    => 'Switch',
 					),
+					'Align'            => array(
+						'config'  => array(
+							'name'       => __( 'Size and Alignment', 'thrive-cb' ),
+							'full-width' => true,
+							'buttons'    => array(
+								array(
+									'icon'    => 'a_left',
+									'value'   => 'left',
+									'tooltip' => __( 'Align Left', 'thrive-cb' ),
+								),
+								array(
+									'icon'    => 'a_center',
+									'value'   => 'center',
+									'default' => true,
+									'tooltip' => __( 'Align Center', 'thrive-cb' ),
+								),
+								array(
+									'icon'    => 'a_right',
+									'value'   => 'right',
+									'tooltip' => __( 'Align Right', 'thrive-cb' ),
+								),
+								array(
+									'text'    => 'FULL',
+									'value'   => 'full',
+									'tooltip' => __( 'Full Width', 'thrive-cb' ),
+								),
+							),
+						),
+						'extends' => 'ButtonGroup',
+					),
+					'FormWidth'        => array(
+						'config'  => array(
+							'default' => '400',
+							'min'     => '10',
+							'max'     => '1080',
+							'label'   => __( 'Form width', 'thrive-cb' ),
+							'um'      => array( '%', 'px' ),
+							'css'     => 'max-width',
+						),
+						'extends' => 'Slider',
+					),
 				),
 			),
-			'typography' => array(
+			'typography'       => array(
 				'hidden' => true,
 			),
-			'animation'  => array(
+			'animation'        => array(
 				'hidden' => true,
+			),
+			'styles-templates' => array(
+				'config' => array(
+					'ID' => array(
+						'hidden' => true,
+					),
+				),
+			),
+			'scroll'           => array(
+				'hidden' => false,
 			),
 		);
 
@@ -137,53 +199,6 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 	 * @return array|bool
 	 */
 	public function has_group_editing() {
-
-		return array(
-			'exit_label'    => __( 'Exit Group Styling', 'thrive-cb' ),
-			'select_values' => array(
-				array(
-					'value'    => 'all_form_items',
-					'selector' => '.tve-login-form-item',
-					'name'     => __( 'Grouped Form Items', 'thrive-cb' ),
-					'singular' => __( '-- Form Item %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_inputs',
-					'selector' => '.tve-form-input',
-					'name'     => __( 'Grouped Inputs', 'thrive-cb' ),
-					'singular' => __( '-- Input %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_labels',
-					'selector' => '.tve-login-form-item label',
-					'name'     => __( 'Grouped Labels', 'thrive-cb' ),
-					'singular' => __( '-- Label %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_submit_buttons',
-					'selector' => '.tve-form-submit',
-					'name'     => __( 'Submit Buttons', 'thrive-cb' ),
-					'singular' => __( '-- Label %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_back_buttons',
-					'selector' => '.tcb-go-back',
-					'name'     => __( 'Go Back Buttons', 'thrive-cb' ),
-					'singular' => __( '-- Label %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_back_icons',
-					'selector' => '.tcb-go-back .thrv_icon',
-					'name'     => __( 'Go Back Icon', 'thrive-cb' ),
-					'singular' => __( '-- Label %s', 'thrive-cb' ),
-				),
-				array(
-					'value'    => 'all_back_primary_text',
-					'selector' => '.tcb-go-back .thrv-inline-text',
-					'name'     => __( 'Go Back Text', 'thrive-cb' ),
-					'singular' => __( '-- Label %s', 'thrive-cb' ),
-				),
-			),
-		);
+		return TCB_Login_Element_Handler::get_group_editing_options();
 	}
 }

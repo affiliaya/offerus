@@ -227,9 +227,9 @@ TL_Editor.views.ThriveBoxAction = TCB_AnimViews.ThriveLightbox.extend( {
 	 */
 	TVE.Views.Controls.AssetDelivery = TVE.Views.Controls.Switch.extend( {
 
-		before_initialize: function () {
-			TVE.add_filter( 'lg_api_save', this.update.bind( this ) );
-			TVE.add_filter( 'lg_custom_html_save', this.update.bind( this ) );
+		after_initialize: function () {
+			TVE.add_filter( 'lg_api_save.' + this.component.key, this.update.bind( this ) );
+			TVE.add_filter( 'lg_custom_html_save.' + this.component.key, this.update.bind( this ) );
 		},
 
 		/**
@@ -299,7 +299,7 @@ TL_Editor.views.ThriveBoxAction = TCB_AnimViews.ThriveLightbox.extend( {
 	TVE.Views.Controls.AssetGroup = TVE.Views.Controls.Select.extend( {
 
 		after_initialize: function () {
-			TVE.add_filter( 'lg_consent_apis', _.bind( function ( apis ) {
+			TVE.add_filter( 'lg_consent_apis.' + this.component.key, _.bind( function ( apis ) {
 
 				if ( this.component.has_asset_delivery() ) {
 					apis.push( {

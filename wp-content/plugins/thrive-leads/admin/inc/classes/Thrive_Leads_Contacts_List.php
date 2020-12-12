@@ -60,7 +60,7 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		$actions = array(
-			'bulk-delete' => __( 'Delete', "thrive-leads" )
+			'bulk-delete' => __( 'Delete', "thrive-leads" ),
 		);
 
 		return $actions;
@@ -70,7 +70,7 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 		/* Process bulk action */
 		$this->process_bulk_action();
 
-		$this->per_page = $this->getContactFilter( 'per-page' );
+		$this->per_page = $this->get_contact_filter( 'per-page' );
 
 		//get total items
 		$total_items = $this->get_contacts();
@@ -89,7 +89,7 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
 			'total_pages' => $total_pages,
-			'per_page'    => $this->per_page
+			'per_page'    => $this->per_page,
 		) );
 
 		//init header columns
@@ -100,7 +100,7 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 	 * Get contacts from the database for the table
 	 *
 	 * @param bool|true $count
-	 * @param int $offset
+	 * @param int       $offset
 	 *
 	 * @return array|false|int|null|object
 	 */
@@ -108,20 +108,20 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 		$sql       = "SELECT " . ( $count ? "COUNT(*)" : "*" ) . " FROM {$this->table_name} `contacts` ";
 		$post_data = $_REQUEST;
 
-		$start_date = $this->getContactFilter( 'start-date' );
-		$end_date   = $this->getContactFilter( 'end-date' );
-		$source     = $this->getContactFilter( 'source' );
+		$start_date = $this->get_contact_filter( 'start-date' );
+		$end_date   = $this->get_contact_filter( 'end-date' );
+		$source     = $this->get_contact_filter( 'source' );
 
 		$params = array();
 		if ( $source > 0 ) {
-			$sql .= "JOIN " . tve_leads_table_name( 'event_log' ) . " `logs` ON `logs`.id=`contacts`.`log_id` WHERE `logs`.`main_group_id`=%s ";
+			$sql      .= "JOIN " . tve_leads_table_name( 'event_log' ) . " `logs` ON `logs`.id=`contacts`.`log_id` WHERE `logs`.`main_group_id`=%s ";
 			$params[] = $source;
 		} else {
 			$sql .= "WHERE 1";
 		}
 
 		if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
-			$sql .= " AND `contacts`.`date` BETWEEN %s AND %s ";
+			$sql       .= " AND `contacts`.`date` BETWEEN %s AND %s ";
 			$params [] = $start_date;
 			$params [] = $end_date . ' 23:59:59';
 		}
@@ -209,21 +209,21 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 	 * If there is no specific function for column this is called
 	 * And this is the default implementation for showing a value in each cell of the table
 	 *
-	 * @param $item object of entire row from db
+	 * @param $item        object of entire row from db
 	 * @param $column_name string column name to be displayed
 	 *
 	 * @return mixed
 	 */
 	protected function column_default( $item, $column_name ) {
-		return $item->$column_name;
+		return esc_html( $item->$column_name );
 	}
 
 	protected function column_name( $item ) {
 		if ( empty( $item->name ) ) {
 			return __( 'N/A', "thrive-leads" );
-		} else {
-			return $item->name;
 		}
+
+		return esc_html( $item->name );
 	}
 
 	protected function column_date( $item ) {
@@ -239,7 +239,7 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 		}
 
 		foreach ( $fields as $name => $value ) {
-			$info .= "<strong>" . $name . "</strong>: " . $value . "<br/>";
+			$info .= "<strong>" . esc_html( $name ) . "</strong>: " . esc_html( $value ) . "<br/>";
 		}
 
 		return sprintf( '%1$s',
@@ -271,10 +271,10 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 	}
 
 	protected function extra_tablenav( $which ) {
-		$start_date = $this->getContactFilter( 'start-date' );
-		$end_date   = $this->getContactFilter( 'end-date' );
-		$source     = $this->getContactFilter( 'source' );
-		$per_page   = $this->getContactFilter( 'per-page' );
+		$start_date = $this->get_contact_filter( 'start-date' );
+		$end_date   = $this->get_contact_filter( 'end-date' );
+		$source     = $this->get_contact_filter( 'source' );
+		$per_page   = $this->get_contact_filter( 'per-page' );
 
 		include dirname( dirname( dirname( __FILE__ ) ) ) . '/views/contacts/contacts_filters.php';
 	}
@@ -299,22 +299,45 @@ class Thrive_Leads_Contacts_List extends WP_List_Table {
 		return $this->wpdb->prepare( $sql, $params );
 	}
 
-	private function getContactFilter( $filter ) {
+	/**
+	 * Get a valid date from a raw string
+	 *
+	 * @param string $req_field name of the request parameter
+	 * @param string $default   default value to return in case date does not exist or is invalid. Defaults to current date
+	 *
+	 * @return string
+	 */
+	private function get_date_filter( $req_field, $default = null ) {
+		if ( $default === null ) {
+			$default = date( 'Y-m-d' );
+		}
+
+		if ( ! empty( $_REQUEST[ $req_field ] ) ) {
+			$date = strtotime( $_REQUEST[ $req_field ] );
+			if ( ! empty( $date ) ) {
+				$date = date( 'Y-m-d', $date );
+			}
+		}
+
+		return empty( $date ) ? $default : $date;
+	}
+
+	private function get_contact_filter( $filter ) {
 		switch ( $filter ) {
 			case 'start-date':
-				$value = empty( $_REQUEST['tve-start-date'] ) ? date( 'Y-m-d', strtotime( '-7 days' ) ) : $_REQUEST['tve-start-date'];
+				$value = $this->get_date_filter( 'tve-start-date', date( 'Y-m-d', strtotime( '-7 days' ) ) );
 				break;
 
 			case 'end-date':
-				$value = empty( $_REQUEST['tve-end-date'] ) ? date( 'Y-m-d' ) : $_REQUEST['tve-end-date'];
+				$value = $this->get_date_filter( 'tve-end-date' );
 				break;
 
 			case 'source':
-				$value = empty( $_REQUEST['tve-source'] ) ? - 1 : $_REQUEST['tve-source'];
+				$value = empty( $_REQUEST['tve-source'] ) ? - 1 : (int) $_REQUEST['tve-source'];
 				break;
 
 			case 'per-page':
-				$value = empty( $_REQUEST['tve-per-page'] ) ? 20 : $_REQUEST['tve-per-page'];
+				$value = empty( $_REQUEST['tve-per-page'] ) ? 20 : (int) $_REQUEST['tve-per-page'];
 				break;
 
 			default:

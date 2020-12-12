@@ -12,11 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TCB_Lead_Generation_Checkbox_Element extends TCB_Element_Abstract {
 
 	public function name() {
-		return __( 'Lead Generation Checkbox', 'thrive-cb' );
+		return __( 'Form Checkbox', 'thrive-cb' );
 	}
 
 	public function identifier() {
-		return '.tve_lg_checkbox';
+		return '.tve_lg_checkbox.tve-new-checkbox:not(.tcb-lg-consent):not(.tcb-remember-me)';
 	}
 
 	public function hide() {
@@ -24,98 +24,113 @@ class TCB_Lead_Generation_Checkbox_Element extends TCB_Element_Abstract {
 	}
 
 	public function own_components() {
-		$controls_default_config = array(
-			'css_suffix' => ' label',
-			'css_prefix' => tcb_selection_root() . ' ',
-		);
 
-		$columns = array();
-		for ( $i = 1; $i <= 10; $i ++ ) {
-			$col = array(
-				'value' => $i,
-				'name'  => sprintf( __( '%d column', 'thrive-cb' ), $i ),
-			);
-
-			$columns[] = $col;
-		}
-
-		return array(
+		$components = array(
 			'lead_generation_checkbox' => array(
 				'config' => array(
-					'columns_number' => array(
+					'ShowLabel'       => array(
 						'config'  => array(
-							'options' => $columns,
-							'name'    => 'Columns',
+							'label' => __( 'Show Label', 'thrive-cb' ),
 						),
-						'extends' => 'Select',
+						'extends' => 'Switch',
 					),
-					'consent'        => array(
-						'config' => array(
-							'options' => array(
-								array(
-									'value' => 'when_checked',
-									'name'  => __( 'Only when the checkbox is ticked', 'thrive-cb' ),
-								),
-								array(
-									'value' => 'always',
-									'name'  => __( 'Always on form submission', 'thrive-cb' ),
-								),
-							),
-							'labels'  => array(
-								'wordpress' => __( 'Create Wordpress account', 'thrive-cb' ),
-								'default'   => __( 'Send lead data to {service}', 'thrive-cb' ),
-							),
-						),
-					),
-					'required'       => array(
-						'config' => array(
+					'Required'            => array(
+						'config'  => array(
 							'default' => false,
 							'label'   => __( 'Required field' ),
+							'info'    => true,
 						),
+						'extends' => 'Switch',
+					),
+					'ColumnNumber'    => array(
+						'to'      => '.tve-checkbox-grid',
+						'config'  => array(
+							'default' => '1',
+							'min'     => '1',
+							'max'     => '5',
+							'limit'   => '5',
+							'label'   => __( 'Columns', 'thrive-cb' ),
+							'um'      => array(),
+						),
+						'extends' => 'Slider',
+					),
+					'VerticalSpace'   => array(
+						'to'      => '.tve-checkbox-grid',
+						'config'  => array(
+							'default' => '0',
+							'min'     => '0',
+							'max'     => '300',
+							'label'   => __( 'Vertical Space', 'thrive-cb' ),
+							'um'      => array( 'px', '%' ),
+							'css'     => '--v-gutter',
+						),
+						'extends' => 'Slider',
+					),
+					'HorizontalSpace' => array(
+						'to'      => '.tve-checkbox-grid',
+						'config'  => array(
+							'default' => '20',
+							'min'     => '0',
+							'max'     => '100',
+							'label'   => __( 'Horizontal Space', 'thrive-cb' ),
+							'um'      => array( 'px', '%' ),
+							'css'     => '--h-gutter',
+						),
+						'extends' => 'Slider',
+					),
+					'OptionsList'     => array(
+						'config' => array(
+							'sortable'      => true,
+							'settings_icon' => 'pen-light',
+							'marked'        => true,
+							'marking_text'  => __( 'Set as default', 'thrive-cb' ),
+							'marking_icon'  => 'check',
+							'marked_field'  => 'default',
+						),
+					),
+					'AnswerTag'        => array(
+						'config'  => array(
+							'default' => false,
+							'label'   => __( 'Send answer(s) as tag', 'thrive-cb' ),
+							'info'    => true,
+						),
+						'extends' => 'Switch',
 					),
 				),
 			),
-			'typography'               => array(
-				'disabled_controls' => array(
-					'TextAlign',
-					'.tve-advanced-controls',
-				),
-				'config'            => array(
-					'FontSize'      => $controls_default_config,
-					'FontColor'     => $controls_default_config,
-					'FontFace'      => $controls_default_config,
-					'LetterSpacing' => $controls_default_config,
-					'LineHeight'    => $controls_default_config,
-					'TextAlign'     => $controls_default_config,
-					'TextStyle'     => $controls_default_config,
-					'TextTransform' => $controls_default_config,
-				),
+			'typography'            => array(
+				'hidden' => true,
 			),
-			'layout'                   => array(
+			'layout'                => array(
 				'disabled_controls' => array(
 					'Width',
 					'Height',
 					'Alignment',
 					'.tve-advanced-controls',
+					'hr',
 				),
 				'config'            => array(),
 			),
-			'borders'                  => array(
+			'borders'               => array(
 				'config' => array(),
 			),
-			'animation'                => array(
+			'animation'             => array(
 				'hidden' => true,
 			),
-			'background'               => array(
+			'background'            => array(
 				'config' => array(),
 			),
-			'styles-templates'         => array(
+			'shadow'                => array(
+				'hidden' => true,
+			),
+			'styles-templates'      => array(
 				'config' => array(),
 			),
-			'responsive'               => array(
+			'responsive'            => array(
 				'hidden' => true,
 			),
 		);
-	}
 
+		return array_merge( $components, $this->group_component() );
+	}
 }

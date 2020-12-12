@@ -24,6 +24,14 @@ class Thrive_Dash_List_Connection_Sendlane extends Thrive_Dash_List_Connection_A
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return true;
+	}
+
+	/**
 	 * output the setup form html
 	 *
 	 * @return void

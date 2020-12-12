@@ -52,8 +52,21 @@ class TCB_Post_List_Content {
 				$element_class .= ' tcb-no-delete tcb-selector-no_clone';
 			}
 
+			$content = TCB_Post_List_Shortcodes::shortcode_function_content( 'the_content' );
+
+			$content .= wp_link_pages(
+				array(
+					'before'      => '<nav class="post-nav-links bg-light-background" aria-label="' . esc_attr__( 'Page', 'thrive-cb' ) . '">
+				<span class="label">' . __( 'Pages:', 'thrive-cb' ) . '</span>',
+					'after'       => '</nav>',
+					'link_before' => '<span class="page-number">',
+					'link_after'  => '</span>',
+					'echo'        => false,
+				)
+			);
+
 			return TCB_Post_List_Shortcodes::before_wrap( array(
-				'content' => TCB_Post_List_Shortcodes::shortcode_function_content( 'the_content' ),
+				'content' => $content,
 				'tag'     => 'section',
 				'class'   => $element_class,
 			), $attr );
@@ -175,7 +188,7 @@ class TCB_Post_List_Content {
 		) {
 			/* if there are no paragraphs in the content, just add the read more at the end */
 			if ( strpos( $content, '<\/p>' ) === false ) {
-				$content = $content . $tcb_read_more_link;
+				$content .= $tcb_read_more_link;
 			} else {
 				/* if there are paragraphs, insert the read more before the closing of the last paragraph tag */
 				$content = preg_replace( '/<\/p>$/', " {$tcb_read_more_link}$0", trim( $content ) );

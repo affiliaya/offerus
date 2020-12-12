@@ -4,11 +4,13 @@
 		<a class="sidebar-item click" data-fn="blur" href="javascript:void(0)">
 			<img alt="Thrive Architect" width="18" src="<?php echo apply_filters( 'architect.branding', tve_editor_css( 'images/admin-bar-logo.png' ), 'logo_src' ); ?>"/>
 		</a>
-		<a href="javascript:void(0)" class="sidebar-item green add-element" data-position="left" data-tooltip="<?php echo __( 'Add Element', 'thrive-cb' ); ?>"
-		   data-toggle="elements">
-			<?php tcb_icon( 'plus-square-light' ); ?>
-			<?php tcb_icon( 'plus-square-regular', false, 'sidebar', 'active' ); ?>
-		</a>
+		<?php if ( tcb_editor()->can_add_elements() ) : ?>
+			<a href="javascript:void(0)" class="sidebar-item green add-element" data-position="left" data-tooltip="<?php echo __( 'Add Element', 'thrive-cb' ); ?>"
+			   data-toggle="elements">
+				<?php tcb_icon( 'plus-square-light' ); ?>
+				<?php tcb_icon( 'plus-square-regular', false, 'sidebar', 'active' ); ?>
+			</a>
+		<?php endif; ?>
 		<?php
 		/* this is not connected yet
 		<a href="javascript:void(0)" class="sidebar-item">

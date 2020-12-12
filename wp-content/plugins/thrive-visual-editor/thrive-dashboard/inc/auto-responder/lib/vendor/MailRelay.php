@@ -146,7 +146,7 @@ class Thrive_Dash_Api_MailRelay {
 	 * @return array
 	 * @throws Thrive_Dash_Api_MailRelay_Exception
 	 */
-	public function send_email( $args ) {
+	public function sendEmail( $args ) {
 
 		$args['function']        = 'sendMail';
 		$args['mailboxFromId']   = 1;

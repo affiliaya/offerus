@@ -487,6 +487,11 @@ if ( ! class_exists( 'TVE_PluginUpdateChecker_1_3_2', false ) ) {
 				$updates->response[ $this->pluginFile ]->plugin = $this->pluginFile;
 			} else if ( isset( $updates, $updates->response ) ) {
 				unset( $updates->response[ $this->pluginFile ] );
+				/* This line ensures that WordPress will always show the "Enable auto-updates" link for Thrive plugins, even if there is no update available */
+				$updates->no_update[ $this->pluginFile ] = (object) array(
+					'slug'   => $this->slug,
+					'plugin' => '',
+				);
 			}
 
 			return $updates;

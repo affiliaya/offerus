@@ -38,11 +38,11 @@ $contacts_data = array(
 	<input type="hidden" name="tve_template_redirect_contacts" value="true"/>
 <?php endif; ?>
 <div class="tvd-input-field tve-inline-block-top tvd-margin-left-small">
-	<input type="text" <?php if ( $which == "top" ): ?>name="tve-start-date"<?php endif; ?> class="tve-contacts-start-date" value="<?php echo $start_date; ?>" id="tve-contacts-start-date"/>
+	<input type="text" <?php if ( $which == "top" ): ?>name="tve-start-date"<?php endif; ?> class="tve-contacts-start-date" value="<?php echo esc_attr( $start_date ); ?>" id="tve-contacts-start-date"/>
 	<label for="tve-contacts-start-date" class="tvd-active"><?php echo __( 'From', "thrive-leads" ); ?></label>
 </div>
 <div class="tvd-input-field tve-inline-block-top tvd-margin-left-small">
-	<input type="text" <?php if ( $which == "top" ): ?>name="tve-end-date"<?php endif; ?> class="tve-contacts-end-date" value="<?php echo $end_date; ?>" id="tve-contacts-end-date"/>
+	<input type="text" <?php if ( $which == "top" ): ?>name="tve-end-date"<?php endif; ?> class="tve-contacts-end-date" value="<?php echo esc_attr( $end_date ); ?>" id="tve-contacts-end-date"/>
 	<label for="tve-contacts-end-date" class="tvd-active"><?php echo __( 'To', "thrive-leads" ); ?></label>
 </div>
 <div class="tvd-input-field tve-inline-block-top tvd-margin-left-small">
@@ -51,7 +51,7 @@ $contacts_data = array(
 		<optgroup label="<?php echo __( 'Lead Groups', 'thrive-leads' ); ?>">
 			<?php if ( ! empty( $contacts_data['lead_groups'] ) ): ?>
 				<?php foreach ( $contacts_data['lead_groups'] as $group ) : ?>
-					<option value="<?php echo $group->ID ?>" <?php echo $source == $group->ID ? 'selected' : ''; ?>><?php echo $group->post_title ?></option>
+					<option value="<?php echo $group->ID ?>" <?php echo $source == $group->ID ? 'selected' : ''; ?>><?php echo esc_html( $group->post_title ); ?></option>
 				<?php endforeach ?>
 			<?php else: ?>
 				<option value="-1" disabled>(<?php echo __( 'empty', 'thrive-leads' ) ?>)</option>
@@ -60,7 +60,7 @@ $contacts_data = array(
 		<optgroup label="<?php echo __( 'Shortcodes', 'thrive-leads' ); ?>">
 			<?php if ( ! empty( $contacts_data['shortcodes'] ) ): ?>
 				<?php foreach ( $contacts_data['shortcodes'] as $shortcode ) : ?>
-					<option value="<?php echo $shortcode->ID ?>" <?php echo $source == $shortcode->ID ? 'selected' : ''; ?>><?php echo $shortcode->post_title ?></option>
+					<option value="<?php echo $shortcode->ID ?>" <?php echo $source == $shortcode->ID ? 'selected' : ''; ?>><?php echo esc_html( $shortcode->post_title ); ?></option>
 				<?php endforeach ?>
 			<?php else: ?>
 				<option value="-1" disabled>(<?php echo __( 'empty', 'thrive-leads' ) ?>)</option>
@@ -69,7 +69,7 @@ $contacts_data = array(
 		<optgroup label="<?php echo __( 'ThriveBoxes', 'thrive-leads' ); ?>">
 			<?php if ( ! empty( $contacts_data['two_step_lightbox'] ) ): ?>
 				<?php foreach ( $contacts_data['two_step_lightbox'] as $tsl ) : ?>
-					<option value="<?php echo $tsl->ID ?>" <?php echo $source == $tsl->ID ? 'selected' : ''; ?>><?php echo $tsl->post_title ?></option>
+					<option value="<?php echo $tsl->ID ?>" <?php echo $source == $tsl->ID ? 'selected' : ''; ?>><?php echo esc_html( $tsl->post_title ); ?></option>
 				<?php endforeach ?>
 			<?php else: ?>
 				<option value="-1" disabled>(<?php echo __( 'empty', 'thrive-leads' ) ?>)</option>
@@ -78,7 +78,7 @@ $contacts_data = array(
 		<optgroup label="<?php echo __( 'Signup Segue', 'thrive-leads' ); ?>">
 			<?php if ( ! empty( $contacts_data['one_click_signup'] ) ): ?>
 				<?php foreach ( $contacts_data['one_click_signup'] as $ocs ) : ?>
-					<option value="<?php echo $ocs->ID ?>" <?php echo $source == $ocs->ID ? 'selected' : ''; ?>><?php echo $ocs->post_title ?></option>
+					<option value="<?php echo $ocs->ID ?>" <?php echo $source == $ocs->ID ? 'selected' : ''; ?>><?php echo esc_html( $ocs->post_title ); ?></option>
 				<?php endforeach ?>
 			<?php else: ?>
 				<option value="-1" disabled>(<?php echo __( 'empty', 'thrive-leads' ) ?>)</option>

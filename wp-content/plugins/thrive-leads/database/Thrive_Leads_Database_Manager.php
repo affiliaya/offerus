@@ -65,8 +65,8 @@ class Thrive_Leads_Database_Manager {
 			}
 			global $wpdb;
 			$wpdb->suppress_errors();
-			foreach ( $scripts as $filePath ) {
-				require_once $filePath;
+			foreach ( $scripts as $file_path ) {
+				require $file_path;
 			}
 
 			update_option( 'tve_leads_db_version', TVE_LEADS_DB_VERSION );

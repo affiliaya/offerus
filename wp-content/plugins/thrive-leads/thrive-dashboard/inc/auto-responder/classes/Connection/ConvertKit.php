@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Andrei
- * Date: 15/9/2015
- * Time: 10:09 AM
- */
 class Thrive_Dash_List_Connection_ConvertKit extends Thrive_Dash_List_Connection_Abstract {
 	/**
 	 * Return the connection type
@@ -21,6 +15,14 @@ class Thrive_Dash_List_Connection_ConvertKit extends Thrive_Dash_List_Connection
 	 */
 	public function getTitle() {
 		return 'ConvertKit / Seva';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return true;
 	}
 
 	/**
@@ -186,9 +188,10 @@ class Thrive_Dash_List_Connection_ConvertKit extends Thrive_Dash_List_Connection
 
 					unset( $_name[0] );
 
-					$_name = implode( '_', $_name );
-
-					$response[ $_name ] = $args[ $id['type'] . '_' . $key ];
+					$_name              = implode( '_', $_name );
+					$name               = strpos( $id['type'], 'mapping_' ) !== false ? $id['type'] . '_' . $key : $key;
+					$cf_form_name       = str_replace( '[]', '', $name );
+					$response[ $_name ] = $this->processField( $args[ $cf_form_name ] );
 				}
 			}
 		}
@@ -277,12 +280,7 @@ class Thrive_Dash_List_Connection_ConvertKit extends Thrive_Dash_List_Connection
 
 		$form_data = unserialize( base64_decode( $args['tve_mapping'] ) );
 
-		$mapped_fields = array_map(
-			function ( $field ) {
-				return $field['id'];
-			},
-			$this->_mapped_custom_fields
-		);
+		$mapped_fields = $this->getMappedFieldsIDs();
 
 		foreach ( $mapped_fields as $mapped_field_name ) {
 

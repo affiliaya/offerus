@@ -190,7 +190,8 @@ class Thrive_Dash_List_Connection_Sendinblue extends Thrive_Dash_List_Connection
 			'NAME'      => $first_name,
 			'FIRSTNAME' => $first_name,
 			'SURNAME'   => $last_name,
-			'VORNAME'   => $last_name,
+			'VORNAME'   => $first_name,
+			'NACHNAME'  => $last_name,
 			'LASTNAME'  => $last_name,
 		);
 
@@ -204,7 +205,7 @@ class Thrive_Dash_List_Connection_Sendinblue extends Thrive_Dash_List_Connection
 
 		$data = array(
 			'email'      => $arguments['email'],
-			'attributes' => $merge_tags,
+			'attributes' => array_merge( $merge_tags, $this->_generate_custom_fields( $arguments ) ),
 			'listid'     => array( $list_identifier ),
 		);
 
@@ -247,4 +248,145 @@ class Thrive_Dash_List_Connection_Sendinblue extends Thrive_Dash_List_Connection
 		return '{{ contact.EMAIL }}';
 	}
 
+	/**
+	 * @param array $params  which may contain `list_id`
+	 * @param bool  $force   make a call to API and invalidate cache
+	 * @param bool  $get_all where to get lists with their custom fields
+	 *
+	 * @return array
+	 */
+	public function get_api_custom_fields( $params, $force = false, $get_all = true ) {
+
+		$cached_data = $this->_get_cached_custom_fields();
+		if ( false === $force && ! empty( $cached_data ) ) {
+			return $cached_data;
+		}
+
+		/** @var Thrive_Dash_Api_Sendinblue $api */
+		$api = $this->getApi();
+
+		try {
+			$attributes = $api->get_attributes();
+		} catch ( Thrive_Dash_Api_SendinBlue_Exception $e ) {
+			// Maybe log this
+		}
+
+		$custom_fields   = array();
+		$excluded_fields = array(
+			'NAME',
+			'FIRSTNAME',
+			'SURNAME',
+			'VORNAME',
+			'LASTNAME',
+			'SMS',
+			'PHONE',
+			'TELEFON',
+		);
+
+		if ( ! empty( $attributes['data']['normal_attributes'] ) ) {
+			foreach ( (array) $attributes['data']['normal_attributes'] as $attribute ) {
+				if ( ! empty( $attribute['type'] ) && ! in_array( $attribute['name'], $excluded_fields ) && 'text' === $attribute['type'] ) {
+					$custom_fields[] = $this->normalize_custom_field( $attribute );
+				}
+			}
+		}
+
+		$this->_save_custom_fields( $custom_fields );
+
+		return $custom_fields;
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	protected function normalize_custom_field( $field = array() ) {
+
+		return array(
+			'id'    => ! empty( $field['name'] ) ? $field['name'] : '',
+			'name'  => ! empty( $field['name'] ) ? $field['name'] : '',
+			'type'  => ! empty( $field['type'] ) ? $field['type'] : '',
+			'label' => ! empty( $field['name'] ) ? $field['name'] : '',
+		);
+	}
+
+	/**
+	 * Generate custom fields array
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	private function _generate_custom_fields( $args ) {
+		$custom_fields = $this->get_api_custom_fields( array() );
+		$ids           = $this->build_mapped_custom_fields( $args );
+		$result        = array();
+
+		foreach ( $ids as $key => $id ) {
+			$field = array_filter(
+				$custom_fields,
+				function ( $item ) use ( $id ) {
+					return $item['id'] === $id['value'];
+				}
+			);
+
+			$field = array_values( $field );
+
+			if ( ! isset( $field[0] ) ) {
+				continue;
+			}
+			$name         = strpos( $id['type'], 'mapping_' ) !== false ? $id['type'] . '_' . $key : $key;
+			$cf_form_name = str_replace( '[]', '', $name );
+
+			$result[ $field[0]['name'] ] = $this->processField( $args[ $cf_form_name ] );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Build mapped custom fields array based on form params
+	 *
+	 * @param $args
+	 *
+	 * @return array
+	 */
+	public function build_mapped_custom_fields( $args ) {
+		$mapped_data = array();
+
+		// Should be always base_64 encoded of a serialized array
+		if ( empty( $args['tve_mapping'] ) || ! tve_dash_is_bas64_encoded( $args['tve_mapping'] ) || ! is_serialized( base64_decode( $args['tve_mapping'] ) ) ) {
+			return $mapped_data;
+		}
+
+		$form_data = unserialize( base64_decode( $args['tve_mapping'] ) );
+
+		$mapped_fields = $this->getMappedFieldsIDs();
+
+		foreach ( $mapped_fields as $mapped_field_name ) {
+
+			// Extract an array with all custom fields (siblings) names from form data
+			// {ex: [mapping_url_0, .. mapping_url_n] / [mapping_text_0, .. mapping_text_n]}
+			$cf_form_fields = preg_grep( "#^{$mapped_field_name}#i", array_keys( $form_data ) );
+
+			if ( ! empty( $cf_form_fields ) && is_array( $cf_form_fields ) ) {
+
+				foreach ( $cf_form_fields as $cf_form_name ) {
+					if ( empty( $form_data[ $cf_form_name ][ $this->_key ] ) ) {
+						continue;
+					}
+
+					$field_id = str_replace( $mapped_field_name . '_', '', $cf_form_name );
+
+					$mapped_data[ $field_id ] = array(
+						'type'  => $mapped_field_name,
+						'value' => $form_data[ $cf_form_name ][ $this->_key ],
+					);
+				}
+			}
+		}
+
+		return $mapped_data;
+	}
 }

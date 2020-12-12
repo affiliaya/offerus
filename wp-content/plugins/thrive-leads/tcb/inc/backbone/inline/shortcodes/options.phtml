@@ -5,7 +5,7 @@
 	<option value="<#= shortcode.value #>"
 			data-name="<#= shortcode.option #>"
 			data-extra-key="<#= shortcode.extra_param ? shortcode.extra_param : '' #>">
-		<#= shortcode.option #>
+		<#= utils.updatePostTypeLabel(shortcode.option) #>
 	</option>
 	<# }); #>
 </select>

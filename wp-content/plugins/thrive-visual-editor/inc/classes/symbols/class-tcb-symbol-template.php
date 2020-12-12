@@ -10,6 +10,13 @@
 class TCB_Symbol_Template {
 
 	/**
+	 * Stores symbol types that contain states
+	 *
+	 * @var string[]
+	 */
+	public static $symbol_with_states = array( 'header' );
+
+	/**
 	 * Render the symbol content
 	 *
 	 * @param array $config
@@ -57,7 +64,7 @@ class TCB_Symbol_Template {
 			/**
 			 * Adds the global style node if it's not in the editor page
 			 */
-			$content .= tve_get_shared_styles( $content );
+			$content = tve_get_shared_styles( $content ) . $content;
 		}
 
 		$content = apply_filters( 'tcb_symbol_template', $content );
@@ -114,6 +121,21 @@ class TCB_Symbol_Template {
 	}
 
 	/**
+	 * @param $symbol_type
+	 *
+	 * @return string
+	 */
+	public static function symbol_state_class( $symbol_type ) {
+		$cls = '';
+
+		if ( in_array( $symbol_type, self::$symbol_with_states, true ) ) {
+			$cls = 'tve-default-state';
+		}
+
+		return $cls;
+	}
+
+	/**
 	 * Render symbol shortcode content
 	 *
 	 * @param array   $config
@@ -130,17 +152,18 @@ class TCB_Symbol_Template {
 			$post = get_post( $symbol_id );
 
 			if ( $post instanceof WP_Post && $post->post_status === 'publish' ) {
-				$content = self::render_content( $config, $wrap );
-				$css     = self::tcb_symbol_get_css( $config );
-				$name    = is_editor_page_raw() ? ' data-name="' . esc_attr( $post->post_title ) . '"' : '';
+				$content         = self::render_content( $config, $wrap );
+				$css             = self::tcb_symbol_get_css( $config );
+				$type            = substr( TCB_Symbols_Taxonomy::get_symbol_type( $symbol_id ), 0, - 1 );
+				$shortcode_class = in_array( $type, self::$symbol_with_states, true ) ? 'tve-default-state' : '';
+				$name            = is_editor_page_raw() ? ' data-name="' . esc_attr( $post->post_title ) . '"' : '';
 
-				$content = '<div class="thrive-shortcode-html thrive-symbol-shortcode"' . $name . self::data_attr( $symbol_id ) . '>' . $css . $content . '</div>';
+				$content = '<div class="thrive-shortcode-html thrive-symbol-shortcode ' . $shortcode_class . '"' . $name . self::data_attr( $symbol_id ) . '>' . $css . $content . '</div>';
 
 				if ( $wrap ) {
-					$type = substr( TCB_Symbols_Taxonomy::get_symbol_type( $symbol_id ), 0, - 1 );
 
 					$content = TCB_Utils::wrap_content( $content, 'div', "thrive-$type",
-						array( 'thrv_wrapper', 'thrv_symbol', 'thrive-shortcode', "thrv_$type", 'tve_no_drag', "thrv_symbol_$symbol_id" ),
+						array( 'thrv_wrapper', 'thrv_symbol', 'thrive-shortcode', "thrv_$type", 'tve_no_drag', "thrv_symbol_$symbol_id", self::symbol_state_class( $type ) ),
 						array(
 							'data-id'            => $symbol_id,
 							'data-selector'      => ".thrv_symbol_$symbol_id",
@@ -164,9 +187,15 @@ class TCB_Symbol_Template {
 
 		$type = TCB_Symbols_Taxonomy::get_symbol_type( get_the_ID() );
 
+		$is_hf = $type === 'headers' || $type === 'footers';
+
+		if ( $is_hf ) {
+			$type = substr( $type, 0, - 1 );
+		}
+
 		return array(
-			'css_class' => ( $type === 'headers' || $type === 'footers' ) ? 'thrv_' . substr( $type, 0, - 1 ) : '',
-			'type'      => substr( $type, 0, - 1 ),
+			'css_class' => $is_hf ? 'thrv_' . $type : '',
+			'type'      => $type,
 		);
 	}
 

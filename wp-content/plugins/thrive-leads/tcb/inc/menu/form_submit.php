@@ -26,7 +26,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="tve-control gl-st-button-toggle-2" data-view="ButtonWidth"></div>
 		<hr>
 		<div class="tve-control gl-st-button-toggle-2" data-view="ButtonAlign"></div>
-		<hr>
-		<div class="tve-control" data-key="style" data-initializer="button_style_control"></div>
 	</div>
 </div>

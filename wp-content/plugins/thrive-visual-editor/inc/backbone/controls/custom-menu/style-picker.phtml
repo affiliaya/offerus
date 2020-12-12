@@ -9,7 +9,7 @@
 	<div class="flex-mid wrap style-set set-<#=set.id#>">
 		<# _.each( set.styles, function( item, index ) { #>
 		<# if ( item ) { #>
-		<div class="tve-select-item ha wa click menu-item p-5 mb-0" data-value="<#=setIndex + '::' + index #>" data-fn="select">
+		<div class="tve-select-item split ha wa click menu-item p-5 mb-0" data-value="<#=setIndex + '::' + index #>" data-fn="select">
 			<ul class="menu-preview">
 				<li class="li-<#=index#>"><a href="javascript:void(0)"><span class="tve-disabled-text-inner"><#=item.name#></span></a></li>
 			</ul>

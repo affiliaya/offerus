@@ -76,7 +76,10 @@ if ( ! class_exists( 'TCB_Thrive_Lightbox' ) ) {
 				return '';
 			}
 
-			$lightbox = get_post( $lightbox_id );
+			/**
+			 * Leave the possibility for others to change the lightbox showed to the users
+			 */
+			$lightbox = tve_filter_intrusive_forms( 'tcb', get_post( $lightbox_id ) );
 			if ( empty( $lightbox ) ) {
 				return '';
 			}

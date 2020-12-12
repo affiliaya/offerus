@@ -9,15 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="error-container"></div>
 <div class="tve-modal-content">
 	<div id="cb-cloud-menu">
-		<div class="fixed top">
-			<div class="lp-search">
-				<input type="text" data-source="search" class="keydown" data-fn="filter" placeholder="<?php echo esc_html__( 'Search', 'thrive-cb' ); ?>"/>
-				<?php tcb_icon( 'search-regular' ); ?>
-				<?php tcb_icon( 'close2', false, 'sidebar', 'click', array( 'data-fn' => 'domClearSearch' ) ); ?>
-			</div>
+		<div class="lp-search">
+			<input type="text" data-source="search" class="keydown" data-fn="filter" placeholder="<?php echo esc_html__( 'Search', 'thrive-cb' ); ?>"/>
+			<?php tcb_icon( 'search-regular' ); ?>
+			<?php tcb_icon( 'close2', false, 'sidebar', 'click', array( 'data-fn' => 'domClearSearch' ) ); ?>
 		</div>
 		<div class="lp-menu-wrapper fixed">
-			<div id="lp-blk-pack-categories"></div>
 			<div class="lp-label-wrapper mt-30">
 				<span><?php echo __( 'Type', 'thrive-cb' ); ?></span>
 				<span class="separator"></span>

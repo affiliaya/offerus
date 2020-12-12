@@ -83,4 +83,44 @@ class TCB_Product extends TVE_Dash_Product_Abstract {
 			),
 		);
 	}
+
+	/**
+	 * Reset all TCB data
+	 *
+	 * @return bool|void
+	 */
+	public static function reset_plugin() {
+
+		$query = new WP_Query( array(
+				'post_type'      => array(
+					'tcb_lightbox',
+					TCB_CT_POST_TYPE,
+					TCB_Symbols_Post_Type::SYMBOL_POST_TYPE,
+				),
+				'fields'         => 'ids',
+				'posts_per_page' => '-1',
+			)
+		);
+
+		$post_ids = $query->posts;
+		foreach ( $post_ids as $id ) {
+			wp_delete_post( $id, true );
+		}
+
+		$options = array(
+			'tve_display_save_notification',
+			'tve_social_fb_app_id',
+			'tve_comments_disqus_shortname',
+			'tve_comments_facebook_admins',
+
+			'tve_fa_kit',
+			'tve_user_templates',
+		);
+
+		foreach ( $options as $option ) {
+			delete_option( $option );
+		}
+		delete_user_option( get_current_user_id(), 'tcb_pinned_elements' );
+
+	}
 }

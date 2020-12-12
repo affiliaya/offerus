@@ -319,7 +319,8 @@ if ( ! class_exists( 'TVD_Smart_Site' ) ) :
 					$fields = $this->db->get_fields_by_type( $group['id'], TVD_Smart_DB::$types['link'] );
 					$name   = $group['name'];
 
-					if ( ! empty( $fields ) ) {
+					/* Add the fields in the group only when the group is empty */
+					if ( ! empty( $fields ) && empty( $links[ $name ] ) ) {
 
 						$links[ $name ] = array();
 

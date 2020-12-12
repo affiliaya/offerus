@@ -137,7 +137,8 @@ final class TVD_AM {
 		tve_dash_enqueue();
 		include TVE_DASH_PATH . '/inc/access-manager/includes/assets/css/am-icons.svg';
 		tve_dash_enqueue_style( 'tve-dash-access-manager-css', TVE_DASH_URL . '/inc/access-manager/includes/assets/css/style.css' );
-		tve_dash_enqueue_script( 'tve-dash-access-manager-js', TVE_DASH_URL . '/inc/access-manager/includes/assets/js/admin.js', array(
+		tve_dash_enqueue_script( 'tve-dash-access-manager-js', TVE_DASH_URL . '/inc/access-manager/includes/assets/dist/admin.min.js', array(
+			'tve-dash-main-js',
 			'jquery',
 			'backbone',
 		), false, true );

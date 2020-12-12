@@ -29,8 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<div class="hide-tablet hide-mobile hide-states">
 			<div class="tve-control" data-view="HasImage"></div>
-			<div class="if-image tve-control" data-view="ImageSide"></div>
+			<div class="if-image tve-control mb-10" data-view="ImageSide"></div>
 		</div>
-		<div class="tve-control link-control" data-key="link" data-initializer="elementLink"></div>
+		<div class="tve-control link-control hide-states" data-key="link" data-initializer="elementLink"></div>
 	</div>
 </div>

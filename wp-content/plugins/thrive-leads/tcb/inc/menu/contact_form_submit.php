@@ -28,6 +28,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<hr>
 		<div class="tve-control gl-st-button-toggle-2" data-view="ButtonAlign"></div>
 		<hr>
-<!--		<div class="tve-control tcb-hidden" data-key="style" data-initializer="button_style_control" style="display: none;"></div> --><?php ////TODO: change this ?>
 	</div>
 </div>

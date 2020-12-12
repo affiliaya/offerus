@@ -21,6 +21,10 @@
 				<span><?php echo __( 'Target', 'thrive-cb' ); ?></span>
 				<a id="tcb-jump-target" class="click" data-fn="scrollTo"></a>
 			</div>
+			<div class="tcb-no-target mb-10 mt-5">
+				<span class="info-text"><?php echo __( 'The target element was removed from the page. Please modify the target.', 'thrive-cb' ) ?></span>
+
+			</div>
 			<div id="tcb-jumplink-buttons" class="tcb-flex space-between">
 				<div id="select-target" class="tve-button click" data-fn="selectJumpTarget"><?php echo __( 'Select Target', 'thrive-cb' ); ?></div>
 				<div id="remove-target" class="tve-button tve-remove click" data-fn="removeJumpTarget"><?php echo __( 'Remove Target', 'thrive-cb' ); ?></div>
@@ -31,6 +35,9 @@
 		<div data-tab="dynamic">
 			<div class="tcb-dynamic-link-select-category mb-5"></div>
 			<div class="tcb-dynamic-link-select mb-5"></div>
+			<div class="tve-dynamic-link-shortcode input control-grid no-space" style="display: none">
+				<input type="text" class="tve-input-control" placeholder="<?php esc_attr_e( 'Enter shortcode... [ example ]', 'thrive-cb' ); ?>">
+			</div>
 			<div class="tcb-flex space-between">
 				<div class="elem-link-newtab"></div>
 				<div class="elem-link-nofollow"></div>

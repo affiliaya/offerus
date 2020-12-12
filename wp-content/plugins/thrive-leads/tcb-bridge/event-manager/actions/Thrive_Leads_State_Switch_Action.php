@@ -180,8 +180,9 @@ if ( ! class_exists( 'Thrive_Leads_State_Switch_Action' ) ) {
 			}
 
 			/* Use case: already subscribed state which links back to the first state - this caused the Already Subscribed state to be displayed twice */
+			/* Same happened when a lightbox was used*/
 			$current_variation = isset( $GLOBALS['tl_event_parse_variation'] ) ? end( $GLOBALS['tl_event_parse_variation'] ) : array();
-			if ( ! empty( $current_variation ) && $current_variation['form_state'] === 'already_subscribed' ) {
+			if ( ! empty( $current_variation ) && ( $current_variation['form_state'] === 'already_subscribed' || $current_variation['form_state'] === 'lightbox' ) ) {
 				/**
 				 * we also need to check the following:
 				 * if the subscribed state links back to the default state, we do not need to render that anymore, because that's already included in the page

@@ -205,6 +205,14 @@ class Thrive_Dash_List_Connection_CampaignMonitor extends Thrive_Dash_List_Conne
 				);
 			}
 
+			if ( empty( $subscriber['CustomFields'] ) ) {
+				$subscriber['CustomFields'] = array();
+			}
+
+			$_custom_fields = $this->_generate_custom_fields( array_merge( $arguments, array( 'list_id' => $list_identifier ) ) );
+
+			$subscriber['CustomFields'] = array_merge( $subscriber['CustomFields'], $_custom_fields );
+
 			$list->add_subscriber( $subscriber );
 		} catch ( Exception $e ) {
 			return $e->getMessage();
@@ -238,5 +246,161 @@ class Thrive_Dash_List_Connection_CampaignMonitor extends Thrive_Dash_List_Conne
 		Thrive_Dash_List_Manager::save( $related_api );
 
 		return $this;
+	}
+
+	/**
+	 * @param array $params  which may contain `list_id`
+	 * @param bool  $force   make a call to API and invalidate cache
+	 * @param bool  $get_all where to get lists with their custom fields
+	 *
+	 * @return array
+	 */
+	public function get_api_custom_fields( $params, $force = false, $get_all = true ) {
+
+		$cached_data = $this->_get_cached_custom_fields();
+		if ( false === $force && ! empty( $cached_data ) ) {
+			return $cached_data;
+		}
+
+		/** @var Thrive_Dash_Api_CampaignMonitor $cm */
+		$cm            = $this->getApi();
+		$custom_data   = array();
+		$lists         = array();
+		$allowed_types = array(
+			'Text',
+		);
+
+		try {
+			$clients = $cm->get_clients();
+			$client  = current( $clients );
+			$lists   = $cm->get_client_lists( $client['id'] );
+		} catch ( Exception $e ) {
+		}
+
+		foreach ( $lists as $list ) {
+			$custom_data[ $list['id'] ] = array();
+
+			try {
+				$custom_fields = $cm->get_list_custom_fields( $list['id'] );
+
+				foreach ( $custom_fields as $item ) {
+
+					if ( isset( $item['DataType'] ) && in_array( $item['DataType'], $allowed_types ) ) {
+						$custom_data[ $list['id'] ][] = $this->normalize_custom_field( $item );
+					}
+				}
+			} catch ( Exception $e ) {
+			}
+		}
+
+		$this->_save_custom_fields( $custom_data );
+
+		return $custom_data;
+	}
+
+	/**
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	protected function normalize_custom_field( $field = array() ) {
+
+		return array(
+			'id'    => ! empty( $field['Key'] ) ? $field['Key'] : '',
+			'name'  => ! empty( $field['FieldName'] ) ? $field['FieldName'] : '',
+			'type'  => ! empty( $field['DataType'] ) ? $field['DataType'] : '',
+			'label' => ! empty( $field['FieldName'] ) ? $field['FieldName'] : '',
+		);
+	}
+
+
+	/**
+	 * Generate custom fields array
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	private function _generate_custom_fields( $args ) {
+		$custom_fields = $this->get_api_custom_fields( array() );
+
+		if ( empty( $custom_fields[ $args['list_id'] ] ) ) {
+			return array();
+		}
+
+		$custom_fields = $custom_fields[ $args['list_id'] ];
+
+		$mapped_custom_fields = $this->build_mapped_custom_fields( $args );
+		$result               = array();
+
+		foreach ( $mapped_custom_fields as $key => $custom_field ) {
+
+			$field_key         = strpos( $custom_field['type'], 'mapping_' ) !== false ? $custom_field['type'] . '_' . $key : $key;
+
+			$field_key          = str_replace( '[]', '', $field_key );
+			if ( ! empty( $args[ $field_key ] ) ) {
+				$args[ $field_key ] = $this->processField( $args[ $field_key ] );
+			}
+
+			$is_in_list = array_filter(
+				$custom_fields,
+				function ( $field ) use ( $custom_field ) {
+					return $custom_field['value'] === $field['id'];
+				}
+			);
+
+			if ( ! empty( $is_in_list ) && isset( $args[ $field_key ] ) ) {
+				$result[] = array(
+					'Key'   => $custom_field['value'],
+					'Value' => sanitize_text_field( $args[ $field_key ] ),
+				);
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Build mapped custom fields array based on form params
+	 *
+	 * @param $args
+	 *
+	 * @return array
+	 */
+	public function build_mapped_custom_fields( $args ) {
+		$mapped_data = array();
+
+		// Should be always base_64 encoded of a serialized array
+		if ( empty( $args['tve_mapping'] ) || ! tve_dash_is_bas64_encoded( $args['tve_mapping'] ) || ! is_serialized( base64_decode( $args['tve_mapping'] ) ) ) {
+			return $mapped_data;
+		}
+
+		$form_data = unserialize( base64_decode( $args['tve_mapping'] ) );
+
+		$mapped_fields = $this->getMappedFieldsIDs();
+
+		foreach ( $mapped_fields as $mapped_field_name ) {
+
+			// {ex: [mapping_url_0, .. mapping_url_n] / [mapping_text_0, .. mapping_text_n]}
+			$cf_form_fields = preg_grep( "#^{$mapped_field_name}#i", array_keys( $form_data ) );
+
+			if ( ! empty( $cf_form_fields ) && is_array( $cf_form_fields ) ) {
+
+				foreach ( $cf_form_fields as $cf_form_name ) {
+					if ( empty( $form_data[ $cf_form_name ][ $this->_key ] ) ) {
+						continue;
+					}
+
+					$field_id = str_replace( $mapped_field_name . '_', '', $cf_form_name );
+
+					$mapped_data[ $field_id ] = array(
+						'type'  => $mapped_field_name,
+						'value' => $form_data[ $cf_form_name ][ $this->_key ],
+					);
+				}
+			}
+		}
+
+		return $mapped_data;
 	}
 }

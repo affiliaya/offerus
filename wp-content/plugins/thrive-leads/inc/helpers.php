@@ -123,16 +123,19 @@ function tve_leads_prepare_default_form_types() {
 /**
  * return a formatted conversion rate based on $impressions and $conversions
  *
- * @param int $impressions
- * @param int $conversions
+ * @param int    $impressions
+ * @param int    $conversions
  * @param string $suffix
  * @param string $decimals
+ * @param string $if_zero what to return if either of the values is 0
  *
  * @return string $rate the calculated conversion rate
  */
-function tve_leads_conversion_rate( $impressions, $conversions, $suffix = '%', $decimals = '2' ) {
-	if ( $conversions == 0 || $impressions == 0 ) {
-		return 'N/A';
+function tve_leads_conversion_rate( $impressions, $conversions, $suffix = '%', $decimals = '2', $if_zero = 'N/A' ) {
+	$impressions = (int) $impressions;
+	$conversions = (int) $conversions;
+	if ( ! $impressions || ! $conversions ) {
+		return $if_zero;
 	}
 
 	return round( 100 * ( $conversions / $impressions ), $decimals ) . $suffix;
@@ -579,12 +582,14 @@ function tve_leads_shortcode_render( $attributes = array() ) {
 	}
 
 	$GLOBALS['tve_leads_form_config']['forms'][ 'shortcode_' . $attributes['id'] ] = array(
-		'_key'           => $variation['key'],
-		'trigger'        => $variation['trigger'],
-		'trigger_config' => ! empty( $variation['trigger_config'] ) ? $variation['trigger_config'] : new stdClass(),
-		'form_type_id'   => $attributes['id'],
-		'main_group_id'  => $attributes['id'],
-		'active_test_id' => empty( $variation['test_model'] ) ? '' : $variation['test_model']->id,
+		'_key'            => $variation['key'],
+		'form_name'       => $variation['post_title'],
+		'trigger'         => $variation['trigger'],
+		'trigger_config'  => ! empty( $variation['trigger_config'] ) ? $variation['trigger_config'] : new stdClass(),
+		'form_type_id'    => $attributes['id'],
+		'main_group_id'   => $attributes['id'],
+		'main_group_name' => get_the_title( $attributes['id'] ),
+		'active_test_id'  => empty( $variation['test_model'] ) ? '' : $variation['test_model']->id,
 	);
 
 	/**
@@ -688,7 +693,7 @@ function tve_leads_two_step_render( $attributes, $content ) {
 	/**
 	 * Filter to check if we want to show the two step lightbox
 	 *
-	 * @param $attributes['id'] - the id of the two step lightbox
+	 * @param $attributes ['id'] - the id of the two step lightbox
 	 */
 	if ( apply_filters( 'tve_leads_do_not_show_two_step', false, $attributes['id'] ) ) {
 		return '';
@@ -760,12 +765,14 @@ function tve_leads_two_step_render( $attributes, $content ) {
 	 * append javascript needed for triggers to the global JS variable
 	 */
 	$GLOBALS['tve_leads_form_config']['forms'][ 'two_step_' . $attributes['id'] ] = array(
-		'_key'           => $variation['key'],
-		'trigger'        => 'click', // ALWAYS click
-		'trigger_config' => array( 'c' => 'tl-2step-trigger-' . $attributes['id'] ),
-		'form_type_id'   => $attributes['id'],
-		'main_group_id'  => $attributes['id'],
-		'active_test_id' => ! empty( $variation['test_model'] ) ? $variation['test_model']->id : null,
+		'_key'            => $variation['key'],
+		'form_name'       => $variation['post_title'],
+		'trigger'         => 'click', // ALWAYS click
+		'trigger_config'  => array( 'c' => 'tl-2step-trigger-' . $attributes['id'] ),
+		'form_type_id'    => $attributes['id'],
+		'main_group_id'   => $attributes['id'],
+		'main_group_name' => get_the_title( $attributes['id'] ),
+		'active_test_id'  => ! empty( $variation['test_model'] ) ? $variation['test_model']->id : null,
 	);
 
 	$GLOBALS['tve_leads_two_step'][ $variation['key'] ]['form_output'] = tve_editor_custom_content( $variation );
@@ -1298,15 +1305,15 @@ function tve_leads_get_targeted_form_types( $lead_group, $skip_group_tests = fal
 			continue;
 		}
 		$display_on_mobile = get_post_meta( $form_type->ID, 'display_on_mobile', true );
-		$display_on_mobile = (string) $display_on_mobile === '' ? 1 : intval( $display_on_mobile );
-		if ( wp_is_mobile() && $display_on_mobile === 0 ) {
+		$display_on_mobile = (string) $display_on_mobile === '' ? 1 : (int) $display_on_mobile;
+		if ( $display_on_mobile === 0 && wp_is_mobile() ) {
 			continue;
 		}
 
 		$display_status = get_post_meta( $form_type->ID, 'display_status', true );
-		$display_status = (string) $display_status === '' ? 1 : intval( $display_status );
+		$display_status = (string) $display_status === '' ? 1 : (int) $display_status;
 		/* since 05.09.2016 display status is display on desktop so we just check if this is not a mobile */
-		if ( ! wp_is_mobile() && $display_status === 0 ) {
+		if ( $display_status === 0 && ! wp_is_mobile() ) {
 			continue;
 		}
 		/**
@@ -1691,7 +1698,7 @@ function tve_leads_state_html( $form_html, $variation, $control ) {
  *
  * @return string the style key
  */
-function tve_leads_get_variation_style_key( & $variation ) {
+function tve_leads_get_variation_style_key( &$variation ) {
 	if ( ! isset( $variation['style_key'] ) ) {
 		$parts                  = explode( '|', $variation[ TVE_LEADS_FIELD_TEMPLATE ] );
 		$key                    = end( $parts );
@@ -1891,6 +1898,12 @@ function tve_get_lead_generation_ignored_fields() {
 		'_asset_group',
 		'_asset_option',
 		'mailchimp_optin',
+		'tcb_token',
+		'tve_labels',
+		'tve_mapping',
+		'_api_custom_fields',
+		'_sendParams',
+		'_autofill',
 	);
 }
 

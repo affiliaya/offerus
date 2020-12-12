@@ -284,6 +284,27 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		}
 
 		/**
+		 * For landing pages, returns the landing page set needed for content blocks cloud call
+		 *
+		 * @param string $special_set
+		 *
+		 * @return string
+		 */
+		public static function get_lp_set( $special_set = '' ) {
+			$post_id = get_the_ID();
+
+			if ( wp_doing_ajax() && empty( $post_id ) && isset( $_POST['post_id'] ) ) {
+				$post_id = $_POST['post_id'];
+			}
+
+			if ( tve_post_is_landing_page( $post_id ) ) {
+				$special_set = get_post_meta( $post_id, 'tve_landing_set', true );
+			}
+
+			return $special_set;
+		}
+
+		/**
 		 * Prepare LP variables for frontend
 		 *
 		 * @return array
@@ -379,6 +400,16 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 				foreach ( $tpl_gradients as $gradient ) {
 					echo TVE_LP_GRADIENT_VAR_CSS_PREFIX . $gradient['id'] . ':' . $gradient['gradient'] . ';';
 				}
+
+				$master_variables = array_filter( $tpl_colors, function ( $ar ) {
+					return ( isset( $ar['parent'] ) && (int) $ar['parent'] === - 1 );
+				} );
+
+				if ( ! empty( $master_variables ) ) {
+					$master_variable = reset( $master_variables );
+
+					echo tve_prepare_master_variable( $master_variable );
+				}
 			}
 		}
 
@@ -400,10 +431,6 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 * Called from set_cloud_template method and form import LP from zip method
 		 */
 		public function update_template_global_styles( $page_styles = array() ) {
-
-			if ( ! apply_filters( 'tcb_allow_landing_page_set_data', true, $this ) ) {
-				return;
-			}
 
 			if ( empty( $page_styles ) && ! empty( $this->cloud_template_data['page_styles'] ) ) {
 				$page_styles = $this->cloud_template_data['page_styles'];
@@ -559,7 +586,7 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 * @param array  $fonts
 		 * @param bool   $ignore_css
 		 */
-		public function update_template_style( $identifier = '', $for_element = '', $name = '', $css, $fonts = array(), $ignore_css = false ) {
+		public function update_template_style( $identifier, $for_element, $name, $css, $fonts = array(), $ignore_css = false ) {
 
 			$post_meta_name = 'thrv_lp_template_' . $for_element;
 
@@ -734,6 +761,7 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 				'tve_custom_style',
 				'tve_global_style',
 				'tve_global_variables',
+				'optm_lazyload',
 			);
 			/**
 			 * Filter list of CSS classes / DOM attributes for style nodes that should be kept
@@ -889,7 +917,24 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 				echo $this->global_scripts['body'];
 			}
 
-			do_action( self::HOOK_BODY_OPEN, $this->id );
+			$hook = self::HOOK_BODY_OPEN;
+
+			/**
+			 * Action called right after the body opening tag
+			 */
+			do_action( $hook, $this->id );
+
+			$page = is_editor_page() ? 'editor' : 'frontend';
+
+			/**
+			 * Specialized action depending on whether the current page is an editor page or not
+			 *
+			 * In general no javascript should be outputted in the <body> element while in the editor page.
+			 * This allows hooking only in the frontend context for such cases (e.g. outputting global scripts from TD)
+			 *
+			 * @param int $id current landing page id
+			 */
+			do_action( "{$hook}_{$page}", $this->id );
 		}
 
 		/**
@@ -903,7 +948,26 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		 * called right before the <body> end tag
 		 */
 		public function before_body_end() {
-			do_action( self::HOOK_BODY_CLOSE, $this->id );
+			$hook = self::HOOK_BODY_CLOSE;
+
+			/**
+			 * Action called right before outputting the </body> closing tag
+			 *
+			 * @param int $id current landing page id
+			 */
+			do_action( $hook, $this->id );
+
+			$page = is_editor_page() ? 'editor' : 'frontend';
+
+			/**
+			 * Specialized action depending on whether the current page is an editor page or not
+			 *
+			 * In general no javascript should be outputted in the <body> element while in the editor page.
+			 * This allows hooking only in the frontend context for such cases (e.g. outputting global scripts from TD)
+			 *
+			 * @param int $id current landing page id
+			 */
+			do_action( "{$hook}_{$page}", $this->id );
 
 			if ( ! empty( $this->global_scripts['footer'] ) && ! is_editor_page() ) {
 				$this->global_scripts['footer'] = $this->remove_jquery( $this->global_scripts['footer'] );
@@ -1585,11 +1649,12 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		public static function templates_v2() {
 			return array(
 				'blank_v2' => array(
-					'name'         => 'Blank Page',
-					'tags'         => array( 'blank' ),
-					'set'          => 'Blank',
-					'style_family' => 'Flat',
-					'LP_VERSION'   => 2,
+					'name'       => 'Blank Page',
+					'tags'       => array( 'blank' ),
+					'set'        => 'Blank',
+					'type'       => 'l',
+					'thumb'      => TVE_LANDING_PAGE_TEMPLATE . '/thumbnails/blank_v2.png',
+					'LP_VERSION' => 2,
 				),
 			);
 		}
@@ -1760,9 +1825,11 @@ if ( ! class_exists( 'TCB_Landing_Page' ) ) {
 		return apply_filters( 'tcb_landing_page_default_content', $content, $is_lightbox, $file_suffix );
 	}
 
-	add_action( 'tcb_get_extra_global_variables', array( 'TCB_Landing_Page', 'output_landing_page_variables' ) );
+	add_action( 'tcb_get_extra_global_variables', array( 'TCB_Landing_Page', 'output_landing_page_variables' ), PHP_INT_MAX );
 
 	add_filter( 'tcb_get_extra_global_styles', array( 'TCB_Landing_Page', 'add_landing_page_styles' ) );
 
 	add_filter( 'tcb_prepare_global_variables_for_front', array( 'TCB_Landing_Page', 'prepare_landing_page_variables_for_front' ), 10, 2 );
+
+	add_filter( 'tcb_get_special_blocks_set', array( 'TCB_Landing_Page', 'get_lp_set' ) );
 }

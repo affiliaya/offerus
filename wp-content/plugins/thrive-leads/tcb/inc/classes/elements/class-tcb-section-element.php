@@ -201,7 +201,7 @@ class TCB_Section_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 
 	/**

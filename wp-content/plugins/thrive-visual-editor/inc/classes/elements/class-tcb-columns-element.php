@@ -69,8 +69,8 @@ class TCB_Columns_Element extends TCB_Element_Abstract {
 							'default' => '15',
 							'min'     => '0',
 							'max'     => '200',
-							'label'   => __( 'Gutter Width', 'thrive-cb' ),
-							'um'      => array( 'PX' ),
+							'label'   => __( 'Gutter width', 'thrive-cb' ),
+							'um'      => array( 'px' ),
 						),
 						'to'         => '> .tcb-flex-row',
 						'css_suffix' => ' > .tcb-flex-col',
@@ -87,12 +87,12 @@ class TCB_Columns_Element extends TCB_Element_Abstract {
 					),
 					'VerticalPosition' => array(
 						'config'  => array(
-							'name'    => __( 'Vertical Position', 'thrive-cb' ),
+							'name'    => __( 'Vertical position', 'thrive-cb' ),
 							'buttons' => array(
 								array(
 									'icon'    => 'top',
 									'default' => true,
-									'value'   => '',
+									'value'   => 'flex-start',
 								),
 								array(
 									'icon'  => 'vertical',
@@ -121,7 +121,9 @@ class TCB_Columns_Element extends TCB_Element_Abstract {
 							'default' => '250',
 							'min'     => '40',
 							'max'     => '700',
-							'label'   => __( 'Minimum Column Width', 'thrive-cb' ),
+							'label'   => __( 'Column breakpoint', 'thrive-cb' ),
+							'info'    => true,
+							'info_hover'    => true,
 							'um'      => array( 'PX' ),
 						),
 						'to'      => ' > .tcb-flex-row',
@@ -140,7 +142,7 @@ class TCB_Columns_Element extends TCB_Element_Abstract {
 							'default' => '1024',
 							'min'     => '1',
 							'max'     => '1000',
-							'label'   => __( 'Minimum Height', 'thrive-cb' ),
+							'label'   => __( 'Minimum height', 'thrive-cb' ),
 							'um'      => array( 'px', 'vh' ),
 							'css'     => 'min-height',
 						),
@@ -181,6 +183,6 @@ class TCB_Columns_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 }

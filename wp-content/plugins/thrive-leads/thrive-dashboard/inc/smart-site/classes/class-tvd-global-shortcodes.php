@@ -23,6 +23,7 @@ class TVD_Global_Shortcodes {
 			'thrv_dynamic_data_content'   => 'content_shortcode',
 			'thrv_dynamic_data_user'      => 'user_data_shortcode',
 			'thrv_dynamic_data_source'    => 'source_shortcode',
+			'thrv_dynamic_data_user_acf'  => 'acf_user_field',
 		);
 
 	public function __construct() {
@@ -57,20 +58,55 @@ class TVD_Global_Shortcodes {
 		/**
 		 * If a static link is detected in config, we need to wrap $content in that link (only if a link doesn't already exist in $shortcode_content ..)
 		 */
-		if ( $shortcode_content && ! empty( $attr['static-link'] ) && strpos( $shortcode_content, '</a>' ) === false ) {
+		if ( $shortcode_content && ! empty( $attr['static-link'] ) ) {
 			$link_attr = json_decode( htmlspecialchars_decode( $attr['static-link'] ), true );
+			if ( strpos( $shortcode_content, '</a>' ) === false ) {
 
-			if ( ! empty( $link_attr ) && ! empty( $link_attr['href'] ) ) {
-				/* replacement for shortcode open "[" */
-				if ( strpos( $link_attr['href'], '((' ) === 0 ) {
-					$link_attr['href'] = str_replace( array( '((', '))' ), array( '[', ']' ), $link_attr['href'] );
-					$link_attr['href'] = do_shortcode( $link_attr['href'] );
+				if ( ! empty( $link_attr ) && ! empty( $link_attr['href'] ) ) {
+					/* replacement for shortcode open "[" */
+					if ( strpos( $link_attr['href'], '((' ) === 0 ) {
+						$link_attr['href'] = str_replace( array( '((', '))' ), array( '[', ']' ), $link_attr['href'] );
+						$link_attr['href'] = do_shortcode( $link_attr['href'] );
+					}
+					/* put the brackets back in the title attribute if they were replaced before */
+					if ( ! empty( $link_attr['title'] ) && strpos( $link_attr['title'], '((' ) !== false ) {
+						$link_attr['title'] = str_replace( array( '((', '))' ), array(
+							'[',
+							']',
+						), $link_attr['title'] );
+					}
+					$attributes = [];
+					foreach ( $link_attr as $attr_name => $value ) {
+						$attributes[] = ( $attr_name === 'className' ? 'class' : $attr_name ) . '="' . esc_attr( $value ) . '"';
+					}
+					$shortcode_content = '<a ' . implode( ' ', $attributes ) . '>' . $shortcode_content . '</a>';
 				}
-				$attributes = [];
-				foreach ( $link_attr as $attr_name => $value ) {
-					$attributes[] = ( $attr_name === 'className' ? 'class' : $attr_name ) . '="' . esc_attr( $value ) . '"';
+			} elseif ( isset( $link_attr['className'] ) && function_exists( 'mb_convert_encoding' ) ) {
+				/**
+				 * For elements already containing an a link just add the old classes (e.g global styles)
+				 */
+				$dom = new DOMDocument;
+				@$dom->loadHTML( mb_convert_encoding( $shortcode_content, 'HTML-ENTITIES', 'UTF-8' ) );
+				$dom->encoding = 'UTF-8';
+
+				$items = $dom->getElementsByTagName( 'a' );
+
+				for ( $i = 0; $i < $items->length; $i ++ ) {
+					$link = $items->item( $i );
+					if ( $link ) {
+						$link->setAttribute( 'class', $link_attr['className'] );
+					}
 				}
-				$shortcode_content = '<a ' . implode( ' ', $attributes ) . '>' . $shortcode_content . '</a>';
+
+				$body = $dom->getElementsByTagName( 'body' );
+				if ( $body && $body->length ) {
+					$shortcode_content = '';
+					foreach ( $body[0]->childNodes as $child ) {
+						$shortcode_content .= $dom->saveHTML( $child );
+					}
+				} else {
+					$shortcode_content = $dom->saveHTML();
+				}
 			}
 		}
 
@@ -81,11 +117,8 @@ class TVD_Global_Shortcodes {
 		return array_merge_recursive( TVD_Global_Shortcodes::get_inline_shortcodes(), $shortcodes );
 	}
 
-
 	public static function get_inline_shortcodes() {
 		$inline_shortcodes = array();
-
-// phpcs:disable
 
 		$shortcodes_without_params = array(
 			/* Content */
@@ -96,13 +129,13 @@ class TVD_Global_Shortcodes {
 				'group'     => 'Content',
 			),
 			'the_title' => array(
-				'name'      => __( 'Post Title', TVE_DASH_TRANSLATE_DOMAIN ),
+				'name'      => __( 'Post title', TVE_DASH_TRANSLATE_DOMAIN ),
 				'shortcode' => 'thrv_dynamic_data_content',
 				'fn'        => 'content_shortcode',
 				'group'     => 'Content',
 			),
 			'post_type' => array(
-				'name'      => __( 'Post Type', TVE_DASH_TRANSLATE_DOMAIN ),
+				'name'      => __( 'Post type', TVE_DASH_TRANSLATE_DOMAIN ),
 				'shortcode' => 'thrv_dynamic_data_content',
 				'fn'        => 'content_shortcode',
 				'group'     => 'Content',
@@ -138,13 +171,13 @@ class TVD_Global_Shortcodes {
 				'fn'        => 'date_shortcode',
 				'group'     => 'Time & Date',
 			),
-			'g:i:s'     => array(
+			'G:i:s'     => array(
 				'name'      => esc_html__( 'Time (23:59:59)', TVE_DASH_TRANSLATE_DOMAIN ),
 				'shortcode' => 'thrv_dynamic_data_date',
 				'fn'        => 'date_shortcode',
 				'group'     => 'Time & Date',
 			),
-			'g:i'       => array(
+			'G:i'       => array(
 				'name'      => esc_html__( 'Time (23:59)', TVE_DASH_TRANSLATE_DOMAIN ),
 				'shortcode' => 'thrv_dynamic_data_date',
 				'fn'        => 'date_shortcode',
@@ -199,12 +232,12 @@ class TVD_Global_Shortcodes {
 				'group'     => 'Time & Date',
 			),
 		);
-		$resources                 = array(
+
+		$resources = array(
 			'get'    => __( 'URL QueryString', TVE_DASH_TRANSLATE_DOMAIN ),
 			'post'   => __( 'Post Variable', TVE_DASH_TRANSLATE_DOMAIN ),
 			'cookie' => __( 'Cookie', TVE_DASH_TRANSLATE_DOMAIN ),
 		);
-
 
 		$shortcodes_with_default = array(
 			/* User Data */
@@ -253,6 +286,18 @@ class TVD_Global_Shortcodes {
 				'fn'        => 'user_data_shortcode',
 				'group'     => 'User data',
 			),
+			'website'      => array(
+				'name'      => __( 'Wordpress User Website', TVE_DASH_TRANSLATE_DOMAIN ),
+				'shortcode' => 'thrv_dynamic_data_user',
+				'fn'        => 'user_data_shortcode',
+				'group'     => 'User data',
+			),
+			'user_bio'     => array(
+				'name'      => __( 'Wordpress User Bio', TVE_DASH_TRANSLATE_DOMAIN ),
+				'shortcode' => 'thrv_dynamic_data_user',
+				'fn'        => 'user_data_shortcode',
+				'group'     => 'User data',
+			),
 			'ip'           => array(
 				'name'      => __( 'IP', TVE_DASH_TRANSLATE_DOMAIN ),
 				'shortcode' => 'thrv_dynamic_data_user',
@@ -273,7 +318,23 @@ class TVD_Global_Shortcodes {
 				'group'     => 'Source',
 			),
 		);
-// phpcs:enable
+
+		if ( tvd_has_external_fields_plugins() ) {
+			// if is acf plugin active, run through all of them and update the custom fields for the user
+
+			foreach ( tvd_get_acf_user_external_fields() as $field ) {
+
+				$shortcodes_with_default[ $field['name'] ] = array(
+					'name'      => $field['label'],
+					'shortcode' => 'thrv_dynamic_data_user_acf',
+					'fn'        => 'acf_user_field',
+					'group'     => 'User data',
+				);
+			}
+
+		}
+
+
 		foreach ( $shortcodes_with_default as $key => $data ) {
 			$shortcode = array(
 				'name'        => $data['name'],
@@ -346,14 +407,18 @@ class TVD_Global_Shortcodes {
 					),
 					'id'       => array(
 						'extra_options' => array(),
-						'real_data'     => array( $key => TVD_Global_Shortcodes::request_data_shortcode( array( 'id' => $key, 'var_name' => '' ) ) ),
+						'real_data'     => array(
+							$key => TVD_Global_Shortcodes::request_data_shortcode( array(
+								'id'       => $key,
+								'var_name' => '',
+							) ),
+						),
 						'type'          => 'hidden',
 						'value'         => $key,
 					),
 				),
 			);
 		}
-
 
 		return $inline_shortcodes;
 	}
@@ -382,7 +447,10 @@ class TVD_Global_Shortcodes {
 			$value['id']    = $index;
 			$global_links[] = $value;
 		}
-		$links['Site'] = array( 'links' => array( $global_links ), 'shortcode' => 'thrive_global_shortcode_url' );
+		$links['Site'] = array(
+			'links'     => array( $global_links ),
+			'shortcode' => 'thrive_global_shortcode_url',
+		);
 
 		return $links;
 	}
@@ -435,7 +503,7 @@ class TVD_Global_Shortcodes {
 		$data = '';
 		if ( isset( $args['id'] ) ) {
 			$groups = $this->global_data();
-			$id     = ( int ) $args['id'];
+			$id     = (int) $args['id'];
 			$data   = empty( $groups[ $id ] ) ? '' : $groups[ $id ]['url'];
 		}
 
@@ -456,17 +524,40 @@ class TVD_Global_Shortcodes {
 		if ( isset( $args['id'] ) ) {
 			if ( $args['id'] === 'browser' ) {
 				$value = '<span class="tve-browser-data"></span >'; /* Replace this with JS because PHP get_browser doesnt work  all the time */
-			} else {
-				if ( isset( $user_data[ $args['id'] ] ) ) {
-					$value = $user_data[ $args['id'] ];
-					if ( isset( $args['link'] ) && $args['link'] === '1' ) {
-						$value = sprintf( '<a href="%s" target="_blank">%s</a>', $user_data['edit_url'], $value );
-					}
+			}
+			if ( isset( $user_data[ $args['id'] ] ) ) {
+				$value = $user_data[ $args['id'] ];
+
+				if ( $args['id'] === 'website' ) {
+					/* create link with user website */
+					$value = sprintf( '<a href="%s" target="_blank">%s</a>', $value, $value );
+				} elseif ( isset( $args['link'] ) && $args['link'] === '1' ) {
+					$value = sprintf( '<a href="%s" target="_blank">%s</a>', $user_data['edit_url'], $value );
 				}
 			}
 		}
 		if ( empty( $value ) && isset( $args['default'] ) ) {
 			$value = $args['default'];
+		}
+
+		return $value;
+	}
+
+
+	/**
+	 * Shortcode render for user data from acf
+	 *
+	 * @param $args
+	 *
+	 * @return mixed|string
+	 */
+	public static function acf_user_field( $args ) {
+		$value = '';
+		if ( tvd_has_external_fields_plugins() ) {
+			$value = get_field( $args['id'], 'user_' . get_current_user_id() );
+			if ( empty( $value ) && isset( $args['default'] ) ) {
+				$value = $args['default'];
+			}
 		}
 
 		return $value;
@@ -498,7 +589,19 @@ class TVD_Global_Shortcodes {
 	}
 
 	public static function date_shortcode( $args ) {
-		return trim( date( $args['id'] ) );
+		/**
+		 * The hour should be in 24h format
+		 */
+		$format = str_replace( 'g', 'G', $args['id'] );
+
+
+		if ( function_exists( 'wp_date' ) ) {
+			$result = wp_date( $format );
+		} else {
+			$result = date_i18n( $format );
+		}
+
+		return trim( $result );
 	}
 
 
@@ -533,15 +636,29 @@ class TVD_Global_Shortcodes {
 	public static function request_data_shortcode( $args ) {
 		$value = '';
 		if ( ! empty( $args['var_name'] ) ) {
+			/**
+			 * just in case the var_name has spaces check var_Name with underscore
+			 * e.g test 01 comes as test_01
+			 */
+			$fallback_var = strpos( $args['var_name'], ' ' ) !== false ? preg_replace( "/\s/", "_", $args['var_name'] ) : '';
 			switch ( $args['id'] ) {
 				case 'post':
 					$value = isset( $_POST[ $args['var_name'] ] ) ? $_POST[ $args['var_name'] ] : '';
+					if ( empty( $value ) && ! empty( $fallback_var ) ) {
+						$value = isset( $_POST[ $fallback_var ] ) ? $_POST[ $fallback_var ] : '';
+					}
 					break;
 				case 'get':
 					$value = isset( $_GET[ $args['var_name'] ] ) ? $_GET[ $args['var_name'] ] : '';
+					if ( empty( $value ) && ! empty( $fallback_var ) ) {
+						$value = isset( $_GET[ $fallback_var ] ) ? $_GET[ $fallback_var ] : '';
+					}
 					break;
 				case 'cookie':
 					$value = isset( $_COOKIE[ $args['var_name'] ] ) ? $_COOKIE[ $args['var_name'] ] : '';
+					if ( empty( $value ) && ! empty( $fallback_var ) ) {
+						$value = isset( $_COOKIE[ $fallback_var ] ) ? $_COOKIE[ $fallback_var ] : '';
+					}
 					break;
 				default:
 					break;
@@ -551,6 +668,6 @@ class TVD_Global_Shortcodes {
 			$value = $args['default'];
 		}
 
-		return esc_html( $value );
+		return esc_html( stripslashes( $value ) );
 	}
 }

@@ -22,6 +22,7 @@ class Thrive_Dash_List_Manager {
 			'sellings'      => 'Sales',
 			'integrations'  => 'Integration Services',
 			'email'         => 'Email Delivery',
+			'storage'       => 'File Storage',
 		);
 
 	public static $AVAILABLE
@@ -59,6 +60,8 @@ class Thrive_Dash_List_Manager {
 			'webinarjamstudio'     => 'Thrive_Dash_List_Connection_WebinarJamStudio',
 			'wordpress'            => 'Thrive_Dash_List_Connection_Wordpress',
 			'mailster'             => 'Thrive_Dash_List_Connection_Mailster',
+			'sendfox'              => 'Thrive_Dash_List_Connection_Sendfox',
+			'zoho'                 => 'Thrive_Dash_List_Connection_Zoho',
 
 			/* notification manger - these are now included in the dashboard - services for email notifications */
 			'awsses'               => 'Thrive_Dash_List_Connection_Awsses',
@@ -77,6 +80,10 @@ class Thrive_Dash_List_Manager {
 
 			/* integrations services */
 			'zapier'               => 'Thrive_Dash_List_Connection_Zapier',
+
+			/* File Storage */
+			'google_drive'         => 'Thrive_Dash_List_Connection_FileUpload_GoogleDrive',
+			'dropbox'              => 'Thrive_Dash_List_Connection_FileUpload_Dropbox',
 		);
 
 	private static $_available = array();
@@ -100,14 +107,24 @@ class Thrive_Dash_List_Manager {
 			if ( ! class_exists( $api ) ) {//for cases when Mandril is not updated in TL
 				continue;
 			}
-			$instance = new $api( $key );
-			if ( ( $onlyConnected && empty( $credentials[ $key ] ) ) || in_array( $instance->getType(), $exclude_types ) ) {
+
+			$instance = self::connectionInstance( $key, isset( $credentials[ $key ] ) ? $credentials[ $key ] : array() );
+			if ( ! $instance ) {
+				continue;
+			}
+			if ( ( $onlyConnected && empty( $credentials[ $key ] ) ) || in_array( $instance::getType(), $exclude_types, true ) ) {
+				continue;
+			}
+			/**
+			 * Allow custom isConnected implementations
+			 */
+			if ( $onlyConnected && ! $instance->isConnected() ) {
 				continue;
 			}
 			if ( $onlyNames ) {
-				$lists[ $key ] = self::connectionInstance( $key, isset( $credentials[ $key ] ) ? $credentials[ $key ] : array() )->getTitle();
+				$lists[ $key ] = $instance->getTitle();
 			} else {
-				$lists[ $key ] = self::connectionInstance( $key, isset( $credentials[ $key ] ) ? $credentials[ $key ] : array() );
+				$lists[ $key ] = $instance;
 			}
 		}
 
@@ -173,25 +190,32 @@ class Thrive_Dash_List_Manager {
 	/**
 	 * get a list of all available APIs by type
 	 *
-	 * @param bool  $onlyConnected if true, it will return only APIs that are already connected
-	 * @param array $include_types exclude connection by their type
+	 * @param bool         $onlyConnected if true, it will return only APIs that are already connected
+	 * @param string|array $include_types exclude connection by their type
 	 *
 	 * @return array Thrive_Dash_List_Connection_Abstract[]
 	 */
 	public static function getAvailableAPIsByType( $onlyConnected = false, $include_types = array() ) {
+
+		if ( ! is_array( $include_types ) ) {
+			$include_types = array( $include_types );
+		}
 		$lists = array();
 
 		$credentials = self::credentials();
 
 		foreach ( self::available() as $key => $api ) {
 			/** @var Thrive_Dash_List_Connection_Abstract $instance */
-			$instance = new $api( $key );
-			if ( ( $onlyConnected && empty( $credentials[ $key ] ) ) || ! in_array( $instance->getType(), $include_types ) ) {
+			$instance = self::connectionInstance( $key, isset( $credentials[ $key ] ) ? $credentials[ $key ] : array() );
+			if ( ( $onlyConnected && empty( $credentials[ $key ] ) ) || ! in_array( $instance::getType(), $include_types, true ) ) {
 				continue;
 			}
 
-			$lists[ $key ] = self::connectionInstance( $key, isset( $credentials[ $key ] ) ? $credentials[ $key ] : array() );
+			if ( $onlyConnected && ! $instance->isConnected() ) {
+				continue;
+			}
 
+			$lists[ $key ] = $instance;
 		}
 
 		return $lists;
@@ -212,6 +236,13 @@ class Thrive_Dash_List_Manager {
 		 */
 		if ( ! array_key_exists( 'email', $details ) ) {
 			$details['email'] = array( 'connected' => true );
+		}
+
+		/**
+		 * Make sure the WP API Connection is always available
+		 */
+		if ( empty( $details['wordpress'] ) ) {
+			$details['wordpress'] = array( 'connected' => true );
 		}
 
 		if ( empty( $key ) ) {
@@ -327,7 +358,7 @@ class Thrive_Dash_List_Manager {
 		}
 		$data = @unserialize( $string );
 
-		return empty( $data ) ? array() : $data;
+		return empty( $data ) ? array() : tve_sanitize_data_recursive( $data, 'sanitize_textarea_field' );
 	}
 
 	public static function toJSON( $APIs = array() ) {
@@ -340,7 +371,7 @@ class Thrive_Dash_List_Manager {
 		foreach ( $APIs as $key => $instance ) {
 
 			/** @var $instance Thrive_Dash_List_Connection_Abstract */
-			if ( ! is_subclass_of( $instance, 'Thrive_Dash_List_Connection_Abstract' ) ) {
+			if ( ! $instance instanceof Thrive_Dash_List_Connection_Abstract ) {
 				continue;
 			}
 

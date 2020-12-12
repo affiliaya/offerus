@@ -341,13 +341,12 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 			switch ( $custom_action ) {
 				// reset all logs associated with this form type
 				case 'reset_statistics':
-
 					$post = tve_leads_get_form_type( $this->param( 'ID', 0 ), array(
 						'get_variations' => false,
 					) );
 
-					if ( is_null( $post ) ) {
-						$this->error( "Form Type not found !" );
+					if ( $post === null ) {
+						$this->error( 'Form Type not found !', 'thrive-leads' );
 					}
 
 					/**
@@ -358,7 +357,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 					}
 
 					global $tvedb;
-					$result = $tvedb->archive_logs( array(
+					$result = $tvedb->delete_logs( array(
 						'form_type_id' => $this->param( 'ID' ),
 					) );
 
@@ -368,7 +367,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 					tve_leads_reset_post_tracking_data( $post );
 
 					if ( $result === false ) {
-						$this->error( __( "Error on resetting form type statistics", "thrive-leads" ) );
+						$this->error( __( 'Error on resetting form type statistics', 'thrive-leads' ) );
 					}
 
 					return array(
@@ -397,14 +396,14 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 			case 'GET':
 				//get post form type
 				$post = tve_leads_get_form_type( $this->param( 'ID', 0 ) );
-				if ( is_null( $post ) ) {
-					$this->error( "Form Type not found !" );
+				if ( $post === null ) {
+					$this->error( 'Form Type not found !', 'thrive-leads' );
 				}
 
 				//get post group parent for form type
 				$post->parent = get_post( $post->post_parent );
 				if ( empty( $post->parent ) || $post->parent->post_status === 'trash' ) {
-					$this->error( "Form Type with no group !" );
+					$this->error( 'Form Type with no group !', 'thrive-leads' );
 				}
 
 				//all info for active test is returned and only ID is needed
@@ -459,7 +458,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 
 					$variation = tve_leads_get_form_variation( null, $this->param( 'key' ), array( 'tracking_data' => true ) );
 
-					$tvedb->archive_logs( array(
+					$tvedb->delete_logs( array(
 						'variation_key' => $this->param( 'key' ),
 					) );
 
@@ -533,7 +532,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 
 				$variation = tve_leads_save_form_variation( $model );
 				if ( empty( $model['key'] ) ) {
-					$variation['impressions']     = $variation['unique_impressions'] = $variation['conversions'] = '0';
+					$variation['impressions']     = $variation['unique_impressions'] = $variation['conversions'] = 0;
 					$variation['conversion_rate'] = tve_leads_conversion_rate( $variation['unique_impressions'], $variation['conversions'] );
 				}
 				$variation['tcb_edit_url']    = tve_leads_get_editor_url( $variation['post_parent'], $variation['key'] );
@@ -615,10 +614,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 		$chartType = $this->param( 'chartType', '' );
 		switch ( $chartType ) {
 			case 'testChart':
-				$chart_data = tve_leads_get_test_chart_data( $this->param( 'ID', 0 ), $this->param( 'interval', 'day' ) );
-
-				return $chart_data;
-				break;
+				return tve_leads_get_test_chart_data( $this->param( 'ID', 0 ), $this->param( 'interval', 'day' ) );
 		}
 	}
 
@@ -667,7 +663,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 			'archived_log'     => 0,
 		);
 
-		if ( $this->param( 'type' ) == 'table' ) {
+		if ( $this->param( 'type' ) === 'table' ) {
 			$filters['itemsPerPage'] = $this->param( 'itemsPerPage' );
 			$filters['page']         = $this->param( 'page' );
 			switch ( $this->param( 'report_type' ) ) {
@@ -1008,6 +1004,7 @@ class Thrive_Leads_Ajax_Controller extends Thrive_Leads_Request_Handler {
 		$v_result = 0;
 		if ( ! empty( $v_ids ) ) {
 			$v_result = $tvedb->delete_conversion_logs( $v_ids );
+			$tvedb->delete_summary_for_variations( $v_ids );
 		}
 
 		$t_result = 0;

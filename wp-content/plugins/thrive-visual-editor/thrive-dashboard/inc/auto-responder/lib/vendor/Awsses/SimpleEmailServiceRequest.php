@@ -3,33 +3,70 @@
 /**
  * SimpleEmailServiceRequest PHP class
  *
- * @link https://github.com/daniel-zahariev/php-aws-ses
+ * @link    https://github.com/daniel-zahariev/php-aws-ses
  * @package AmazonSimpleEmailService
  */
 final class Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest {
+
 	private $ses, $verb, $parameters = array();
 	public $response;
-	public static $curlOptions = array();
+
+	/**
+	 * For Signature V4 https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html
+	 */
+	const SERVICE = 'email';
+	const DOMAIN = 'amazonaws.com';
+	const ALGORITHM = 'AWS4-HMAC-SHA256';
+
+	private $_aws_key;
+	private $_aws_secret;
+	private $_region;
+
+	private $_host;
+	private $_endpoint;
+
+	private $_amz_date;
+	private $_date;
+
+	private $_method;
+	private $_body;
+
+	private $_headers;
+	private $_query_parameters;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $ses The SimpleEmailService object making this request
+	 * @param string $ses  The SimpleEmailService object making this request
 	 * @param string $verb HTTP verb
 	 *
 	 * @return void
 	 */
-	function __construct( $ses, $verb ) {
+	function __construct( $ses, $verb, $region = 'eu-west-1' ) {
 		$this->ses      = $ses;
 		$this->verb     = $verb;
 		$this->response = (object) array( 'body' => '', 'code' => 0, 'error' => false );
+
+		/**
+		 * Signature V4
+		 */
+		$this->_amz_date = gmdate( 'Ymd\THis\Z' );
+		$this->_date     = gmdate( 'Ymd' );
+
+		$this->_aws_key    = $this->ses->getAccessKey();
+		$this->_aws_secret = $this->ses->getSecretKey();
+		$this->_region     = $region; // Used in vendor class as well
+		$this->_method     = $verb;
+
+		$this->_host     = self::SERVICE . '.' . $this->_region . '.' . self::DOMAIN;
+		$this->_endpoint = 'https://' . self::SERVICE . '.' . $this->_region . '.' . self::DOMAIN;
 	}
 
 	/**
 	 * Set request parameter
 	 *
-	 * @param string $key Key
-	 * @param string $value Value
+	 * @param string  $key     Key
+	 * @param string  $value   Value
 	 * @param boolean $replace Whether to replace the key if it already exists (default true)
 	 *
 	 * @return Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest $this
@@ -44,6 +81,65 @@ final class Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Build one of the f*!#ing keys for v4 signature
+	 *
+	 * @return string
+	 */
+	private function _generateSignatureKey() {
+
+		$date_h    = hash_hmac( 'sha256', $this->_date, 'AWS4' . $this->_aws_secret, true );
+		$region_h  = hash_hmac( 'sha256', $this->_region, $date_h, true );
+		$service_h = hash_hmac( 'sha256', self::SERVICE, $region_h, true );
+		$signing_h = hash_hmac( 'sha256', 'aws4_request', $service_h, true );
+
+		return $signing_h;
+	}
+
+	/**
+	 * Create headers & body for v4 signature
+	 */
+	private function _generateDataSignature() {
+
+		$parameters     = $this->parameters;
+		$this->_headers = [];
+		$canonical_uri  = '/';
+		ksort( $parameters );
+		$query_parameters  = '';
+		$canonical_headers = '';
+		$signed_headers    = '';
+		$qp                = http_build_query( $parameters, '', '&', PHP_QUERY_RFC3986 );
+
+		if ( $parameters['Action'] == "SendRawEmail" || $parameters['Action'] == "SendEmail" ) {
+			$this->_body                    = $qp;
+			$canonical_headers              .= 'content-type:' . 'application/x-www-form-urlencoded' . "\n";
+			$signed_headers                 .= 'content-type;';
+			$this->_headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		} else {
+			$query_parameters = $qp;
+		}
+
+		$canonical_headers .= 'host:' . $this->_host . "\n" . 'x-amz-date:' . $this->_amz_date . "\n";
+		$signed_headers    .= 'host;x-amz-date';
+		$payload_hash      = hash( 'sha256', $this->_body );
+
+		// task 1 https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
+		$canonical_request = $this->_method . "\n" . $canonical_uri . "\n" . $query_parameters . "\n" . $canonical_headers . "\n" . $signed_headers . "\n" . $payload_hash;
+
+		// task 2 https://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html
+		$credential_scope = $this->_date . '/' . $this->_region . '/' . self::SERVICE . '/aws4_request';
+		$string_to_sign   = self::ALGORITHM . "\n" . $this->_amz_date . "\n" . $credential_scope . "\n" . hash( 'sha256', $canonical_request );;
+
+		// task 3 https://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html
+		$signing_key = $this->_generateSignatureKey();
+
+		// task 4 https://docs.aws.amazon.com/general/latest/gr/sigv4-add-signature-to-request.html
+		$signature                       = hash_hmac( 'sha256', $string_to_sign, $signing_key );
+		$this->_headers['Authorization'] = self::ALGORITHM . ' Credential=' . $this->_aws_key . '/' . $credential_scope . ', SignedHeaders=' . $signed_headers . ', Signature=' . $signature;
+		$this->_headers['x-amz-date']    = $this->_amz_date;
+		$this->_query_parameters         = $query_parameters;
 	}
 
 	/**
@@ -66,22 +162,9 @@ final class Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest {
 
 		sort( $params, SORT_STRING );
 
-		// must be in format 'Sun, 06 Nov 1994 08:49:37 GMT'
-		$date = gmdate( 'D, d M Y H:i:s e' );
-
-		$query = implode( '&', $params );
-
-		$headers   = array();
-		$headers[] = 'Date: ' . $date;
-		$headers[] = 'Host: ' . $this->ses->getHost();
-
-		$auth = 'AWS3-HTTPS AWSAccessKeyId=' . $this->ses->getAccessKey();
-		$auth .= ',Algorithm=HmacSHA256,Signature=' . $this->getSignature( $date );
-		$headers[] = 'X-Amzn-Authorization: ' . $auth;
-
 		$url = 'https://' . $this->ses->getHost() . '/';
+		$this->_generateDataSignature();
 
-		$fn = '';
 		switch ( $this->verb ) {
 			case 'GET':
 				$fn = 'tve_dash_api_remote_get';
@@ -92,110 +175,14 @@ final class Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest {
 		}
 
 		$this->response = $fn( $url, array(
-			'body'      => $query,
+			'body'      => $this->_body,
+			'headers'   => $this->_headers,
 			'timeout'   => 15,
-			'headers'   => array(
-				'User-Agent'           => "SimpleEmailService/php",
-				'Date'                 => $date,
-				'X-Amzn-Authorization' => $auth,
-				'Content-Type'         => 'application/x-www-form-urlencoded',
-				'Accept'               => 'application/json',
-			),
 			'sslverify' => false,
 		) );
 
-//		$response = json_decode($this->response['body']);
-		//var_dump($this->response);
-//		die;
-
-		// Basic setup
-//		$curl = curl_init();
-//		curl_setopt($curl, CURLOPT_USERAGENT, 'SimpleEmailService/php');
-//
-//		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, ($this->ses->verifyHost() ? 2 : 0));
-//		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, ($this->ses->verifyPeer() ? 1 : 0));
-//
-//		// Request types
-//		switch ($this->verb) {
-//			case 'GET':
-//				$url .= '?'.$query;
-//				break;
-//			case 'POST':
-//				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $this->verb);
-//				curl_setopt($curl, CURLOPT_POSTFIELDS, $query);
-//				$headers[] = 'Content-Type: application/x-www-form-urlencoded';
-//			break;
-//			case 'DELETE':
-//				$url .= '?'.$query;
-//				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-//			break;
-//			default: break;
-//		}
-//		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-//		curl_setopt($curl, CURLOPT_HEADER, false);
-//
-//		curl_setopt($curl, CURLOPT_URL, $url);
-//		curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
-//		curl_setopt($curl, CURLOPT_WRITEFUNCTION, array(&$this, 'responseWriteCallback'));
-//		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-//
-//		foreach(self::$curlOptions as $option => $value) {
-//			curl_setopt($curl, $option, $value);
-//		}
-//
-//		// Execute, grab errors
-//		if (curl_exec($curl)) {
-//			$this->response->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-//		} else {
-//			$this->response->error = array(
-//				'curl' => true,
-//				'code' => curl_errno($curl),
-//				'message' => curl_error($curl),
-//			);
-//		}
-//
-//		@curl_close($curl);
-
-		// Parse body into XML
-//		if ($this->response['response'] === false && !empty($this->response->body)) {
-//			$this->response->body = simplexml_load_string($this->response->body);
-//
-//			// Grab SES errors
-//			if (!in_array($this->response->code, array(200, 201, 202, 204))
-//				&& isset($this->response->body->Error)) {
-//				$error = $this->response->body->Error;
-//				$output = array();
-//				$output['curl'] = false;
-//				$output['Error'] = array();
-//				$output['Error']['Type'] = (string)$error->Type;
-//				$output['Error']['Code'] = (string)$error->Code;
-//				$output['Error']['Message'] = (string)$error->Message;
-//				$output['RequestId'] = (string)$this->response->body->RequestId;
-//
-//				$this->response->error = $output;
-//				unset($this->response->body);
-//			}
-//		}
 
 		return $this->response;
-	}
-
-	/**
-	 * CURL write callback
-	 *
-	 * @param resource $curl CURL resource
-	 * @param string $data Data
-	 *
-	 * @return integer
-	 */
-	private function responseWriteCallback( &$curl, &$data ) {
-		if ( ! isset( $this->response->body ) ) {
-			$this->response->body = $data;
-		} else {
-			$this->response->body .= $data;
-		}
-
-		return strlen( $data );
 	}
 
 	/**
@@ -210,18 +197,5 @@ final class Thrive_Dash_Api_Awsses_SimpleEmailServiceRequest {
 	 */
 	private function customUrlEncode( $var ) {
 		return str_replace( '%7E', '~', rawurlencode( $var ) );
-	}
-
-	/**
-	 * Generate the auth string using Hmac-SHA256
-	 *
-	 * @internal Used by SimpleDBRequest::getResponse()
-	 *
-	 * @param string $string String to sign
-	 *
-	 * @return string
-	 */
-	private function getSignature( $string ) {
-		return base64_encode( hash_hmac( 'sha256', $string, $this->ses->getSecretKey(), true ) );
 	}
 }

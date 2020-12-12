@@ -31,7 +31,9 @@ $attributes = array(
 	'actions'          => isset( $_POST['actions'] ) ? $_POST['actions'] : new stdClass(),
 	'images'           => isset( $_POST['images'] ) ? $_POST['images'] : new stdClass(),
 	'img_settings'     => isset( $_POST['img_settings'] ) ? $_POST['img_settings'] : new stdClass(),
+	'logo'             => isset( $_POST['logo'] ) && $_POST['logo'] !== 'false' ? $_POST['logo'] : array(),
 );
+
 if ( ! $attributes['dropdown_icon'] && $attributes['dir'] === 'tve_vertical' ) {
 	$icon_styles                 = tcb_elements()->element_factory( 'menu' )->get_icon_styles();
 	$styles                      = array_keys( $icon_styles );

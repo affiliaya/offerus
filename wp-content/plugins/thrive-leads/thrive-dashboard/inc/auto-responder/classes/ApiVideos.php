@@ -113,6 +113,8 @@ class ApiVideos {
 			'sgautorepondeur'  => '//fast.wistia.net/embed/iframe/jvup3g7em4?popover=true',
 			'zoom'             => '//fast.wistia.net/embed/iframe/zqmpobvt39?popover=true',
 			'sendlane'         => '//fast.wistia.net/embed/iframe/fj7e28vbmf?popover=true',
+			'google_drive'     => '//fast.wistia.net/embed/iframe/q2u7970z2q?popover=true',
+			'dropbox'          => '//fast.wistia.net/embed/iframe/wzepho8uws?popover=true',
 		);
 
 	/**

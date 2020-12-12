@@ -215,6 +215,18 @@ class Thrive_Dash_List_Connection_Zapier extends Thrive_Dash_List_Connection_Abs
 
 		$params['source_url'] = filter_var( $_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL );
 
+		// Add all dynamic messages for textarea
+		$messages = array();
+		foreach ( $arguments as $key => $val ) {
+			if ( strpos( $key, 'mapping_textarea_' ) === 0 ) {
+				$messages[] = $arguments[ $key ];
+			}
+		}
+
+		if ( ! empty( $messages ) ) {
+			$params['message'] = $messages;
+		}
+
 		return $params;
 	}
 

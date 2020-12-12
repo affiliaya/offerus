@@ -13,7 +13,7 @@ TVE.leads = TVE.leads || {};
  */
 TL_Editor.views.ModalTemplates = TVE.modal.base.extend( {
 	el: TVE.modal.get_element( 'tl-templates' ),
-	saved_tpl_delete_confirmation: TVE.tpl( 'landing-pages/delete-confirmation' ),
+	saved_tpl_delete_confirmation: TVE.tpl( 'templates/delete-confirmation' ),
 
 	events: function () {
 
@@ -778,6 +778,12 @@ TVE.leads.StateSwitchAction = TVE.leads.LightboxStateAction.extend( {
 			}
 
 			return data;
+		} );
+
+		TVE.add_action( 'component.update.layout.tl-slide-in', function ( component ) {
+			component.disable_extra_controls( [ 'right', 'left' ].map( function ( side ) {
+				return 'margin-' + side
+			} ) );
 		} );
 	};
 

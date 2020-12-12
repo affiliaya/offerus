@@ -38,6 +38,7 @@ class TCB_Post_List_Shortcodes {
 		'tcb_pagination'              => 'pagination',
 		'tcb_post_custom_field'       => 'custom_field',
 		'tcb_post_custom_external'    => 'externals',
+		'thrive_author_url'           => 'author_link_shortcode',
 	);
 
 	public function __construct() {
@@ -144,6 +145,14 @@ class TCB_Post_List_Shortcodes {
 						 * @param string $content - content between the shortcode opening and closing tags ( like [tag] content [/tag] )
 						 */
 						$output = apply_filters( 'tcb_render_shortcode_' . $tag, $output, $attr, $content );
+
+						/**
+						 * If a static link is detected in config, we need to wrap $output in that link
+						 * ::is_inline() check seems to address backwards compatibility issues from the time where not all post list shortcodes were inline texts.
+						 */
+						if ( TCB_Post_List_Shortcodes::is_inline( $attr ) ) {
+							$output = TVD_Global_Shortcodes::maybe_link_wrap( $output, $attr );
+						}
 
 						array_pop( TCB_Post_List_Shortcodes()->execution_stack );
 					}
@@ -576,17 +585,27 @@ class TCB_Post_List_Shortcodes {
 		/* add the post url only when the post url option is selected */
 		$url_attr = $attr['type-url'] === 'post_url' ?
 			array(
-				'href'  => get_permalink(),
-				'title' => get_the_title(),
+				'href' => get_permalink(),
 			) : array();
 
 		$attr['post_id'] = get_the_ID();
+		$image_id        = get_post_thumbnail_id( $attr['post_id'] );
+
+		if ( ! empty( $attr['title'] ) && $attr['title'] === 'gallery_title' ) {
+			$title_attr = array(
+				'title' => get_the_title( $image_id ),
+			);
+		} else {
+			$title_attr = array(
+				'title' => get_the_title(),
+			);
+		}
 
 		return static::before_wrap( array(
 			'content' => $image,
 			'tag'     => 'a',
 			'class'   => TCB_POST_THUMBNAIL_IDENTIFIER . ' ' . TCB_SHORTCODE_CLASS,
-			'attr'    => $url_attr,
+			'attr'    => array_merge( $url_attr, $title_attr ),
 		), $attr );
 	}
 
@@ -703,7 +722,30 @@ class TCB_Post_List_Shortcodes {
 	 * @return string
 	 */
 	public static function tcb_post_list_dynamic_style( $attr = array(), $dynamic_style = '' ) {
-		return TCB_Utils::wrap_content( do_shortcode( $dynamic_style ), 'style', '', 'tcb-post-list-dynamic-style', array( 'type' => 'text/css' ) );
+		$style_css = do_shortcode( $dynamic_style );
+
+		$style_css .= self::tcb_get_article_dynamic_variables( get_the_ID() );
+
+		return TCB_Utils::wrap_content( $style_css, 'style', '', 'tcb-post-list-dynamic-style', array( 'type' => 'text/css' ) );
+	}
+
+	/**
+	 * Returns article dynamic variables
+	 *
+	 * Contains the article ID as node for the variables
+	 *
+	 * @param int $article_id
+	 *
+	 * @return string
+	 */
+	public static function tcb_get_article_dynamic_variables( $article_id ) {
+		$style_css      = '';
+		$post_list_vars = apply_filters( 'tcb_get_post_list_variables', '', $article_id );
+		if ( ! empty( $post_list_vars ) ) {
+			$style_css .= sprintf( 'article#post-%d{%s}', $article_id, $post_list_vars );;
+		}
+
+		return $style_css;
 	}
 
 	/**
@@ -724,7 +766,7 @@ class TCB_Post_List_Shortcodes {
 	 *
 	 * @return string
 	 */
-	public static function the_post_thumbnail_url( $data = array(), $content, $tag ) {
+	public static function the_post_thumbnail_url( $data, $content, $tag ) {
 		/*
 		 * We only want to render this shortcode when we're rendering the post list
 		 * reason: this can be a shortcode inside a HTML tag ( in an img src ), and it renders in do_shortcodes_in_html_tags which is called before the actual shortcode thing
@@ -753,6 +795,7 @@ class TCB_Post_List_Shortcodes {
 
 	/**
 	 * Author image url
+	 * We are calling this from the theme also
 	 *
 	 * @param array  $attr
 	 * @param string $content
@@ -769,9 +812,7 @@ class TCB_Post_List_Shortcodes {
 			return '[' . $tag . ']';
 		}
 
-		$avatar_url = TCB_Post_List_Author_Image::author_avatar();
-
-		return $avatar_url;
+		return TCB_Post_List_Author_Image::author_avatar();
 	}
 
 	/**
@@ -786,11 +827,8 @@ class TCB_Post_List_Shortcodes {
 		ob_start();
 
 		is_callable( $func ) && call_user_func_array( $func, $args );
-		$content = ob_get_contents();
 
-		ob_end_clean();
-
-		return $content;
+		return ob_get_clean();
 	}
 
 	/**
@@ -896,6 +934,25 @@ class TCB_Post_List_Shortcodes {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Add the author link shortcode shortcode.
+	 */
+	public function author_link_shortcode( $attr, $content, $tag ) {
+		$key = isset( $attr['id'] ) ? $attr['id'] : '';
+
+		/* we shouldn't render the shortcode in the editor */
+		if ( TCB_Utils::in_editor_render( true ) ) {
+			$link = empty( $key ) ? '#' : "[$tag id='$key']";
+		} else {
+			global $post;
+			$links = (array) get_the_author_meta( 'thrive_social_urls', $post->post_author );
+
+			$link = empty( $links[ $key ] ) ? '' : $links[ $key ];
+		}
+
+		return $link;
 	}
 }
 

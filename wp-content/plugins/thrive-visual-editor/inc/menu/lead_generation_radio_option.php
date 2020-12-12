@@ -16,14 +16,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="dropdown-content">
+		<div class="tve-control gl-st-button-toggle-1" data-view="RadioPalettes"></div>
+		<div class="tve-control tve-style-options no-space preview" data-view="StyleChange"></div>
+		<div class="tve-control" data-key="RadioStylePicker" data-initializer="radioStylePicker"></div>
+		<hr>
 		<div class="tve-control" data-view="LabelAsValue"></div>
 		<div class="tve-control" data-view="InputValue"></div>
 		<div class="tve-control" data-view="SetAsDefault"></div>
 		<div class="tve-control" data-view="RadioSize"></div>
-		<div class="tve-control hide-states tve-style-options no-space preview" data-view="StyleChange"></div>
-		<div class="tve-control" data-key="RadioStylePicker" data-initializer="radioStylePicker"></div>
-		<div class="eff-settings">
-			<div class="tve-control hide-states eff-setting eff-color" data-view="RadioStyleColor"></div>
+		<div class="tve-advanced-controls">
+			<div class="dropdown-header" data-prop="advanced">
+				<span class="mb-5">
+					<?php echo __( 'Answer based tagging', 'thrive-cb' ); ?>
+				</span>
+			</div>
+			<div class="dropdown-content pt-0">
+				<span><?php echo __( 'The following tag will be sent to your autoresponder if this answer is selected', 'thrive-cb' ); ?></span>
+				<div class="tve-control mt-10" data-view="CustomAnswerInput"></div>
+			</div>
 		</div>
+
 	</div>
 </div>

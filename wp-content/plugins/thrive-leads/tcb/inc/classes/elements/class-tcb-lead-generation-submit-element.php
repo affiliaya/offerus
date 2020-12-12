@@ -154,7 +154,6 @@ class TCB_Lead_Generation_Submit_Element extends TCB_Element_Abstract {
 		);
 
 		return $submit;
-//		return array_merge( $submit, $this->shared_styles_component() );
 	}
 
 	/**

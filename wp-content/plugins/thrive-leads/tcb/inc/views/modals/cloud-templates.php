@@ -11,13 +11,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 $name_placeholder = '<span class="element-name"></span>';
 ?>
 
-<h2 class="tcb-modal-title">
-	<?php if ( defined( 'TVE_STAGING_TEMPLATES' ) && TVE_STAGING_TEMPLATES ) : ?>
-		<span style="color: #810000"><?php echo __( 'Warning! The templates listed here are only used for testing purposes', 'thrive-cb' ); ?></span>
-	<?php else : ?>
-		<?php echo sprintf( esc_html( __( 'Choose %s Template', 'thrive-cb' ) ), $name_placeholder ); ?>
-	<?php endif ?>
-</h2>
+<div class="tcb-modal-header flex-center space-between">
+	<h2 class="tcb-modal-title">
+		<?php if ( defined( 'TVE_STAGING_TEMPLATES' ) && TVE_STAGING_TEMPLATES ) : ?>
+			<span style="color: #810000"><?php echo __( 'Warning! The templates listed here are only used for testing purposes', 'thrive-cb' ); ?></span>
+		<?php else : ?>
+			<?php echo sprintf( esc_html( __( 'Choose %s Template', 'thrive-cb' ) ), $name_placeholder ); ?>
+		<?php endif ?>
+	</h2>
+	<span data-fn="clearCache" class="tcb-refresh mr-30 click flex-center">
+		<span class="mr-10"><?php tcb_icon( 'sync-regular' ); ?></span>
+		<span class="mr-10"><?php echo __( 'Refresh from cloud', 'thrive-cb' ); ?></span>
+	</span>
+</div>
 
 <div class="error-container tcb-absolute"></div>
 <div class="warning-ct-change">

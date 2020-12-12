@@ -77,6 +77,7 @@ class Thrive_Dash_List_Connection_Mailgun extends Thrive_Dash_List_Connection_Ab
 	 * @return bool|string true for success or error message for failure
 	 */
 	public function testConnection() {
+		/** @var Thrive_Dash_Api_Mailgun $mailgun */
 		$mailgun = $this->getApi();
 
 		if ( isset( $_POST['connection']['domain'] ) ) {
@@ -195,6 +196,24 @@ class Thrive_Dash_List_Connection_Mailgun extends Thrive_Dash_List_Connection_Ab
 
 		} catch ( Exception $e ) {
 			return $e->getMessage();
+		}
+		/* Send confirmation email */
+		if ( ! empty( $data['send_confirmation'] ) ) {
+			try {
+				$messsage = array(
+					'from'      => $from_email,
+					'to'        => array( $data['sender_email'] ),
+					'subject'   => $data['confirmation_subject'],
+					'text'      => '',
+					'html'      => empty ( $data['confirmation_html'] ) ? '' : $data['confirmation_html'],
+					'multipart' => true,
+				);
+
+				$mailgun->sendMessage( "$domain", $messsage );
+
+			} catch ( Exception $e ) {
+				return $e->getMessage();
+			}
 		}
 
 		return true;

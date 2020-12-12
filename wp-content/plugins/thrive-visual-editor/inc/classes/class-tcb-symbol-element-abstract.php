@@ -47,7 +47,7 @@ abstract class TCB_Symbol_Element_Abstract extends TCB_Cloud_Template_Element_Ab
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 
 	/**
@@ -157,7 +157,7 @@ abstract class TCB_Symbol_Element_Abstract extends TCB_Cloud_Template_Element_Ab
 
 		ob_start(); // some plugins echo output through shortcodes causing the ajax request to be misshaped
 		foreach ( $symbols as $symbol ) {
-			$result['local'][ $symbol->ID ] = $this->prepare_symbol( $symbol );
+			$result['local'][ $symbol->ID ] = $this->prepare_symbol( $symbol ) + array( 'is_local' => 1 );
 		}
 		ob_end_clean();
 
@@ -357,6 +357,30 @@ abstract class TCB_Symbol_Element_Abstract extends TCB_Cloud_Template_Element_Ab
 		 * update CSS text to reflect new symbol id ( replace cloud id placeholder with local id in css text)
 		 */
 		$symbol_data['css'] = str_replace( '|TEMPLATE_ID|', $post_id, $symbol_data['css'] );
+
+		/**
+		 * If created from an existing symbol, replace the old ID with the new ID
+		 */
+		if ( ! empty( $symbol_data['from_existing_id'] ) ) {
+			$symbol_data['css'] = str_replace( 'symbol_' . $symbol_data['from_existing_id'], 'symbol_' . $post_id, $symbol_data['css'] );
+			/**
+			 * Copy the thumbnail from the original symbol to the new one.
+			 */
+			$upload_dir = wp_upload_dir();
+			if ( empty( $upload_dir['error'] ) ) {
+				$thumb_data = TCB_Utils::get_thumbnail_data_from_id( $symbol_data['from_existing_id'] );
+				$thumb_path = trailingslashit( $upload_dir['basedir'] ) . 'symbols/' . $symbol_data['from_existing_id'] . '.png';
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( $thumb_data && @is_readable( $thumb_path ) ) {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					$copied = @copy( $thumb_path, dirname( $thumb_path ) . '/' . $post_id . '.png' );
+					if ( $copied ) {
+						$thumb_data['url'] = str_replace( $symbol_data['from_existing_id'], $post_id, $thumb_data['url'] );
+						TCB_Utils::save_thumbnail_data( $post_id, $thumb_data );
+					}
+				}
+			}
+		}
 
 		//if the insert was ok, update the meta attributes for the symbol
 		update_post_meta( $post_id, 'tve_updated_post', $symbol_data['content'] );

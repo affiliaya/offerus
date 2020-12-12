@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="tve-control hide-tablet hide-mobile" data-view="PaginationType"></div>
 
-		<div class="tve-control sep-bottom no-space" data-view="NumberOfItems"></div>
+		<div class="tve-control sep-bottom no-space post-list-actions" data-view="NumberOfItems"></div>
 
 		<div class="post-list-content-controls">
 			<div class="tve-control mt-5 hide-tablet hide-mobile" data-view="ContentSize"></div>

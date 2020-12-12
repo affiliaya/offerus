@@ -13,12 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class TVD_SM_Frontend {
 
-	const LP_HOOK_HEAD = 'tcb_landing_head';
-	const LP_HOOK_BODY_OPEN = 'tcb_landing_body_open';
-	const LP_HOOK_BODY_CLOSE = 'tcb_landing_body_close';
+	const LP_HOOK_HEAD       = 'tcb_landing_head';
+	const LP_HOOK_BODY_OPEN  = 'tcb_landing_body_open_frontend';
+	const LP_HOOK_BODY_CLOSE = 'tcb_landing_body_close_frontend';
 
 	const THEME_LOCATION = 'ttb';
-	const LP_LOCATION = 'lp';
+	const LP_LOCATION    = 'lp';
 
 	private $frontend_scripts = array(
 		TVD_SM_Constants::HEAD_PLACEMENT       => array( self::THEME_LOCATION => '', self::LP_LOCATION => '' ),

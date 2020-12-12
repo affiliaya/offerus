@@ -3,7 +3,6 @@
  * Util functions/plugins for backbone
  */
 
-var TD_NM = TD_NM || {};
 TD_NM.util = TD_NM.util || {};
 
 (function ( $ ) {

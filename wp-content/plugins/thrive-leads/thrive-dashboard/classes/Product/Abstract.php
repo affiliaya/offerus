@@ -41,6 +41,13 @@ abstract class TVE_Dash_Product_Abstract {
 
 	protected $needs_architect = false;
 
+	/**
+	 * Is true if the TAR version is incompatible with the product version
+	 *
+	 * @var bool
+	 */
+	protected $incompatible_architect_version = false;
+
 	public function __construct( $data = array() ) {
 		foreach ( $data as $key => $value ) {
 			$this->{$key} = $value;
@@ -206,5 +213,31 @@ abstract class TVE_Dash_Product_Abstract {
 	 */
 	public function needs_architect() {
 		return $this->needs_architect;
+	}
+
+	/**
+	 * Getter for invalid architect version
+	 *
+	 * @return bool
+	 */
+	public function get_incompatible_architect_version() {
+		return $this->incompatible_architect_version;
+	}
+
+	/**
+	 * Returns the product admin URL
+	 *
+	 * @return string
+	 */
+	public function get_admin_url() {
+		return ! empty( $this->button['url'] ) ? $this->button['url'] : '';
+	}
+
+	/**
+	 * Define reset functionality for our products
+	 * @return bool
+	 */
+	public static function reset_plugin() {
+		return true;
 	}
 }

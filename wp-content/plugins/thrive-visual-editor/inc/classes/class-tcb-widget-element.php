@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TCB_Widget_Element extends TCB_Element_Abstract {
 
 	/**
+	 * @var WP_Widget
+	 */
+	private $widget;
+
+	/**
 	 * TCB_Widget_Element constructor.
 	 *
 	 * @param $widget WP_Widget
@@ -53,10 +58,18 @@ class TCB_Widget_Element extends TCB_Element_Abstract {
 
 		/* some widgets already have 'Widget' at the end of their name */
 		if ( strpos( $name, 'Widget' ) === false ) {
-			$name = $name . ' ' . __( 'Widget', 'thrive-cb' );
+			$name .= ' ' . __( 'Widget', 'thrive-cb' );
 		}
 
 		return $name;
+	}
+
+	/**
+	 * Set alternate for widget so we can better find him with search
+	 * @return mixed|string|string[]|null
+	 */
+	public function alternate() {
+		return $this->widget->id_base;
 	}
 
 	/**
@@ -65,7 +78,15 @@ class TCB_Widget_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function icon() {
-		return 'wordpress';
+		/**
+		 * Filter widget icon in case we want something special
+		 *
+		 * @param string    $icon   by default it's the wordpress icon
+		 * @param WP_Widget $widget the current widget
+		 *
+		 * @return string
+		 */
+		return apply_filters( 'tcb_widget_element_icon', 'wordpress', $this->widget );
 	}
 
 	/**
@@ -78,23 +99,25 @@ class TCB_Widget_Element extends TCB_Element_Abstract {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function has_hover_state() {
-		return true;
-	}
-
-	/**
 	 * Element category that will be displayed in the sidebar
 	 *
 	 * @return string
 	 */
 	public function category() {
-		return self::get_widgets_label();
+		/**
+		 * Filter widget category label in case we want to group widgets differently
+		 *
+		 * @param string    $icon   by default we have 'Widgets'
+		 * @param WP_Widget $widget the current widget
+		 *
+		 * @return string
+		 */
+		return apply_filters( 'tcb_widget_element_category', static::get_widgets_label(), $this->widget );
 	}
 
 	/**
 	 * HTML of the current widget
+	 *
 	 * @return string
 	 */
 	public function html() {
@@ -115,6 +138,10 @@ class TCB_Widget_Element extends TCB_Element_Abstract {
 			),
 			'styles-templates' => array( 'hidden' => true ),
 			'typography'       => array( 'hidden' => true ),
+			'animation'        => array(
+				'disabled_controls' =>
+					array( '.btn-inline.anim-link', '.btn-inline.anim-popup' ),
+			),
 		);
 	}
 }

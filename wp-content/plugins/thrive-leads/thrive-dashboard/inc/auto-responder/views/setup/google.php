@@ -6,12 +6,12 @@
 		<input type="hidden" name="api" value="<?php echo $this->getKey() ?>"/>
 		<div class="tvd-input-field">
 			<input id="tvd-rc-api-client-id" type="text" name="client_id"
-			       value="<?php echo $this->param( 'client_id' ) ?>">
+					value="<?php echo $this->param( 'client_id' ) ?>">
 			<label for="tvd-rc-api-client-id"><?php echo __( 'Client ID', TVE_DASH_TRANSLATE_DOMAIN ) ?></label>
 		</div>
 		<div class="tvd-input-field">
 			<input id="tvd-ac-api-client-secret" type="text" name="client_secret"
-			       value="<?php echo $this->param( 'client_secret' ) ?>">
+					value="<?php echo $this->param( 'client_secret' ) ?>">
 			<label for="tvd-ac-api-client-secret"><?php echo __( 'Client Secret', TVE_DASH_TRANSLATE_DOMAIN ) ?></label>
 		</div>
 		<?php $this->display_video_link(); ?>

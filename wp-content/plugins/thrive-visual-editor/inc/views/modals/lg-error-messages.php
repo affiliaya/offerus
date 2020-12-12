@@ -1,11 +1,11 @@
-<h2 class="tcb-modal-title"><?php echo __( 'Set error message' ) ?></h2>
+<h2 class="tcb-modal-title"><?php echo __( 'Set error messages', 'thrive-cb' ); ?></h2>
 
 <div class="tcb-fields-error control-grid wrap"></div>
 
 <div class="control-grid">
 	<button type="button" class="tve-button text-only click" data-fn="restore_defaults">
 		<?php tcb_icon( 'close' ) ?>
-		<?php echo __( 'Restore errors to default' ) ?>
+		<?php echo __( 'Restore errors to default', 'thrive-cb' ) ?>
 	</button>
 </div>
 

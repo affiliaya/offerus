@@ -21,16 +21,25 @@
 	<?php //Edit view: 2 ?>
 	<div class="tcb-favorites-steps control-grid tcb-favorites-step-2" data-step="2">
 		<div class="tcb-global-color-preview"></div>
+
+		<# if(!enable_edit_color && !enable_unlink) { #>
+		<span class="tcb-global-color-label tcb-truncate t-70"><#= text #></span>
+		<# } else { #>
 		<span class="tcb-global-color-label tcb-truncate t-50"><#= text #></span>
+		<# } #>
+
 		<div class="shared-styles-actions ml-5" data-state="1">
 			<# if(enable_edit_color) { #>
 			<a href="javascript:void(0)" class="click click-icon" data-fn="go_to_state" data-state="31" data-tooltip="<#= edit_tip #>">
 				<?php tcb_icon( 'edit' ); ?>
 			</a>
 			<# } #>
+
+			<# if(enable_unlink) { #>
 			<a href="javascript:void(0)" class="click click-icon" data-fn="unlink_global" data-side="top" data-tooltip="<#= unlink_tip #>">
 				<?php tcb_icon( 'unlink-regular' ); ?>
 			</a>
+			<# } #>
 
 			<a href="javascript:void(0)" class="click click-icon" data-fn="toggle_more_options">
 				<?php tcb_icon( 'ellipsis-v-regular' ); ?>

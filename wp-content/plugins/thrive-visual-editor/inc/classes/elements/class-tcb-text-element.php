@@ -82,7 +82,8 @@ class TCB_Text_Element extends TCB_Element_Abstract {
 						'extends' => 'FontSize',
 					),
 					'LineHeight'     => array(
-						'config'  => array(
+						'css_prefix' => tcb_selection_root() . ' ',
+						'config'     => array(
 							'default' => '1',
 							'min'     => '1',
 							'max'     => '200',
@@ -90,7 +91,7 @@ class TCB_Text_Element extends TCB_Element_Abstract {
 							'um'      => array( 'em', 'px' ),
 							'css'     => 'lineHeight',
 						),
-						'extends' => 'LineHeight',
+						'extends'    => 'LineHeight',
 					),
 					'LetterSpacing'  => array(
 						'config'  => array(
@@ -171,6 +172,24 @@ class TCB_Text_Element extends TCB_Element_Abstract {
 							'important' => true,
 						),
 					),
+					'HeadingToggle'  => array(
+						'config'  => array(
+							'label' => __( 'Include heading in table of contents element (if eligible)', 'thrive-cb' ),
+						),
+						'extends' => 'Switch',
+					),
+					'HeadingRename'  => array(
+						'config'  => array(
+							'label' => __( 'Customize heading label', 'thrive-cb' ),
+						),
+						'extends' => 'Switch',
+					),
+					'HeadingAltText' => array(
+						'config'  => array(
+							'placeholder' => __( 'Enter heading to be displayed', 'thrive-cb' ),
+						),
+						'extends' => 'LabelInput',
+					),
 				),
 			),
 			'layout'     => array(
@@ -221,6 +240,6 @@ class TCB_Text_Element extends TCB_Element_Abstract {
 	 * @return string
 	 */
 	public function category() {
-		return $this->get_thrive_basic_label();
+		return self::get_thrive_basic_label();
 	}
 }

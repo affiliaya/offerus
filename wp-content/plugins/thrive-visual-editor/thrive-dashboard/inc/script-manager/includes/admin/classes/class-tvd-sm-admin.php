@@ -40,7 +40,12 @@ class TVD_SM_Admin {
 		if ( $screen_id === 'admin_page_tve_dash_script_manager' ) {
 			tve_dash_enqueue();
 			tve_dash_enqueue_style( 'tvd-sm-admin-css', TVD_SM_Constants::url( '/assets/css/admin.css' ) );
-			tve_dash_enqueue_script( 'tvd-sm-admin-js', TVD_SM_Constants::url( 'assets/js/dist/admin.min.js' ), array( 'jquery', 'jquery-ui-sortable', 'backbone' ), false, true );
+			tve_dash_enqueue_script( 'tvd-sm-admin-js', TVD_SM_Constants::url( 'assets/js/dist/admin.min.js' ), array(
+				'tve-dash-main-js',
+				'jquery',
+				'jquery-ui-sortable',
+				'backbone',
+			), false, true );
 
 			$params = array(
 				'routes'                => array(

@@ -132,7 +132,7 @@ if ( ! class_exists( 'Thrive_Leads_Two_Step_Action' ) ) {
 				self::$trigger_id = uniqid( 'tl-' );
 			}
 
-			return 'function(t,a,c){var evt=ThriveGlobal.$j.Event("click");evt.tve_trigger=t;evt.tve_action=a;evt.tve_config=c;ThriveGlobal.$j("#tcb-evt-' . self::$trigger_id . '-"+c.l_id+" .tve-leads-two-step-trigger").first().trigger(evt);return false;}';
+			return 'function(t,a,c){var evt=ThriveGlobal.$j.Event("click"), $target=ThriveGlobal.$j("#tcb-evt-' . self::$trigger_id . '-"+c.l_id+" .tve-leads-two-step-trigger");if(t==="exit" && $target.data("shown-on-exit")){ return;}$target.data("shown-on-"+t, true);evt.tve_trigger=t;evt.tve_action=a;evt.tve_config=c;$target.first().trigger(evt);return false;}';
 		}
 
 		/**

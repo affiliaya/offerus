@@ -17,9 +17,10 @@ class TCB_Thrive_Video_Popup extends TCB_Event_Action_Abstract {
 	/**
 	 * Render settings.
 	 *
+	 * @param mixed $data template data.
+	 *
 	 * @deprecated
 	 *
-	 * @param mixed $data template data.
 	 */
 	public function renderSettings( $data ) {
 
@@ -58,7 +59,7 @@ class TCB_Thrive_Video_Popup extends TCB_Event_Action_Abstract {
 	 *
 	 * @param array $data
 	 */
-	protected function _check_wistia_bc( & $data ) {
+	protected function _check_wistia_bc( &$data ) {
 		if ( $data['a'] === 'thrive_wistia' && ! isset( $data['config']['s'] ) ) {
 			/**
 			 * Backwards compatibility support for Wistia popups
@@ -158,6 +159,20 @@ class TCB_Video_Base {
 		return '';
 	}
 
+	/**
+	 * Check if a video provider has autoplay
+	 *
+	 * 1    - for Youtube and Vimeo
+	 * true - for Wistia
+	 *
+	 * @return bool
+	 */
+	public function has_autoplay() {
+		$autoplay = $this->_get( 'a' );
+
+		return ! empty( $autoplay ) && in_array( $autoplay, array( 1, 'true' ) );
+	}
+
 	public function get_id() {
 		return isset( $this->params['id'] ) ? $this->params['id'] : '';
 	}
@@ -183,8 +198,10 @@ class TCB_Video_Base {
 class TCB_Video_Youtube extends TCB_Video_Base {
 
 	public function get_url() {
-		$url = 'https://www.youtube.com/embed/' . $this->get_id();
-		$url = add_query_arg( array(
+		$no_cookie = $this->_get( 'no-cookie', false );
+		$domain    = $no_cookie ? 'youtube-nocookie' : 'youtube';
+		$url       = 'https://www.' . $domain . '.com/embed/' . $this->get_id();
+		$url       = add_query_arg( array(
 			'rel'            => (int) ( ! $this->_get( 'hrv', false ) ),
 			'modestbranding' => (int) $this->_get( 'hyl' ),
 			'controls'       => (int) ( ! $this->_get( 'ahi', false ) ),
@@ -193,6 +210,10 @@ class TCB_Video_Youtube extends TCB_Video_Base {
 			'fs'             => (int) ( ! $this->_get( 'hfs', false ) ),
 			'wmode'          => 'transparent',
 		), $url );
+
+		if ( $this->has_autoplay() ) {
+			$url = add_query_arg( array( 'mute' => 1 ), $url );
+		}
 
 		return $url;
 	}
@@ -210,6 +231,10 @@ class TCB_Video_Vimeo extends TCB_Video_Base {
 			'autoplay' => (int) $this->_get( 'a', 0 ),
 			'loop'     => (int) $this->_get( 'l', 0 ),
 		), $url );
+
+		if ( $this->has_autoplay() ) {
+			$url = add_query_arg( array( 'muted' => 1 ), $url );
+		}
 
 		return $url;
 	}

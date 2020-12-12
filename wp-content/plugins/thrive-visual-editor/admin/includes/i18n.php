@@ -80,5 +80,6 @@ return array(
 	'footers_name'             => __( 'Footer Name', $translate_domain ),
 	'header_name_required'     => __( 'Header name is required', $translate_domain ),
 	'footer_name_required'     => __( 'Footer name is required', $translate_domain ),
-	'empty_list'               => __( 'You have no %s yet. You can start building %s by clicking on the button above.', '$translate_domain' ),
+	'empty_list'               => __( 'You have no %s yet. You can start building %s by clicking on the button above.', $translate_domain ),
+	'text_not_deleted'         => __( 'This item could not be deleted', $translate_domain ),
 );

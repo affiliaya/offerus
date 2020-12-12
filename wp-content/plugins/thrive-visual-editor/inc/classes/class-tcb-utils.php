@@ -88,6 +88,7 @@ class TCB_Utils {
 
 	/**
 	 * Get the image source for the id.
+	 * This is used in TTB, don't delete it
 	 *
 	 * @param        $image_id
 	 * @param string $size
@@ -229,7 +230,10 @@ class TCB_Utils {
 				);
 			}, $formats );
 
-			$options[] = array( 'name' => $custom_option_name, 'value' => '' );
+			$options[] = array(
+				'name'  => $custom_option_name,
+				'value' => '',
+			);
 		}
 
 		return $options;
@@ -283,7 +287,7 @@ class TCB_Utils {
 					'input'  => array(
 						'link'   => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Link to Post Title', 'thrive-cb' ),
+							'label' => __( 'Link to post title', 'thrive-cb' ),
 							'value' => true,
 						),
 						'target' => array(
@@ -294,7 +298,7 @@ class TCB_Utils {
 						),
 						'rel'    => array(
 							'type'  => 'checkbox',
-							'label' => __( 'No Follow', 'thrive-cb' ),
+							'label' => __( 'No follow', 'thrive-cb' ),
 							'value' => false,
 						),
 					),
@@ -308,38 +312,38 @@ class TCB_Utils {
 							'type'  => 'select',
 							'label' => __( 'Display', 'thrive-cb' ),
 							'value' => array(
-								'published' => __( 'Published Date', 'thrive-cb' ),
-								'modified'  => __( 'Modified Date', 'thrive-cb' ),
+								'published' => __( 'Published date', 'thrive-cb' ),
+								'modified'  => __( 'Modified date', 'thrive-cb' ),
 							),
 						),
 						'date-format-select' => array(
 							'type'  => 'select',
-							'label' => __( 'Date Format', 'thrive-cb' ),
+							'label' => __( 'Date format', 'thrive-cb' ),
 							'value' => $date_format_options,
 						),
 						'date-format'        => array(
 							'type'  => 'input',
-							'label' => __( 'Format String', 'thrive-cb' ),
+							'label' => __( 'Format string', 'thrive-cb' ),
 							'value' => $date_formats[0],
 						),
 						'show-time'          => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Show Time?', 'thrive-cb' ),
+							'label' => __( 'Show time?', 'thrive-cb' ),
 							'value' => false,
 						),
 						'time-format-select' => array(
 							'type'  => 'select',
-							'label' => __( 'Time Format', 'thrive-cb' ),
+							'label' => __( 'Time format', 'thrive-cb' ),
 							'value' => $time_format_options,
 						),
 						'time-format'        => array(
 							'type'  => 'input',
-							'label' => __( 'Format String', 'thrive-cb' ),
+							'label' => __( 'Format string', 'thrive-cb' ),
 							'value' => '',
 						),
 						'link'               => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Link to Archive', 'thrive-cb' ),
+							'label' => __( 'Link to archive', 'thrive-cb' ),
 							'value' => false,
 						),
 						'target'             => array(
@@ -350,19 +354,19 @@ class TCB_Utils {
 						),
 						'rel'                => array(
 							'type'  => 'checkbox',
-							'label' => __( 'No Follow', 'thrive-cb' ),
+							'label' => __( 'No follow', 'thrive-cb' ),
 							'value' => false,
 						),
 					),
 				),
 				array(
-					'name'   => __( 'Author Name', 'thrive-cb' ),
-					'option' => __( 'Author Name', 'thrive-cb' ),
+					'name'   => __( 'Author name', 'thrive-cb' ),
+					'option' => __( 'Author name', 'thrive-cb' ),
 					'value'  => 'tcb_post_author_name',
 					'input'  => array(
 						'link'   => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Link to Author Profile', 'thrive-cb' ),
+							'label' => __( 'Link to author profile', 'thrive-cb' ),
 							'value' => false,
 						),
 						'target' => array(
@@ -373,36 +377,36 @@ class TCB_Utils {
 						),
 						'rel'    => array(
 							'type'  => 'checkbox',
-							'label' => __( 'No Follow', 'thrive-cb' ),
+							'label' => __( 'No follow', 'thrive-cb' ),
 							'value' => false,
 						),
 					),
 				),
 				array(
-					'name'   => __( 'Author Role', 'thrive-cb' ),
-					'option' => __( 'Author Role', 'thrive-cb' ),
+					'name'   => __( 'Author role', 'thrive-cb' ),
+					'option' => __( 'Author role', 'thrive-cb' ),
 					'value'  => 'tcb_post_author_role',
 				),
 				array(
-					'name'   => __( 'Author Bio', 'thrive-cb' ),
-					'option' => __( 'Author Bio', 'thrive-cb' ),
+					'name'   => __( 'Author bio', 'thrive-cb' ),
+					'option' => __( 'Author bio', 'thrive-cb' ),
 					'value'  => 'tcb_post_author_bio',
 				),
 				array(
 					'name'   => 24,
-					'option' => __( 'Number of Comments', 'thrive-cb' ),
+					'option' => __( 'Number of comments', 'thrive-cb' ),
 					'value'  => 'tcb_post_comments_number',
 				),
 			),
 			'Taxonomies' => array(
 				array(
 					'name'   => __( 'Category-1, Category-2, Category-3', 'thrive-cb' ),
-					'option' => __( 'List of Categories', 'thrive-cb' ),
+					'option' => __( 'List of categories', 'thrive-cb' ),
 					'value'  => 'tcb_post_categories',
 					'input'  => array(
 						'link'   => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Link to Archive', 'thrive-cb' ),
+							'label' => __( 'Link to archive', 'thrive-cb' ),
 							'value' => true,
 						),
 						'target' => array(
@@ -413,24 +417,24 @@ class TCB_Utils {
 						),
 						'rel'    => array(
 							'type'  => 'checkbox',
-							'label' => __( 'No Follow', 'thrive-cb' ),
+							'label' => __( 'No follow', 'thrive-cb' ),
 							'value' => false,
 						),
 					),
 				),
 				array(
 					'name'   => __( 'Tag-1, Tag-2, Tag-3', 'thrive-cb' ),
-					'option' => __( 'List of Tags', 'thrive-cb' ),
+					'option' => __( 'List of tags', 'thrive-cb' ),
 					'value'  => 'tcb_post_tags',
 					'input'  => array(
 						'default' => array(
 							'type'  => 'input',
-							'label' => __( 'Default Value', 'thrive-cb' ),
+							'label' => __( 'Default value', 'thrive-cb' ),
 							'value' => '',
 						),
 						'link'    => array(
 							'type'  => 'checkbox',
-							'label' => __( 'Link to Archive', 'thrive-cb' ),
+							'label' => __( 'Link to archive', 'thrive-cb' ),
 							'value' => true,
 						),
 						'target'  => array(
@@ -441,7 +445,7 @@ class TCB_Utils {
 						),
 						'rel'     => array(
 							'type'  => 'checkbox',
-							'label' => __( 'No Follow', 'thrive-cb' ),
+							'label' => __( 'No follow', 'thrive-cb' ),
 							'value' => false,
 						),
 					),
@@ -576,6 +580,26 @@ class TCB_Utils {
 		return defined( 'REST_REQUEST' ) && REST_REQUEST;
 	}
 
+	/**
+	 * Returns the content at the given path
+	 * A more simpler and general version of tcb_template()
+	 *
+	 * @param string $full_path
+	 *
+	 * @return string
+	 */
+	public static function return_part( $full_path ) {
+		$content = '';
+
+		if ( file_exists( $full_path ) ) {
+			ob_start();
+			include $full_path;
+			$content = trim( ob_get_contents() );
+			ob_end_clean();
+		}
+
+		return $content;
+	}
 
 	/**
 	 * parse and combine all font links => ensure a single request is sent out for a font
@@ -682,5 +706,21 @@ class TCB_Utils {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Shortcut function that will output json encoded data or return it as it is based on the second parameter.
+	 *
+	 * @param mixed $data
+	 * @param bool  $output if true, it will use WordPress's wp_send_json to output data
+	 *
+	 * @return mixed
+	 */
+	public static function maybe_send_json( $data, $output = true ) {
+		if ( $output ) {
+			wp_send_json( $data );
+		} else {
+			return $data;
+		}
 	}
 }

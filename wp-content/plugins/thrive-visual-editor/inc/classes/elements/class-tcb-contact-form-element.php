@@ -26,6 +26,10 @@ class TCB_Contact_Form_Element extends TCB_Cloud_Template_Element_Abstract {
 		return $this->get_thrive_advanced_label();
 	}
 
+	public function hide() {
+		return true;
+	}
+
 	/**
 	 * Name of the Element in sidebar
 	 *

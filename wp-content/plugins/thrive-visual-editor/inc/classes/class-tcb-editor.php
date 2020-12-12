@@ -5,6 +5,8 @@
  * @package thrive-visual-editor
  */
 
+//include "functions.php";
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Silence is golden!
 }
@@ -252,7 +254,7 @@ class TCB_Editor {
 		wp_enqueue_script( 'tcb-velocity', TVE_DASH_URL . '/js/dist/velocity.min.js' );
 		wp_enqueue_script( 'tcb-leanmodal', TVE_DASH_URL . '/js/dist/leanmodal.min.js' );
 
-		wp_enqueue_script( 'tcb-scrollbar', tve_editor_url() . '/editor/js/libs/jquery.scrollbar.min.js' );
+		wp_enqueue_script( 'tcb-scrollbar', TVE_DASH_URL . '/js/util/jquery.scrollbar.min.js' );
 
 		wp_enqueue_script( 'tcb-moment', tve_editor_url() . '/editor/js/libs/moment.min.js' );
 
@@ -291,6 +293,7 @@ class TCB_Editor {
 		wp_enqueue_editor();
 
 		TCB_Icon_Manager::enqueue_icon_pack();
+		TCB_Icon_Manager::enqueue_fontawesome_styles();
 
 		Tvd_Auth_Check::auth_enqueue_scripts();
 
@@ -338,6 +341,12 @@ class TCB_Editor {
 		wp_deregister_style( 'admin-uncode-icons' );
 		wp_dequeue_style( 'uncode-custom-style' );
 		wp_deregister_style( 'uncode-custom-style' );
+
+		/**
+		 * This saves QueryString params as cookies and in some cases will make admin menu disappear
+		 */
+		wp_dequeue_script( 'inbound-analytics' );
+		wp_deregister_script( 'inbound-analytics' );
 	}
 
 	/**
@@ -408,12 +417,26 @@ class TCB_Editor {
 			$tcb_user_settings = array();
 		}
 
+		$post_constants = get_post_meta( $this->post->ID, '_tve_post_constants', true );
+		if ( ! is_array( $post_constants ) ) {
+			$post_constants = array( 'e' => 1 );
+		}
+
+		/* build api connections localization */
+		$api_connections      = array();
+		$api_connections_data = array();
+		foreach ( Thrive_Dash_List_Manager::getAvailableAPIs( true, array( 'email', 'social', 'storage' ) ) as $key => $connection_instance ) {
+			$api_connections[ $key ]      = $connection_instance->getTitle();
+			$api_connections_data[ $key ] = $connection_instance->getDataForSetup();
+		}
+
 		$data = array(
 			'global_css_prefix'            => tcb_selection_root(),
 			'frame_uri'                    => tcb_get_editor_url( $this->post->ID, false ),
 			'plugin_url'                   => tve_editor_url() . '/',
 			'nonce'                        => wp_create_nonce( TCB_Editor_Ajax::NONCE_KEY ),
 			'rest_nonce'                   => wp_create_nonce( 'wp_rest' ),
+			'dash_nonce'                   => wp_create_nonce( 'tve-dash' ),
 			'ajax_url'                     => $admin_base_url . 'admin-ajax.php',
 			'post'                         => $this->post,
 			'post_format'                  => get_post_format(),
@@ -429,18 +452,38 @@ class TCB_Editor {
 			'pinned_category'              => $this->elements->pinned_category,
 			'social_fb_app_id'             => tve_get_social_fb_app_id(),
 			'disable_google_fonts'         => tve_dash_is_google_fonts_blocked(),
-			'api_connections'              => Thrive_Dash_List_Manager::getAvailableAPIs( true, array(
-				'email',
-				'social',
-			), true ),
+			'api_connections'              => $api_connections,
+			'api_connections_data'         => $api_connections_data,
+			'storage_apis'                 => array_map( static function ( $connection ) {
+				/**
+				 * Search for a square version of the logo. if not found, use the default one
+				 */
+				$base_path = TVE_DASH_PATH . '/inc/auto-responder/views/images/';
+				$base_url  = TVE_DASH_URL . '/inc/auto-responder/views/images/';
+				$png       = $connection->getKey() . '.png';
+
+				$credentials = $connection->getCredentials();
+
+				return array(
+					'name'      => $connection->getTitle(),
+					'client_id' => isset( $credentials['client_id'] ) ? $credentials['client_id'] : '',
+					'logo'      => file_exists( $base_path . 'square/' . $png ) ? ( $base_url . 'square/' . $png ) : ( $base_url . $png ),
+				);
+			}, Thrive_Dash_List_Manager::getAvailableAPIsByType( true, array( 'storage' ) ) ),
 			'connected_apis_custom_fields' => is_callable( 'Thrive_Dash_List_Manager::getAvailableCustomFields' ) ? Thrive_Dash_List_Manager::getAvailableCustomFields() : array(),
 			'apis_custom_fields_mapper'    => is_callable( 'Thrive_Dash_List_Manager::getCustomFieldsMapper' ) ? Thrive_Dash_List_Manager::getCustomFieldsMapper() : array(),
 			'colors'                       => array(
-				'favorites'     => get_option( 'thrv_custom_colours', array() ),
-				'globals'       => array_reverse( get_option( apply_filters( 'tcb_global_colors_option_name', 'thrv_global_colours' ), array() ) ),
-				'global_prefix' => TVE_GLOBAL_COLOR_VAR_CSS_PREFIX,
-				'local_prefix'  => TVE_LOCAL_COLOR_VAR_CSS_PREFIX,
-				'lp_set_prefix' => TVE_LP_COLOR_VAR_CSS_PREFIX,
+				'favorites'      => tve_convert_favorite_colors(),
+				'globals'        => array_reverse( get_option( apply_filters( 'tcb_global_colors_option_name', 'thrv_global_colours' ), array() ) ),
+				'global_prefix'  => TVE_GLOBAL_COLOR_VAR_CSS_PREFIX,
+				'local_prefix'   => TVE_LOCAL_COLOR_VAR_CSS_PREFIX,
+				'lp_set_prefix'  => TVE_LP_COLOR_VAR_CSS_PREFIX,
+				'dynamic_prefix' => TVE_DYNAMIC_COLOR_VAR_CSS_PREFIX,
+				'main'           => array(
+					'h' => TVE_MAIN_COLOR_H,
+					's' => TVE_MAIN_COLOR_S,
+					'l' => TVE_MAIN_COLOR_L,
+				),
 			),
 			'gradients'                    => array(
 				'favorites'     => get_option( 'thrv_custom_gradients', array() ),
@@ -477,6 +520,7 @@ class TCB_Editor {
 			 * Globals for the current post / page
 			 */
 			'tve_globals'                  => $globals,
+			'tve_post_constants'           => $post_constants,
 			'icon_pack_css'                => $this->icon_pack_css(),
 			'editor_selector'              => apply_filters( 'editor_selector', $post->is_lightbox() || $is_landing_page ? 'body' : '' ),
 			'current_user'                 => array(
@@ -494,9 +538,22 @@ class TCB_Editor {
 				'mega_desc_tpl'            => TCB_Menu_Walker::$mega_description_template,
 				'mega_image_tpl'           => TCB_Menu_Walker::$mega_image_template,
 			),
+			'lead_generation'              => array(
+				/**
+				 * Allows turning the default file upload validation on or off (default = true)
+				 *
+				 * @param boolean
+				 *
+				 */
+				'file_upload_validation' => apply_filters( 'tcb_file_upload_validation', true ),
+			),
 			'froalaMode'                   => get_user_meta( $current_user->ID, 'froalaMode', true ),
 			'default_styles'               => tve_get_default_styles( false ),
 			'post_login_actions'           => TCB_Login_Element_Handler::get_post_login_actions(),
+			'post_register_actions'        => TCB_Login_Element_Handler::get_post_register_actions(),
+			'is_woo_active'                => \Tcb\Integrations\WooCommerce\Main::active() ? 1 : 0,
+			'lg_email_shortcodes'          => $this->get_lg_email_shortcodes(),
+			'dismissed_tooltips'           => (array) get_user_meta( wp_get_current_user()->ID, 'tcb_dismissed_tooltips', true ),
 		);
 
 		/** Do not localize anything that's not necessary */
@@ -537,12 +594,94 @@ class TCB_Editor {
 	}
 
 	/**
+	 * Returns an array of shortcodes to be used in LG email message
+	 *
+	 * @return array
+	 */
+	public function get_lg_email_shortcodes() {
+
+		$shortcodes = array(
+			array(
+				'key'        => 'standard',
+				'order'      => 0,
+				'label'      => __( 'Standard fields', 'thrive-cb' ),
+				'shortcodes' => array(
+					'all_form_fields' => array(
+						'label' => __( 'List all the fields and data captured in the form', 'thrive-cb' ),
+						'value' => '[all_form_fields]',
+					),
+					'first_name'      => array(
+						'label' => __( 'The first name of visitor', 'thrive-cb' ),
+						'value' => '[first_name]',
+					),
+					'user_email'      => array(
+						'label' => __( 'The email of visitor', 'thrive-cb' ),
+						'value' => '[user_email]',
+					),
+					'phone'           => array(
+						'label' => __( 'The phone of visitor', 'thrive-cb' ),
+						'value' => '[phone]',
+					),
+					'uploaded_files'  => array(
+						'label' => __( 'Lists all files uploaded by the user (if any).', 'thrive-cb' ),
+						'value' => '[uploaded_files]',
+					),
+				),
+			),
+			array(
+				'key'        => 'other',
+				'order'      => 1,
+				'label'      => __( 'Other', 'thrive-cb' ),
+				'shortcodes' => array(
+					'date'            => array(
+						'label' => __( 'Date of submission', 'thrive-cb' ),
+						'value' => '[date]',
+					),
+					'time'            => array(
+						'label' => __( 'Time of submission', 'thrive-cb' ),
+						'value' => '[time]',
+					),
+					'site_title'      => array(
+						'label' => __( 'The title of your Wordpress site', 'thrive-cb' ),
+						'value' => '[wp_site_title]',
+					),
+					'page_url'        => array(
+						'label' => __( 'Page containing the form', 'thrive-cb' ),
+						'value' => '[page_url]',
+					),
+					'ip_address'      => array(
+						'label' => __( 'TIP address of visitor', 'thrive-cb' ),
+						'value' => '[ip_address]',
+					),
+					'device_settings' => array(
+						'label' => __( '"Chrome 3.3.2" for example', 'thrive-cb' ),
+						'value' => '[device_settings]',
+					),
+					'form_url_slug'   => array(
+						'label' => __( 'The slug of form e.g "/form/123"', 'thrive-cb' ),
+						'value' => '[form_url_slug]',
+					),
+				),
+			),
+		);
+
+		return apply_filters( 'tve_lg_email_shortcodes', $shortcodes );
+	}
+
+	/**
 	 * Returns true if the editor has the POST breadcrumb option
 	 *
 	 * @return bool
 	 */
 	public function has_post_breadcrumb_option() {
-		return apply_filters( 'tcb_add_post_breadcrumb_option', get_the_ID() );
+		$post_type = get_post_type( get_the_ID() );
+
+		return ! in_array( $post_type, apply_filters( 'tcb_post_visibility_options_availability', array(
+			'attachment',
+			'content_template',
+			'tcb_lightbox',
+			TCB_Symbols_Post_Type::SYMBOL_POST_TYPE,
+		) ) );
 	}
 
 	/**
@@ -651,6 +790,35 @@ class TCB_Editor {
 	 */
 	private function allow_central_style_panel() {
 		return apply_filters( 'tcb_allow_central_style_panel', $this->is_landing_page() );
+	}
+
+	/**
+	 * Checks if the editor allows to add elements
+	 *
+	 * @return boolean
+	 */
+	public function can_add_elements() {
+		/**
+		 * Allows other plugins that have the ability to edit content with TAR to disable/enable the "Add Elements" button in the sidebar
+		 *
+		 * @param boolean
+		 */
+		return apply_filters( 'tcb_can_add_elements', true );
+	}
+
+	/**
+	 * Checks if the editor allows the preview button
+	 *
+	 * @return boolean
+	 */
+	public function has_preview_button() {
+
+		/**
+		 * Allows other plugins that have the ability to edit content with TAR to disable/enable the "Preview" button in the bottom sidebar
+		 *
+		 * @return boolean
+		 */
+		return apply_filters( 'tcb_has_preview_button', true );
 	}
 
 	/**

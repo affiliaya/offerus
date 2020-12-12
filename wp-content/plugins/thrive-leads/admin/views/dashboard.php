@@ -5,7 +5,6 @@
 			'groups': <?php echo json_encode( $dashboard_data['groups'] ) ?>,
 			'shortcodes': <?php echo json_encode( $dashboard_data['shortcodes'] ) ?>,
 			globalSettings: <?php echo json_encode( $dashboard_data['global_settings'] ) ?>,
-			has_non_uniques: <?php echo empty( $dashboard_data['has_non_unique_impressions'] ) ? 'false' : 'true' ?>
 		};
 
 		function thrive_leads_init() {
@@ -34,8 +33,6 @@
 		} );
 
 	</script>
-
-	<?php /* the main dashboard template - we keep it here in order to have the data directly from php */ ?>
 
 	<script type="text/template" id="tve-leads-dashboard">
 		<div class="tve-header">
@@ -66,6 +63,7 @@
 			</div>
 		</div>
 		<# } #>
+		<?php tve_leads_check_data_updates(); ?>
 		<h3 class="tvd-title"><?php echo __( "Today's Summary", 'thrive-leads' ) ?></h3>
 		<div class="tvd-row tvd-collapse tvd-summary-row">
 			<div class="tvd-col tvd-s12 tvd-m4">

@@ -342,7 +342,7 @@ function tve_social_get_share_count( $post_id, $post_permalink = null, $networks
 		't_share',
 		'pin_share',
 		'in_share',
-		'xing_share'
+		'xing_share',
 	);
 
 	/* make sure the $networks will be an array */
@@ -464,8 +464,8 @@ function tve_social_fetch_count_t_share( $url ) {
  * @return int
  */
 function tve_social_fetch_count_pin_share( $url ) {
-	$response = wp_remote_get( 'http://api.pinterest.com/v1/urls/count.json?callback=_&url=' . rawurlencode( $url ), array(
-		'sslverify' => false
+	$response = wp_remote_get( 'https://api.pinterest.com/v1/urls/count.json?callback=_&url=' . rawurlencode( $url ), array(
+		'sslverify' => false,
 	) );
 
 	$body = wp_remote_retrieve_body( $response );
@@ -500,7 +500,7 @@ function tve_social_fetch_count_in_share( $url ) {
  */
 function tve_social_fetch_count_xing_share( $url ) {
 	$response = wp_remote_get( 'https://www.xing-share.com/app/share?op=get_share_button;counter=top;url=' . rawurlencode( $url ), array(
-		'sslverify' => false
+		'sslverify' => false,
 	) );
 
 	if ( $response instanceof WP_Error ) {
@@ -519,10 +519,11 @@ function tve_social_fetch_count_xing_share( $url ) {
 /**
  * entry point for the main ajax request - count social shares
  *
- * @see tve_dash_frontend_ajax_load
- *
  * @param array $current   no used
  * @param array $post_data post data received from the main ajax request
+ *
+ * @see tve_dash_frontend_ajax_load
+ *
  */
 function tve_social_dash_ajax_share_counts( $current, $post_data ) {
 	return tve_social_ajax_count( true, $post_data );
@@ -540,7 +541,7 @@ function tve_social_dash_ajax_share_counts( $current, $post_data ) {
 function tve_social_ajax_count( $return = false, $post_data = null ) {
 	$response = array(
 		'counts' => array(),
-		'totals' => array()
+		'totals' => array(),
 	);
 	$data     = null !== $post_data ? $post_data : $_POST;
 
@@ -553,6 +554,11 @@ function tve_social_ajax_count( $return = false, $post_data = null ) {
 	$url_cache   = array();
 	$count_cache = array();
 	foreach ( $data['for'] as $index => $item ) {
+
+		if ( ! is_array( $item ) ) {
+			continue;
+		}
+
 		$default        = tve_social_get_custom_networks();
 		$networks       = array_intersect( $default, array_keys( $item ) );
 		$total          = 0;
@@ -583,15 +589,16 @@ function tve_social_ajax_count( $return = false, $post_data = null ) {
 				$count = call_user_func( 'tve_social_fetch_count_' . $network, $url );
 			}
 
-			$total                                    += $count;
+			$total += $count;
+
 			$response['counts'][ $index ][ $network ] = array(
 				'value'     => $count,
-				'formatted' => tve_social_count_format( $count )
+				'formatted' => tve_social_count_format( $count ),
 			);
 		}
 		$response['totals'][ $index ] = array(
 			'value'     => $total,
-			'formatted' => tve_social_count_format( $total )
+			'formatted' => tve_social_count_format( $total ),
 		);
 	}
 

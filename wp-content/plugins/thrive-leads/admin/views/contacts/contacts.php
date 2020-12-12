@@ -20,6 +20,7 @@
         <div class="tve-leads-breadcrumbs-wrapper">
             <?php require_once(dirname(dirname(__FILE__)) . '/leads_breadcrumbs.php') ?>
         </div>
+	    <?php tve_leads_check_data_updates(); ?>
         <h3 class="tvd-title"><?php echo __('Leads Export', 'thrive-leads'); ?></h3>
         <div class="tvd-v-spacer"></div>
         <div class="tve-contact-wrapper">

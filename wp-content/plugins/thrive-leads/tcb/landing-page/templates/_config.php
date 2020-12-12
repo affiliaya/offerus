@@ -35,7 +35,7 @@ return array(
 		'tags'         => array(),
 		'set'          => 'blank',
 		'style_family' => 'Flat',
-		'head_css'     => '',
+		'head_css'     => '@media (min-width: 300px){.tve_post_lp > div > :not(#tve) { --page-section-max-width:1080px; }}',
 		'globals'      => array( 'body_css' => 'tve-u-15e09c94f7d' ),
 	),
 	'blank'                                     => array(

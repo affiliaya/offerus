@@ -4,7 +4,7 @@
  */
 global $tve_leads_help_videos;
 $tve_leads_help_videos = array(
-	'Forms'                => 'http://fast.wistia.net/embed/iframe/3bvkuef0om?popover=true',
+	'Forms'                => '//fast.wistia.net/embed/iframe/3bvkuef0om?popover=true',
 	// displayed when creating a new form (in the lightbox)
 	'LeadGroups'           => '//fast.wistia.net/embed/iframe/dzmputa1z3?popover=true',
 	// displayed when there are no Lead Groups and when adding a new Lead Group
@@ -51,13 +51,14 @@ function tve_leads_backbone_templates() {
 
 /**
  * Generate an array of dates between $start_date and $end_date depending on the $interval
- * @author: Andrei
  *
- * @param $start_date
- * @param $end_date
+ * @param        $start_date
+ * @param        $end_date
  * @param string $interval - can be 'day', 'week', 'month'
  *
  * @return array $dates
+ * @author: Andrei
+ *
  */
 function tve_leads_generate_dates_interval( $start_date, $end_date, $interval = 'day' ) {
 	switch ( $interval ) {
@@ -139,7 +140,7 @@ function tve_leads_menu_quick_search() {
 	$query           = isset( $request['q'] ) ? $request['q'] : '';
 	$response_format = isset( $_REQUEST['response-format'] ) && in_array( $_REQUEST['response-format'], array(
 		'json',
-		'markup'
+		'markup',
 	) ) ? $_REQUEST['response-format'] : 'json';
 
 	if ( 'markup' == $response_format ) {
@@ -187,4 +188,36 @@ function tve_leads_menu_quick_search() {
  */
 function filter_thrive_display_extended_menu_option( $display_option, $menu_item ) {
 	return $menu_item->object === TVE_LEADS_POST_TWO_STEP_LIGHTBOX ? false : $display_option;
+}
+
+/**
+ * Checks if TL needs upgrading some of its data.
+ *
+ * @return bool
+ */
+function tve_leads_needs_data_updates() {
+	return ! get_option( 'tve_leads_impressions_migrate' );
+}
+
+/**
+ * DB Update page
+ */
+function tve_leads_data_updates() {
+	if ( tve_leads_needs_data_updates() ) {
+		tve_dash_updater_page( new Thrive_Leads_Data_Updater() );
+	} else {
+		include dirname( __DIR__ ) . '/views/no-updates.php';
+	}
+}
+
+/**
+ *
+ * Output a message that TL's database tables need upgrading
+ *
+ * @return bool
+ */
+function tve_leads_check_data_updates() {
+	if ( tve_leads_needs_data_updates() ) {
+		include dirname( __DIR__ ) . '/views/database-update-message.php';
+	}
 }

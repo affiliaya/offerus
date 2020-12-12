@@ -165,6 +165,8 @@ final class TD_Inbox {
 		if ( $this->api_is_connected( $this->_webinarjam_slug ) && self::WEBINARJAM_V4 !== (int) $webinarjam_version ) {
 			$this->add_notification( 'webinarjamstudio_updated' );
 		}
+
+		$this->add_notification( 'zoom_temporary_disabled' );
 	}
 
 	/**
@@ -310,6 +312,13 @@ final class TD_Inbox {
 					'type'  => TD_Inbox_Message::TYPE_INBOX, // to be shown on API list
 				);
 				break;
+			case'zoom_temporary_disabled':
+				$message = array(
+					'title' => __( 'The Zoom integration was temporarily removed, we are sorry for any inconvenience!', TVE_DASH_TRANSLATE_DOMAIN ),
+					'info'  => '',
+					'type'  => TD_Inbox_Message::TYPE_INBOX, // to be shown on API list
+				);
+				break;
 		}
 
 		if ( empty( $message ) ) {
@@ -451,7 +460,9 @@ final class TD_Inbox {
 	 * Admin ajax
 	 */
 	public function admin_create_rest_routes() {
-
+		if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+			wp_die( '' );
+		}
 		TD_NI_Ajax_Controller::instance()->handle();
 	}
 
@@ -497,7 +508,11 @@ final class TD_Inbox {
 
 		$js_prefix = defined( 'TVE_DEBUG' ) && TVE_DEBUG === true ? '.js' : '.min.js';
 
-		tve_dash_enqueue_script( 'td-ni-admin', $this->url( 'assets/dist/admin' . $js_prefix ), array( 'jquery', 'backbone' ), false, true );
+		tve_dash_enqueue_script( 'td-ni-admin', $this->url( 'assets/dist/admin' . $js_prefix ), array(
+			'tve-dash-main-js',
+			'jquery',
+			'backbone',
+		), false, true );
 
 		$limit         = 10;
 		$offset        = 0;

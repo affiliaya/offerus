@@ -144,14 +144,15 @@ class TCB_Content_Templates_Api extends TCB_Landing_Page_Cloud_Templates_Api {
 		$head_css = $do_shortcode ? do_shortcode( $meta['head_css'] ) : $meta['head_css'];
 
 		$data = array(
-			'id'         => $id,
-			'type'       => $meta['type'],
-			'name'       => $post->post_title,
-			'content'    => $content,
-			'head_css'   => $head_css,
-			'custom_css' => $meta['custom_css'],
-			'v'          => (int) ( isset( $meta['v'] ) ? $meta['v'] : 0 ),
-			'config'     => isset( $meta['config'] ) ? $meta['config'] : array(),
+			'id'          => $id,
+			'type'        => $meta['type'],
+			'name'        => $post->post_title,
+			'content'     => $content,
+			'head_css'    => $head_css,
+			'custom_css'  => $meta['custom_css'],
+			'v'           => (int) ( isset( $meta['v'] ) ? $meta['v'] : 0 ),
+			'config'      => isset( $meta['config'] ) ? $meta['config'] : array(),
+			'tve_globals' => isset( $meta['tve_globals'] ) ? $meta['tve_globals'] : array(),
 		);
 
 		return apply_filters( 'tcb_alter_cloud_template_meta', $data, $meta );
@@ -245,11 +246,12 @@ class TCB_Content_Templates_Api extends TCB_Landing_Page_Cloud_Templates_Api {
 
 		update_post_meta( $post_id, 'tcb_ct_id', $id );
 		update_post_meta( $post_id, 'tcb_ct_meta', apply_filters( 'tcb_alter_cloud_template_meta', array(
-			'v'          => isset( $template_data['v'] ) ? $template_data['v'] : '0',
-			'type'       => $template_data['type'],
-			'head_css'   => $template_data['head_css'],
-			'custom_css' => $template_data['custom_css'],
-			'config'     => isset( $template_data['config'] ) ? $template_data['config'] : array(),
+			'v'           => isset( $template_data['v'] ) ? $template_data['v'] : '0',
+			'type'        => $template_data['type'],
+			'head_css'    => $template_data['head_css'],
+			'custom_css'  => $template_data['custom_css'],
+			'config'      => isset( $template_data['config'] ) ? $template_data['config'] : array(),
+			'tve_globals' => isset( $template_data['tve_globals'] ) ? $template_data['tve_globals'] : array(),
 		), $template_data ) );
 	}
 

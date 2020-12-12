@@ -5,7 +5,7 @@
 	<select class="fr-input-line" id="fr-dropdown-categories-list">
 		<option value="" disabled selected><?php echo __( 'Select Source', 'thrive-cb' ); ?></option>
 		<# shortcodeCategories.forEach( category => { #>
-		<option value="<#= category #>"><#= category#></option>
+		<option value="<#= category #>"><#= utils.updatePostTypeLabel(category) #></option>
 		<# }); #>
 	</select>
 

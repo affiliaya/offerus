@@ -34,6 +34,7 @@ require_once TVE_DASH_PATH . '/inc/notification-manager/class-td-nm.php';
 require_once TVE_DASH_PATH . '/inc/db-manager/class-td-db-migration.php';
 require_once TVE_DASH_PATH . '/inc/db-manager/class-td-db-manager.php';
 require_once TVE_DASH_PATH . '/inc/script-manager/class-tvd-sm.php';
+require_once TVE_DASH_PATH . '/inc/login-editor/classes/class-main.php';
 require_once TVE_DASH_PATH . '/inc/auth-check/class-tvd-auth-check.php';
 require_once TVE_DASH_PATH . '/inc/smart-site/classes/class-tvd-smart-shortcodes.php';
 require_once TVE_DASH_PATH . '/inc/smart-site/classes/class-tvd-global-shortcodes.php';
@@ -81,10 +82,25 @@ if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || apply_filters( 'tve_leads_incl
  */
 add_action( 'init', 'tve_dash_init_action' );
 add_action( 'init', 'tve_dash_load_text_domain' );
-add_action( 'wp_head', 'tve_dash_custom_post_no_index' );
+/* priority -1 so we can be compatible with WP Cerber */
+add_action( 'init', array( 'TVD\Login_Editor\Main', 'init' ), - 1 );
+if ( defined( 'WPSEO_FILE' ) ) {
+	/* Yoast SEO plugin installed -> use a hook provided by the plugin for configuring meta "robots" */
+	add_filter( 'wpseo_robots_array', function ( $robots ) {
+		if ( ! tve_dash_should_index_page() ) {
+			$robots = array( 'index' => 'noindex' );
+		}
+
+		return $robots;
+	} );
+} else {
+	/* Default behaviour: add a meta "robots" noindex if needed */
+	add_action( 'wp_head', 'tve_dash_custom_post_no_index' );
+}
 add_action( 'wp_enqueue_scripts', 'tve_dash_frontend_enqueue' );
 
 if ( is_admin() ) {
+	require TVE_DASH_PATH . '/inc/db-updater/init.php';
 	add_action( 'init', 'tve_dash_check_default_cap' );
 	add_action( 'admin_menu', 'tve_dash_admin_menu', 10 );
 	add_action( 'admin_enqueue_scripts', 'tve_dash_admin_enqueue_scripts' );
@@ -97,3 +113,15 @@ if ( is_admin() ) {
 
 	add_action( 'current_screen', 'tve_dash_current_screen' );
 }
+
+/**
+ * Hook when a user submits a wordpress login form & the login has been successful
+ *
+ * Adds a user meta with last login timestamp
+ */
+add_action( 'wp_login', 'tve_dash_on_user_login', 10, 2 );
+
+/**
+ * Hook when a user submits a wordpress login form & the login has been failed
+ */
+add_action( 'wp_login_failed', 'tve_dash_on_user_login_failed', 10, 2 );

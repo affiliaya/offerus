@@ -12,7 +12,6 @@ class TVD_SM_REST_Scripts_Controller {
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_scripts' ),
 				'permission_callback' => array( $this, 'general_permissions_check' ),
-
 			),
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,

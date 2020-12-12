@@ -29,6 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="tve-control pt-10" data-view="ColumnWidth"></div>
 			<div class="tve-control" data-view="FullWidth"></div>
+			<div class="click flex-center p-10 mt-10 tve-columns-reset" data-fn="resetLayout">
+				<span class="mr-10"><?php tcb_icon( 'column' ); ?></span>
+				<span><?php echo __( 'Reset column layout', 'thrive-cb' ); ?></span>
+			</div>
 		</div>
 	</div>
 </div>

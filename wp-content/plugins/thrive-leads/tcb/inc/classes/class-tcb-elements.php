@@ -109,7 +109,7 @@ class TCB_Elements {
 			'tweet',
 			'reveal',
 			'countdown',
-			'countdownevergreen',
+			'countdownevergreen_template',
 			'credit',
 			'html',
 			'menu',
@@ -124,6 +124,7 @@ class TCB_Elements {
 			'postgrid',
 			'progressbar',
 			'social',
+			'social_follow',
 			'rating',
 			'styledlist',
 			'table',
@@ -183,12 +184,19 @@ class TCB_Elements {
 		);
 
 		foreach ( $wp_widget_factory->widgets as $wp_widget ) {
-			if ( ! in_array( $wp_widget->id_base, $blacklisted_widgets ) ) {
+			if ( ! in_array( $wp_widget->id_base, $blacklisted_widgets, true ) ) {
 				$widgets[] = $wp_widget;
 			}
 		}
 
-		return $widgets;
+		/**
+		 * Filter allowed widgets in the editor
+		 *
+		 * @param WP_Widget[] $widgets
+		 *
+		 * @return array
+		 */
+		return apply_filters( 'tcb_editor_widgets', $widgets );
 	}
 
 	/**
@@ -199,41 +207,44 @@ class TCB_Elements {
 
 		$widgets = $this->get_external_widgets();
 
-		foreach ( $widgets as $wp_widget ) {
-			try {
-				$widget = new TCB_Widget_Element( $wp_widget );
-			} catch ( Exception $e ) {
-				echo $e->getMessage();
+		if ( ! empty( $widgets ) ) {
+			foreach ( $widgets as $wp_widget ) {
+				try {
+					$widget = new TCB_Widget_Element( $wp_widget );
+
+					$this->_instances[ $widget->tag() ] = $widget;
+				} catch ( Exception $e ) {
+					//nothing for now.
+				}
 			}
-			$this->_instances[ $widget->tag() ] = $widget;
+
+			/* stop The Events Calendar (https://wordpress.org/plugins/the-events-calendar/) from enqueueing scripts - something from there breaks the editor */
+			add_filter( 'tribe_events_assets_should_enqueue_admin', '__return_false' );
+
+			/* temporarily modify the current screen in order to pass widget checks (which verify if we're on .../wp-admin/widgets.php) */
+			global $current_screen, $pagenow;
+
+			$prev_screen    = $current_screen;
+			$current_screen = WP_Screen::get( 'widgets.php' );
+			$pagenow        = 'widgets.php';
+
+			/* do actions in order to enqueue scrips and styles from widgets inside the editor */
+			do_action( 'admin_enqueue_scripts', 'widgets.php' );
+			do_action( 'admin_print_styles-widgets.php' );
+			do_action( 'admin_print_scripts-widgets.php' );
+			do_action( 'admin_print_footer_scripts-widgets.php' );
+			do_action( 'admin_footer-widgets.php' );
+
+			$current_screen = $prev_screen;
+			$pagenow        = $prev_screen->id;
 		}
-
-		/* stop The Events Calendar (https://wordpress.org/plugins/the-events-calendar/) from enqueueing scripts - something from there breaks the editor */
-		add_filter( 'tribe_events_assets_should_enqueue_admin', '__return_false' );
-
-		/* temporarily modify the current screen in order to pass widget checks (which verify if we're on .../wp-admin/widgets.php) */
-		global $current_screen, $pagenow;
-
-		$prev_screen    = $current_screen;
-		$current_screen = WP_Screen::get( 'widgets.php' );
-		$pagenow        = 'widgets.php';
-
-		/* do actions in order to enqueue scrips and styles from widgets inside the editor */
-		do_action( 'admin_enqueue_scripts', 'widgets.php' );
-		do_action( 'admin_print_styles-widgets.php' );
-		do_action( 'admin_print_scripts-widgets.php' );
-		do_action( 'admin_print_footer_scripts-widgets.php' );
-		do_action( 'admin_footer-widgets.php' );
-
-		$current_screen = $prev_screen;
-		$pagenow        = $prev_screen->id;
 	}
 
 	/**
 	 * Get elements to be displayed on sidebar, grouped in categories
 	 *
-	 * @throws Exception
 	 * @return array
+	 * @throws Exception
 	 */
 	public function get_for_front() {
 		$elements = $this->get();
@@ -303,9 +314,10 @@ class TCB_Elements {
 		 *
 		 * Allows extending existing elements, or adding new functionality
 		 *
+		 * @param array $elements
+		 *
 		 * @since 2.0
 		 *
-		 * @param array $elements
 		 */
 		$elements = apply_filters( 'tcb_elements', $this->_instances );
 		if ( null === $element ) {
@@ -321,9 +333,10 @@ class TCB_Elements {
 		 *
 		 * Allows extending the configuration for a single element
 		 *
+		 * @param array $config element configuration
+		 *
 		 * @since 2.0
 		 *
-		 * @param array $config element configuration
 		 */
 		return apply_filters( 'tcb_element_' . $element, $elements[ $element ] );
 	}
@@ -341,9 +354,10 @@ class TCB_Elements {
 			 *
 			 * Allows insertion of custom Menu components in TCB.
 			 *
+			 * @param string $file default file path
+			 *
 			 * @since 2.0
 			 *
-			 * @param string $file default file path
 			 */
 			$file = apply_filters( 'tcb_menu_path_' . $component, $menu_folder . $component . '.php' );
 
@@ -442,7 +456,14 @@ class TCB_Elements {
 			$elements[ $key ] = $element->config();
 		}
 
-		return $elements;
+		/**
+		 * Allows filtering configuration for all elements
+		 *
+		 * @param array $elements configuration data
+		 *
+		 * @return array
+		 */
+		return apply_filters( 'tcb_elements_localize', $elements );
 	}
 
 	/**

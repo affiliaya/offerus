@@ -1012,7 +1012,11 @@ class TCB_Landing_Page_Transfer {
 		if ( ! empty( $config['cloud_template'] ) ) {
 			$existing = tve_get_downloaded_templates();
 			if ( ! isset( $existing[ $config['tve_landing_page'] ] ) ) {
-				TCB_Landing_Page_Cloud_Templates_Api::getInstance()->download( $config['tve_landing_page'] );
+				try {
+					TCB_Landing_Page_Cloud_Templates_Api::getInstance()->download( $config['tve_landing_page'] );
+				} catch ( Exception $e ) {
+					// this means the LP is not available in the cloud anymore.
+				}
 			}
 		}
 
@@ -1336,6 +1340,9 @@ class TCB_Landing_Page_Transfer {
 			/* if we leave these filters in, the generate_attachment_metadata will run forever */
 			remove_all_filters( 'wp_generate_attachment_metadata' );
 			remove_all_filters( 'intermediate_image_sizes' );
+			/* some themes / plugins fill this directly. empty it so that no extra size is generated */
+			global $_wp_additional_image_sizes;
+			$_wp_additional_image_sizes = array();
 
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 			$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );

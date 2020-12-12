@@ -146,6 +146,6 @@ class Thrive_Dash_List_Connection_HubSpot extends Thrive_Dash_List_Connection_Ab
 	 * @return String
 	 */
 	public static function getEmailMergeTag() {
-		return '*|EMAIL|*';
+		return '{{contact.email}}';
 	}
 }

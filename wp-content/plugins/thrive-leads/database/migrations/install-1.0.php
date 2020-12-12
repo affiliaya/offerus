@@ -103,3 +103,6 @@ $sql              = "CREATE TABLE IF NOT EXISTS `{$variations_table}`(
  );";
 
 $wpdb->query( $sql );
+
+/* for new installs, the performance db upgrade is not needed */
+update_option( 'tve_leads_impressions_migrate', 1 );

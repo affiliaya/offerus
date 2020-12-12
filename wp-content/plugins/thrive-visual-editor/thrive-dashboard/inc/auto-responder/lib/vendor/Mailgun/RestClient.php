@@ -15,10 +15,17 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	protected $url;
 
 	/**
+	 * Required prefix for requests
+	 *
+	 * @var string
+	 */
+	public $prefix = 'https://api.mailgun.net/v3';
+
+	/**
 	 * @param string $apiKey
 	 * @param string $apiEndpoint
 	 * @param string $apiVersion
-	 * @param bool $ssl
+	 * @param bool   $ssl
 	 */
 	public function __construct( $apiKey, $apiEndpoint, $apiVersion, $ssl ) {
 		$this->apiKey = $apiKey;
@@ -27,8 +34,8 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 
 	/**
 	 * @param string $endpointUrl
-	 * @param array $postData
-	 * @param array $files
+	 * @param array  $postData
+	 * @param array  $files
 	 *
 	 * @return \stdClass
 	 *
@@ -39,12 +46,14 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	 */
 	public function post( $endpointUrl, $postData = array(), $files = array() ) {
 
+		$endpointUrl = strpos( $endpointUrl, 'https://api.mailgun.net/' ) !== false ? $endpointUrl : $this->prefix . $endpointUrl;
+
 		$response = tve_dash_api_remote_post( $endpointUrl, array(
 			'body'      => $postData,
 			'headers'   => array(
 				'User-Agent'    => Thrive_Dash_Api_Mailgun_Api::SDK_USER_AGENT . '/' . Thrive_Dash_Api_Mailgun_Api::SDK_VERSION,
 				'Authorization' => 'Basic ' . base64_encode( Thrive_Dash_Api_Mailgun_Api::API_USER . ':' . $this->apiKey ),
-				'content-type'  => 'application/x-www-form-urlencoded'
+				'content-type'  => 'application/x-www-form-urlencoded',
 			),
 			'sslverify' => false,
 		) );
@@ -53,15 +62,14 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	}
 
 	/**
-	 * @param string $endpointUrl
+	 * @param       $endpointUrl
 	 * @param array $queryString
 	 *
-	 * @return \stdClass
-	 *
-	 * @throws GenericHTTPError
-	 * @throws InvalidCredentials
+	 * @return stdClass
+	 * @throws Thrive_Dash_Api_Mailgun_GenericHTTPError
+	 * @throws Thrive_Dash_Api_Mailgun_InvalidCredentials
 	 * @throws Thrive_Dash_Api_Mailgun_MissingEndpoint
-	 * @throws MissingRequiredParameters
+	 * @throws Thrive_Dash_Api_Mailgun_MissingRequiredParameters
 	 */
 	public function get( $endpointUrl, $queryString = array() ) {
 		$response = $this->mgClient->get( $endpointUrl, array( 'query' => $queryString ) );
@@ -70,14 +78,13 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	}
 
 	/**
-	 * @param string $endpointUrl
+	 * @param $endpointUrl
 	 *
-	 * @return \stdClass
-	 *
-	 * @throws GenericHTTPError
-	 * @throws InvalidCredentials
+	 * @return stdClass
+	 * @throws Thrive_Dash_Api_Mailgun_GenericHTTPError
+	 * @throws Thrive_Dash_Api_Mailgun_InvalidCredentials
 	 * @throws Thrive_Dash_Api_Mailgun_MissingEndpoint
-	 * @throws MissingRequiredParameters
+	 * @throws Thrive_Dash_Api_Mailgun_MissingRequiredParameters
 	 */
 	public function delete( $endpointUrl ) {
 		$response = $this->mgClient->delete( $endpointUrl );
@@ -86,18 +93,22 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	}
 
 	/**
-	 * @param ResponseInterface $responseObj
+	 * @param $responseObj
 	 *
-	 * @return \stdClass
-	 *
-	 * @throws GenericHTTPError
-	 * @throws InvalidCredentials
+	 * @return stdClass
+	 * @throws Thrive_Dash_Api_Mailgun_GenericHTTPError
+	 * @throws Thrive_Dash_Api_Mailgun_InvalidCredentials
 	 * @throws Thrive_Dash_Api_Mailgun_MissingEndpoint
-	 * @throws MissingRequiredParameters
+	 * @throws Thrive_Dash_Api_Mailgun_MissingRequiredParameters
 	 */
 	public function responseHandler( $responseObj ) {
+
+		if ( $responseObj instanceof WP_Error ) {
+			throw new Thrive_Dash_Api_Mailgun_InvalidCredentials( Thrive_Dash_Api_Mailgun_ExceptionMessages::EXCEPTION_MISSING_REQUIRED_PARAMETERS );
+		}
+
 		$httpResponseCode = $responseObj['response']['code'];
-		$data             = isset( $responseObj['response']['message'])? (string)$responseObj['response']['message']:'';
+		$data             = isset( $responseObj['response']['message'] ) ? (string) $responseObj['response']['message'] : '';
 		if ( $httpResponseCode === 200 ) {
 			$jsonResponseData = json_decode( $data, false );
 			$result           = new \stdClass();
@@ -120,7 +131,7 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	/**
 	 * @param string $apiEndpoint
 	 * @param string $apiVersion
-	 * @param bool $ssl
+	 * @param bool   $ssl
 	 *
 	 * @return string
 	 */
@@ -136,8 +147,8 @@ class Thrive_Dash_Api_Mailgun_RestClient {
 	 * Add a file to the postBody.
 	 *
 	 * @param PostBodyInterface $postBody
-	 * @param string $fieldName
-	 * @param string|array $filePath
+	 * @param string            $fieldName
+	 * @param string|array      $filePath
 	 */
 	private function addFile( PostBodyInterface $postBody, $fieldName, $filePath ) {
 		$filename = null;

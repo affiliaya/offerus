@@ -47,6 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="dropdown-content pt-0">
 					<div class="tve-control" data-key="typefocus" data-initializer="typefocus_control"></div>
+					<div class="tve-control hide-in-theme" data-key="HeadingToggle"></div>
+					<div class="tve-control hide-in-theme" data-key="HeadingRename"></div>
+					<div class="tve-control full-width hide-in-theme" data-key="HeadingAltText"></div>
 				</div>
 			</div>
 		</div>

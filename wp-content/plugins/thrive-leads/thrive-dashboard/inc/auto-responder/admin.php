@@ -139,16 +139,30 @@ function tve_dash_api_connect() {
  * check to see if we currently need to save some credentials, early in the admin section (e.g. a redirect from Oauth)
  */
 function tve_dash_api_handle_save() {
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die('');
+	}
 	require_once dirname( __FILE__ ) . '/misc.php';
+	$is_google_drive_response = ! empty( $_REQUEST['state'] ) && strpos( $_REQUEST['state'], 'connection_google_drive' ) === 0;
+
 	/**
 	 * either a POST from a regular form, or an oauth redirect
 	 */
-	if ( empty( $_REQUEST['api'] ) && empty( $_REQUEST['oauth_token'] ) && empty( $_REQUEST['disconnect'] ) ) {
+	if ( ! $is_google_drive_response && empty( $_REQUEST['api'] ) && empty( $_REQUEST['oauth_token'] ) && empty( $_REQUEST['disconnect'] ) ) {
 		return;
 	}
 
+	switch ( true ) {
+		case $is_google_drive_response:
+			$api = 'google_drive';
+			break;
+		default:
+			$api = $_REQUEST['api'];
+			break;
+	}
+
 	$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
-	$connection = Thrive_Dash_List_Manager::connectionInstance( $_REQUEST['api'] );
+	$connection = Thrive_Dash_List_Manager::connectionInstance( $api );
 
 	if ( is_null( $connection ) ) {
 		return;
@@ -162,10 +176,10 @@ function tve_dash_api_handle_save() {
 		$connection->disconnect()->success( $connection->getTitle() . ' ' . __( 'is now disconnected', TVE_DASH_TRANSLATE_DOMAIN ) );
 		//delete active conection for thrive ovation
 		$active_connection = get_option( 'tvo_api_delivery_service', false );
-		if ( $active_connection && $active_connection == $_REQUEST['api'] ) {
+		if ( $active_connection && $active_connection == $api ) {
 			delete_option( 'tvo_api_delivery_service' );
 		}
-		tve_dash_remove_api_from_one_click_signups( $_REQUEST['api'] );
+		tve_dash_remove_api_from_one_click_signups( $api );
 		$response['success'] = true;
 		$response['message'] = __( 'Service disconnected', TVE_DASH_TRANSLATE_DOMAIN );
 	} elseif ( ! empty( $_REQUEST['test'] ) ) {
@@ -188,11 +202,11 @@ function tve_dash_api_handle_save() {
 
 	if ( $response['success'] !== true ) {
 		update_option( 'tve_dash_api_error', $response['message'] );
-		wp_redirect( admin_url( 'admin.php?page=tve_dash_api_connect' ) . '#failed/' . $_REQUEST['api'] );
+		wp_redirect( admin_url( 'admin.php?page=tve_dash_api_connect' ) . '#failed/' . $api );
 		exit;
 	}
 
-	wp_redirect( admin_url( 'admin.php?page=tve_dash_api_connect' ) . '#done/' . $_REQUEST['api'] );
+	wp_redirect( admin_url( 'admin.php?page=tve_dash_api_connect' ) . '#done/' . $api );
 	exit();
 }
 
@@ -200,6 +214,9 @@ function tve_dash_api_handle_save() {
  *  Handles the creation of the authorization URL and redirection to that url for token generation purposes
  */
 function tve_dash_api_api_handle_redirect() {
+	if ( ! current_user_can( TVE_DASH_CAPABILITY ) ) {
+		wp_die('');
+	}
 
 	if ( empty( $_REQUEST['api'] ) && empty( $_REQUEST['oauth_token'] ) && empty( $_REQUEST['disconnect'] ) ) {
 		return;
@@ -219,7 +236,7 @@ function tve_dash_api_api_handle_redirect() {
 		'message' => __( 'Unknown error occurred', TVE_DASH_TRANSLATE_DOMAIN ),
 	);
 
-	$connection->setCredentials( $_POST['connection'] );;
+	$connection->setCredentials( $_POST['connection'] );
 	$result = $connection->getAuthorizeUrl();
 
 	$response['success'] = ( filter_var( $result, FILTER_VALIDATE_URL ) ) === false ? false : true;
@@ -251,7 +268,11 @@ function tve_dash_api_admin_scripts( $hook ) {
 	}
 
 	if ( $hook === 'admin_page_tve_dash_api_error_log' ) {
-		tve_dash_enqueue_script( 'tve-dash-api-admin-logs', TVE_DASH_URL . '/inc/auto-responder/views/js/admin-logs-list.js', array( 'jquery', 'backbone' ) );
+		tve_dash_enqueue_script( 'tve-dash-api-admin-logs', TVE_DASH_URL . '/inc/auto-responder/dist/admin-logs-list.min.js', array(
+			'tve-dash-main-js',
+			'jquery',
+			'backbone',
+		) );
 
 		return;
 	}
@@ -259,7 +280,8 @@ function tve_dash_api_admin_scripts( $hook ) {
 	/**
 	 * global admin JS file for notifications
 	 */
-	tve_dash_enqueue_script( 'tve-dash-api-admin-global', TVE_DASH_URL . '/inc/auto-responder/views/js/admin-global.min.js', array(
+	tve_dash_enqueue_script( 'tve-dash-api-admin-global', TVE_DASH_URL . '/inc/auto-responder/dist/admin-global.min.js', array(
+		'tve-dash-main-js',
 		'jquery',
 		'backbone',
 	) );

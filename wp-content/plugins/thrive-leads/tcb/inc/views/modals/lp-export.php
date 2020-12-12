@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="error-container" style="display: none;"></div>
 
 <div class="tvd-input-field mb-5 mt-25">
-	<input type="text" id="tve-template-name" required>
-	<label for="tve-template-name"><?php echo __( 'Template Name', 'thrive-cb' ); ?></label>
+	<input type="text" id="tve-export-template-name" required>
+	<label for="tve-export-template-name"><?php echo __( 'Template Name', 'thrive-cb' ); ?></label>
 </div>
 
 <div class="tve-template-image">

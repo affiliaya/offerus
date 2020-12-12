@@ -11,16 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'TVE_LEADS_TEST_DATA', false );
 
-define( 'TVE_LEADS_VERSION', '2.2.13.2' );
+define( 'TVE_LEADS_VERSION', '2.3.5.2' );
 
-define( 'TVE_LEADS_DB_VERSION', '1.22' );
+define( 'TVE_LEADS_DB_VERSION', '1.23' );
 
 define( 'TVE_LEADS_DB_PREFIX', 'tve_leads_' );
 
 /* we keep these as integers */
-define( 'TVE_LEADS_UNIQUE_IMPRESSION', 1 );
+define( 'TVE_LEADS_UNIQUE_IMPRESSION', 1 ); // not used anymore. kept only for backwards compatibility
 define( 'TVE_LEADS_CONVERSION', 2 );
-define( 'TVE_LEADS_IMPRESSION', 3 );
+define( 'TVE_LEADS_IMPRESSION', 3 ); // not used anymore. kept only for backwards compatibility
 define( 'TVE_LEADS_ONE_CLICK_CONVERSION', 4 );
 
 /* POST statuses */

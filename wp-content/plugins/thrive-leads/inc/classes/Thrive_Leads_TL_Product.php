@@ -25,6 +25,8 @@ class TL_Product extends TVE_Dash_Product_Abstract {
 
 		$this->description = __( 'Create and manage opt-in forms, keep track of your email list building and more.', 'thrive-leads' );
 
+		$this->incompatible_architect_version = ! tve_leads_check_tcb_version();
+
 		$this->button = array(
 			'active' => true,
 			'url'    => admin_url( 'admin.php?page=thrive_leads_dashboard' ),
@@ -67,4 +69,52 @@ class TL_Product extends TVE_Dash_Product_Abstract {
 		);
 	}
 
+
+	/**
+	 * Reset all TL data
+	 *
+	 * @return bool|void
+	 */
+	public static function reset_plugin() {
+		global $wpdb;
+
+		$query    = new WP_Query( array(
+				'post_type'      => array(
+					TVE_LEADS_POST_GROUP_TYPE,
+					TVE_LEADS_POST_SHORTCODE_TYPE,
+					TVE_LEADS_POST_TWO_STEP_LIGHTBOX,
+					TVE_LEADS_POST_ONE_CLICK_SIGNUP,
+					TVE_LEADS_POST_FORM_TYPE,
+				),
+				'posts_per_page' => '-1',
+				'fields'         => 'ids',
+			)
+		);
+		$post_ids = $query->posts;
+		foreach ( $post_ids as $id ) {
+			wp_delete_post( $id, true );
+		}
+
+		$tables = array(
+			'event_log',
+			'split_test',
+			'split_test_items',
+			'form_variations',
+			'contacts',
+			'contact_download',
+			'form_summary',
+			'saved_group_options',
+			'group_options',
+		);
+		foreach ( $tables as $table ) {
+			$table_name = tve_leads_table_name( $table );
+			$sql        = "TRUNCATE TABLE $table_name";
+			$wpdb->query( $sql );
+		}
+
+		$wpdb->query(
+			"DELETE FROM $wpdb->options WHERE 
+						`option_name` LIKE '%tve_lead%';"
+		);
+	}
 }

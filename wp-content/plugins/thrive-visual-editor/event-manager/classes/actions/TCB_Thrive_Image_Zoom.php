@@ -54,14 +54,18 @@ class TCB_Thrive_Image_Zoom extends TCB_Event_Action_Abstract {
 		 * IF an ID exists in the config array, it means that the attachment with the corresponding id must be opened
 		 * Append it to the body
 		 */
-		if ( ! empty( $data ) && ! empty( $data['config'] ) && ! empty( $data['config']['id'] ) ) {
+		$config = ! empty( $data['config'] ) ? $data['config'] : array();
+		if ( empty( $config ) && array_key_exists( 'c', $data ) ) {
+			$config = $data['c'];
+		}
+		if ( $config ) {
 
-			if ( empty( $data['config']['url'] ) ) {
-				$image = wp_get_attachment_image( $data['config']['id'], empty( $data['config']['size'] ) ? 'full' : $data['config']['size'] );
+			if ( empty( $config['url'] ) ) {
+				$image = wp_get_attachment_image( $config['id'], empty( $config['size'] ) ? 'full' : $config['size'] );
 
-				return sprintf( '<div class="tcb-image-zoom" style="display: none" id="tcb-image-zoom-%s">%s</div>', $data['config']['id'], $image );
-			} elseif ( ! empty( $data['config']['url'] ) && filter_var( $data['config']['url'], FILTER_VALIDATE_URL ) !== false ) { //This is a custom image URL. Not saved in WordPress
-				return sprintf( '<div class="tcb-image-zoom" style="display: none" id="tcb-image-zoom-%s">%s</div>', $data['config']['id'], '<img src="' . $data['config']['url'] . '" />' );
+				return sprintf( '<div class="tcb-image-zoom" style="display: none" id="tcb-image-zoom-%s">%s</div>', $config['id'], $image );
+			} elseif ( ! empty( $config['url'] ) && filter_var( $config['url'], FILTER_VALIDATE_URL ) !== false ) { //This is a custom image URL. Not saved in WordPress
+				return sprintf( '<div class="tcb-image-zoom" style="display: none" id="tcb-image-zoom-%s">%s</div>', $config['id'], '<img src="' . $config['url'] . '" />' );
 			}
 		}
 	}

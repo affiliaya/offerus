@@ -259,11 +259,12 @@ class Thrive_Dash_List_Connection_MailerLite extends Thrive_Dash_List_Connection
 				continue;
 			}
 
-			$chunks    = explode( ' ', $field[0]['name'] );
-			$chunks    = array_map( 'strtolower', $chunks );
-			$field_key = implode( '_', $chunks );
-
-			$result[ $field_key ] = $args[ $id['type'] . '_' . $key ];
+			$chunks               = explode( ' ', $field[0]['name'] );
+			$chunks               = array_map( 'strtolower', $chunks );
+			$field_key            = implode( '_', $chunks );
+			$name         = strpos( $id['type'], 'mapping_' ) !== false ? $id['type'] . '_' . $key : $key;
+			$cf_form_name         = str_replace( '[]', '', $name );
+			$result[ $field_key ] = $this->processField( $args[ $cf_form_name ] );
 		}
 
 		return $result;
@@ -286,12 +287,7 @@ class Thrive_Dash_List_Connection_MailerLite extends Thrive_Dash_List_Connection
 
 		$form_data = unserialize( base64_decode( $args['tve_mapping'] ) );
 
-		$mapped_fields = array_map(
-			function ( $field ) {
-				return $field['id'];
-			},
-			$this->_mapped_custom_fields
-		);
+		$mapped_fields = $this->getMappedFieldsIDs();
 
 		foreach ( $mapped_fields as $mapped_field_name ) {
 

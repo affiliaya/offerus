@@ -9,6 +9,8 @@ global $tvedb;
  * encapsulates the global $wpdb object
  *
  * Class Thrive_Leads_DB
+ *
+ * @method int|false query( string $sql )
  */
 class Thrive_Leads_DB {
 	/**
@@ -28,13 +30,13 @@ class Thrive_Leads_DB {
 	/**
 	 * forward the call to the $wpdb object
 	 *
-	 * @param $methodName
+	 * @param $method_name
 	 * @param $args
 	 *
 	 * @return mixed
 	 */
-	public function __call( $methodName, $args ) {
-		return call_user_func_array( array( $this->wpdb, $methodName ), $args );
+	public function __call( $method_name, $args ) {
+		return call_user_func_array( array( $this->wpdb, $method_name ), $args );
 	}
 
 	/**
@@ -98,8 +100,17 @@ class Thrive_Leads_DB {
 			$data['date'] = date( 'Y-m-d H:i:s' );
 		}
 
-		$this->wpdb->insert( tve_leads_table_name( 'event_log' ), $data );
-		$log_id = $this->wpdb->insert_id;
+		$log_id = null;
+
+		if ( $data['event_type'] === TVE_LEADS_UNIQUE_IMPRESSION ) {
+			/**
+			 * Update May 2020 - the log table does not store impression data anymore (not even unique impressions).
+			 * Instead, impressions are stored in a separate db table (form_summary) as a total count / day / variation_key
+			 */
+		} else {
+			$this->wpdb->insert( tve_leads_table_name( 'event_log' ), $data );
+			$log_id = $this->wpdb->insert_id;
+		}
 
 		if ( $active_test ) {
 			$this->update_test_item_data( $data, $active_test, '+' );
@@ -109,6 +120,9 @@ class Thrive_Leads_DB {
 		if ( $cache_variation_data ) {
 			$this->wpdb->query( $this->prepare( "UPDATE {form_variations} SET `cache_{$field}` = `cache_{$field}` + 1 WHERE `key` = %d", array( $data['variation_key'] ) ) );
 		}
+
+		/* update form_summary table */
+		$this->register_event_summary( $data );
 
 		/**
 		 * increase the impressions / conversions for the Lead Group / Form Type / Shortcode
@@ -155,9 +169,6 @@ class Thrive_Leads_DB {
 	public function update_test_item_data( $data, $test_model, $use_case = '-' ) {
 		$params = array();
 		switch ( $data['event_type'] ) {
-			case TVE_LEADS_IMPRESSION:
-				$field = '`impressions`';
-				break;
 			case TVE_LEADS_UNIQUE_IMPRESSION:
 				$field = '`unique_impressions`';
 				break;
@@ -181,19 +192,19 @@ class Thrive_Leads_DB {
 		$sql = "UPDATE {split_test_items} SET {$operation} WHERE test_id = %d";
 
 		$id        = is_object( $test_model ) ? $test_model->id : ( is_array( $test_model ) ? $test_model['id'] : $test_model );
-		$params [] = intval( $id );
+		$params [] = (int) $id;
 
 		/* actually, this should always be filled in */
 		if ( ! empty( $data['variation_key'] ) ) {
-			$sql       .= " AND variation_key = %d";
+			$sql       .= ' AND variation_key = %d';
 			$params [] = $data['variation_key'];
 		}
 		if ( ! empty( $data['main_group_id'] ) ) {
-			$sql       .= " AND main_group_id = %d";
+			$sql       .= ' AND main_group_id = %d';
 			$params [] = $data['main_group_id'];
 		}
 		if ( ! empty( $data['form_type_id'] ) ) {
-			$sql       .= " AND form_type_id = %d";
+			$sql       .= ' AND form_type_id = %d';
 			$params [] = $data['form_type_id'];
 		}
 
@@ -206,70 +217,7 @@ class Thrive_Leads_DB {
 	 * @param int $id
 	 */
 	public function delete_event( $id ) {
-		$id = intval( $id );
-
-		$this->wpdb->delete( tve_leads_table_name( 'event_log' ), array( 'id' => $id ) );
-	}
-
-	/**
-	 * counts event logs based on a filter
-	 *
-	 * @param array $filter
-	 *
-	 * @return mixed
-	 */
-	public function count_events( $filter ) {
-		$sql = "SELECT COUNT( DISTINCT log.id ) FROM {event_log} AS `log` WHERE 1 ";
-
-		$params = array();
-
-		//when the filter is_unique is set to 1, we don't filter by event type
-		if ( ! empty( $filter['event_type'] ) && empty( $filter['is_unique'] ) ) {
-			$sql       .= "AND `event_type` = %d ";
-			$params [] = $filter['event_type'];
-		}
-
-		if ( ! empty( $filter['main_group_id'] ) ) {
-			$sql       .= "AND `main_group_id` = %d ";
-			$params [] = $filter['main_group_id'];
-		}
-
-		if ( ! empty( $filter['form_type_id'] ) ) {
-			$sql       .= "AND `form_type_id` = %d ";
-			$params [] = $filter['form_type_id'];
-		}
-
-		if ( ! empty( $filter['variation_key'] ) ) {
-			$sql       .= "AND `variation_key` = %d ";
-			$params [] = $filter['variation_key'];
-		}
-
-		if ( isset( $filter['archived_log'] ) ) {
-			$sql       .= "AND `archived` = %d ";
-			$params [] = $filter['archived_log'];
-		}
-
-		if ( ! empty( $filter['is_unique'] ) ) {
-			$sql       .= "AND `is_unique` = %d ";
-			$params [] = $filter['is_unique'];
-		}
-
-		if ( ! empty( $filter['date'] ) ) {
-			switch ( $filter['date'] ) {
-				case 'today':
-					$begin_of_day = current_time( 'Y-m-d 00:00:00' );
-					$end_of_day   = current_time( 'Y-m-d 23:59:59' );
-					$sql          .= " AND `date` BETWEEN '{$begin_of_day}' AND '{$end_of_day}'";
-					break;
-			}
-		}
-
-		if ( isset( $filter['archived'] ) ) {
-			$sql       .= " AND `archived` = %d";
-			$params [] = $filter['archived'];
-		}
-
-		return $this->wpdb->get_var( $this->prepare( $sql, $params ) );
+		$this->wpdb->delete( tve_leads_table_name( 'event_log' ), array( 'id' => (int) $id ) );
 	}
 
 	/**
@@ -283,12 +231,17 @@ class Thrive_Leads_DB {
 	 * @return false|int
 	 */
 	public function tve_leads_register_contact( $log_id, $name = '', $email = '', $custom_fields = array() ) {
+		unset( $custom_fields['_api_custom_fields'], $custom_fields['tve_mapping'], $custom_fields['tve_labels'] );
+		$custom = array();
+		foreach ( $custom_fields as $key => $value ) {
+			$custom[ sanitize_text_field( $key ) ] = sanitize_text_field( $value );
+		}
 		$data = array(
-			'log_id'        => $log_id,
-			'name'          => $name,
-			'email'         => $email,
+			'log_id'        => sanitize_text_field( $log_id ),
+			'name'          => sanitize_text_field( $name ),
+			'email'         => sanitize_text_field( $email ),
 			'date'          => date( 'Y-m-d H:i:s' ),
-			'custom_fields' => json_encode( $custom_fields ),
+			'custom_fields' => json_encode( $custom ),
 		);
 
 		return $this->wpdb->insert( tve_leads_table_name( 'contacts' ), $data );
@@ -554,29 +507,29 @@ class Thrive_Leads_DB {
 	 * @return mixed
 	 */
 	public function tve_leads_get_test( $filter ) {
-		$sql = "SELECT * FROM " . tve_leads_table_name( 'split_test' ) . " WHERE 1 ";
+		$sql = 'SELECT * FROM {split_test} WHERE 1 ';
 
 		if ( ! empty( $filter['ID'] ) ) {
-			$sql       .= "AND `id` = %d ";
+			$sql       .= 'AND `id` = %d ';
 			$params [] = $filter['ID'];
 		}
 
 		if ( ! empty( $filter['test_type'] ) ) {
-			$sql       .= "AND `test_type` = %d ";
+			$sql       .= 'AND `test_type` = %d ';
 			$params [] = $filter['test_type'];
 		}
 
 		if ( ! empty( $filter['main_group_id'] ) && $filter['main_group_id'] > 0 ) {
-			$sql       .= "AND `main_group_id` = %d ";
+			$sql       .= 'AND `main_group_id` = %d ';
 			$params [] = $filter['main_group_id'];
 		}
 
 		if ( ! empty( $filter['status'] ) ) {
-			$sql       .= "AND `status` = %s ";
+			$sql       .= 'AND `status` = %s ';
 			$params [] = $filter['status'];
 		}
 
-		$sql .= " LIMIT 1";
+		$sql .= ' LIMIT 1';
 
 		return $this->wpdb->get_row( $this->prepare( $sql, $params ) );
 	}
@@ -738,7 +691,7 @@ class Thrive_Leads_DB {
 		}
 
 		if ( $return_count ) {
-			$sql = "SELECT COUNT(*) AS count FROM (" . $sql . " ) as rows ";
+			$sql = "SELECT COUNT(*) AS count FROM (" . $sql . " ) as `rows`";
 		}
 
 		if ( $return_count == true ) {
@@ -762,8 +715,6 @@ class Thrive_Leads_DB {
 		$sql
 			= "SELECT IF(screen_type IS NULL, 0, screen_type) AS screen_type, IF(screen_id IS NULL, 0,screen_id ) AS screen_id,
                     SUM(IF(event_type=" . TVE_LEADS_CONVERSION . ",1,0)) AS conversions,
-                    SUM(IF(event_type=" . TVE_LEADS_UNIQUE_IMPRESSION . ",1,0)) AS impressions,
-                    SUM(IF(event_type=" . TVE_LEADS_CONVERSION . ",1,0))/SUM(IF(event_type=" . TVE_LEADS_UNIQUE_IMPRESSION . ",1,0)) AS conversion_rate,
                     SUM( IF( t_log.id IS NOT NULL , 1, 0) ) AS leads
                 FROM " . tve_leads_table_name( 'event_log' ) . " logs
                 LEFT JOIN (SELECT user, MIN(id) AS id FROM " . tve_leads_table_name( 'event_log' ) . " GROUP BY user) AS t_log ON logs.user=t_log.user AND logs.id=t_log.id
@@ -1063,44 +1014,6 @@ class Thrive_Leads_DB {
 	}
 
 	/**
-	 * archive event logs based on a filter
-	 *
-	 * @param array $filter
-	 *
-	 * @return int|false number of affected entries or false for error or invalid parameters
-	 */
-	public function archive_logs( $filter = array() ) {
-		/* prevent accidental updates */
-		if ( empty( $filter ) ) {
-			return false;
-		}
-
-		$sql    = "UPDATE {event_log} SET `archived` = 1 WHERE 1 AND ";
-		$params = array();
-
-		if ( ! empty( $filter['variation_key'] ) ) {
-			$sql       .= " `variation_key` = %d";
-			$params [] = $filter['variation_key'];
-		}
-
-		if ( ! empty( $filter['form_type_id'] ) ) {
-			$sql       .= " `form_type_id` = %d";
-			$params [] = $filter['form_type_id'];
-		}
-
-		if ( ! empty( $filter['main_group_id'] ) ) {
-			$sql       .= " `main_group_id` = %d";
-			$params [] = $filter['main_group_id'];
-		}
-
-		if ( empty( $params ) ) {
-			return false;
-		}
-
-		return $this->wpdb->query( $this->prepare( $sql, $params ) );
-	}
-
-	/**
 	 * Delete display settings based on $args
 	 *
 	 * @param $args
@@ -1124,13 +1037,21 @@ class Thrive_Leads_DB {
 
 	/**
 	 * Delete logs based on $args
+	 * Deletes entries from event_log table and form_summary table. use with care :)
 	 *
 	 * @param $args
 	 *
-	 * @return false|int number of rows affected
+	 * @return boolean false for failure true for success
 	 */
 	public function delete_logs( $args ) {
-		return $this->wpdb->delete( tve_leads_table_name( 'event_log' ), $args );
+		if ( empty( $args ) ) {
+			return false;
+		}
+
+		$log_delete     = $this->wpdb->delete( tve_leads_table_name( 'event_log' ), $args );
+		$summary_delete = $this->wpdb->delete( tve_leads_table_name( 'form_summary' ), $args );
+
+		return $log_delete !== false && $summary_delete !== false;
 	}
 
 	/**
@@ -1268,15 +1189,6 @@ class Thrive_Leads_DB {
 		}
 
 		return $this->wpdb->query( $this->prepare( $sql, $params ) );
-	}
-
-	/**
-	 * count event logs that are recorded as "non-unique impressions"
-	 */
-	public function count_non_unique_impressions() {
-		return $this->count_events( array(
-			'event_type' => TVE_LEADS_IMPRESSION,
-		) );
 	}
 
 	/**
@@ -1624,6 +1536,188 @@ class Thrive_Leads_DB {
 		$this->wpdb->delete( tve_leads_table_name( 'contacts' ), array( 'id' => $contact['id'] ) );
 
 		return true;
+	}
+
+	/**
+	 * Get the last wpdb error message
+	 *
+	 * @return string
+	 */
+	public function last_error() {
+		return $this->wpdb->last_error;
+	}
+
+	/**
+	 * Check if a summary row exists for $date and $variation_key
+	 *
+	 * @param string     $date
+	 * @param int|string $variation_key
+	 *
+	 * @return array|null|false
+	 */
+	public function get_summary( $date, $variation_key ) {
+		return $this->wpdb->get_row(
+			$this->prepare(
+				'SELECT * FROM {form_summary} WHERE `date` = %s AND variation_key = %d',
+				array(
+					$date,
+					$variation_key,
+				)
+			),
+			ARRAY_A
+		);
+	}
+
+	/**
+	 * Register summary for an event (impression_count, conversion_count, unique_visitor_count).
+	 *
+	 * @param array $data
+	 */
+	public function register_event_summary( $data ) {
+		$field   = $data['event_type'] === TVE_LEADS_UNIQUE_IMPRESSION ? 'impression_count' : 'conversion_count';
+		$summary = $this->get_summary( current_time( 'Y-m-d' ), $data['variation_key'] );
+		if ( empty( $summary ) ) {
+			$this->wpdb->insert( tve_leads_table_name( 'form_summary' ), array(
+				'date'                 => current_time( 'Y-m-d' ),
+				'main_group_id'        => $data['main_group_id'],
+				'form_type_id'         => $data['form_type_id'],
+				'variation_key'        => $data['variation_key'],
+				$field                 => 1,
+				'unique_visitor_count' => $data['is_unique'] ? 1 : 0,
+			) );
+		} else {
+			$this->wpdb->update( tve_leads_table_name( 'form_summary' ), array(
+				$field                 => $summary[ $field ] + 1,
+				'unique_visitor_count' => $summary['unique_visitor_count'] + ( isset( $data['is_unique'] ) && $data['is_unique'] ? 1 : 0 ),
+			), array( 'id' => $summary['id'] ) );
+		}
+	}
+
+	/**
+	 * @param string $type
+	 * @param array  $filters
+	 *
+	 * @return int
+	 */
+	public function get_summary_count( $type = 'impression', $filters = array() ) {
+		$field  = $type . '_count';
+		$select = 'SELECT SUM(' . $field . ' ) FROM {form_summary}';
+		$where  = '1';
+		$params = array();
+
+		if ( ! empty( $filters['date'] ) && is_string( $filters['date'] ) ) {
+			$where     .= ' AND `date` = %s';
+			$params [] = $filters['date'] === 'today' ? current_time( 'Y-m-d' ) : $filters['date'];
+		}
+
+		if ( ! empty( $filters['main_group_id'] ) ) {
+			$where     .= ' AND `main_group_id` = %d';
+			$params [] = $filters['main_group_id'];
+		}
+
+		if ( ! empty( $filters['form_type_id'] ) ) {
+			$where     .= ' AND `form_type_id` = %d';
+			$params [] = $filters['form_type_id'];
+		}
+
+		if ( ! empty( $filters['variation_key'] ) ) {
+			$where     .= ' AND `variation_key` = %d';
+			$params [] = $filters['variation_key'];
+		}
+
+		$sql = $this->prepare( $select . ' WHERE ' . $where, $params );
+
+		return (int) $this->wpdb->get_var( $sql );
+	}
+
+	public function prepare_date_select_query( $interval, $alias = 'date_interval' ) {
+		switch ( $interval ) {
+			case 'month':
+				$date_select = 'CONCAT( MONTHNAME( `date` ), " ", YEAR( `date` ) )';
+				break;
+			case 'week':
+				$year        = 'IF( WEEKOFYEAR( `date` ) = 1 AND MONTH( `date` ) = 12, 1 + YEAR( `date` ), YEAR( `date` ) )';
+				$date_select = "CONCAT( 'Week ', WEEKOFYEAR( `date` ), ', ', {$year} )";
+				break;
+			case 'day':
+			default:
+				$date_select = 'DATE_FORMAT( `date`, "%d %b, %Y" )';
+				break;
+		}
+
+		return "$date_select AS `{$alias}`";
+	}
+
+	public function get_summary_count_for_reports( $filter, $by_column = null ) {
+		$date_column = $this->prepare_date_select_query( $filter['interval'] );
+
+		$impression_column = ! empty( $filter['is_unique'] ) ? 'SUM( `unique_visitor_count` )' : 'SUM( `impression_count` )';
+
+		$sql = "SELECT 
+					{$impression_column} AS `impression_count`, 
+					SUM( conversion_count ) AS `conversion_count`,
+					ROUND( 100 * SUM( conversion_count ) / {$impression_column}, 2 ) AS `conversion_rate`,
+					`{$filter['data_group']}` AS `data_group`
+				FROM 
+					{form_summary} 
+				WHERE 1 ";
+
+		$params = array();
+
+		if ( isset( $filter['main_group_id'] ) && $filter['main_group_id'] > 0 ) {
+			$sql       .= 'AND `main_group_id` = %d ';
+			$params [] = $filter['main_group_id'];
+		}
+
+		if ( ! empty( $filter['form_type_id'] ) ) {
+			$sql       .= 'AND `form_type_id` = %d ';
+			$params [] = $filter['form_type_id'];
+		}
+
+		if ( ! empty( $filter['variation_key'] ) ) {
+			$sql       .= 'AND `variation_key` = %d ';
+			$params [] = $filter['variation_key'];
+		}
+
+		if ( ! empty( $filter['start_date'] ) && ! empty( $filter['end_date'] ) ) {
+			$sql       .= 'AND `date` BETWEEN %s AND %s ';
+			$params [] = $filter['start_date'];
+			$params [] = $filter['end_date'];
+		}
+
+		//we filter the log data and retrieve only from the specified data group, form_type or variation ids
+		if ( ! empty( $filter['group_ids'] ) && ! empty( $filter['data_group'] ) ) {
+			$ids = implode( ', ', $filter['group_ids'] );
+			$sql .= "AND `{$filter['data_group']}` IN ({$ids}) ";
+		}
+
+		if ( ! empty( $filter['group_by'] ) && is_array( $filter['group_by'] ) ) {
+			$sql .= 'GROUP BY ' . implode( ', ', $filter['group_by'] );
+		}
+
+		$sql .= ' ORDER BY `date` DESC';
+
+		$prepared = $this->prepare( $sql, $params );
+		$prepared = str_replace( 'SELECT ', "SELECT {$date_column}, ", $prepared );
+
+		$return = array();
+		if ( ! empty( $by_column ) ) {
+			foreach ( $this->wpdb->get_results( $prepared ) as $row ) {
+				$return[ $row->{$by_column} ] = $row;
+			}
+		} else {
+			$return = $this->wpdb->get_results( $prepared );
+		}
+
+		return $return;
+	}
+
+	public function delete_summary_for_variations( $v_ids ) {
+		$table_name = tve_leads_table_name( 'form_summary' );
+		$v          = implode( "', '", $v_ids );
+		$sql        = "DELETE FROM {$table_name} WHERE `variation_key` IN ('{$v}')";
+
+		return $this->wpdb->query( $sql );
 	}
 }
 

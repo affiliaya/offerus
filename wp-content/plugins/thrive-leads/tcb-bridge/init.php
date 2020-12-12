@@ -69,7 +69,8 @@ function tve_leads_frontend_enqueue_scripts() {
 
 	tve_enqueue_style_family();
 
-	tve_enqueue_script( 'tve_frontend', tve_editor_js() . '/frontend' . $js_suffix, array( 'jquery', 'jquery-masonry' ), false, true );
+	wp_enqueue_script( 'plupload' );
+	tve_enqueue_script( 'tve_frontend', tve_editor_js() . '/frontend' . $js_suffix, array( 'jquery', 'jquery-masonry', 'plupload' ), false, true );
 
 	if ( ! is_editor_page() && is_singular() ) {
 		$events = tve_get_post_meta( get_the_ID(), 'tve_page_events' );

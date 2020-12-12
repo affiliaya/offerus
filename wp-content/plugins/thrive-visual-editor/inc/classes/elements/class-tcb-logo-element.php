@@ -59,18 +59,36 @@ class TCB_Logo_Element extends TCB_Image_Element {
 		/* add the logo control */
 		$components[ TCB_Logo::COMPONENT ] = array(
 			'config'            => array(
-				'ImageSize'    => array(
+				'ImageSize'             => array(
 					'config'  => array(
-						'default' => '240',
-						'min'     => '20',
-						'max'     => '1024',
-						'label'   => __( 'Size', 'thrive-cb' ),
-						'um'      => array( 'px', '%' ),
-						'css'     => 'width',
+						'default'   => '240',
+						'min'       => '20',
+						'max'       => '1024',
+						'label'     => __( 'Size', 'thrive-cb' ),
+						'um'        => array( 'px', '%' ),
+						'css'       => 'width',
+						'important' => true,
 					),
 					'extends' => 'ImageSize',
 				),
-				'ImageAltText' => array(
+				'MenuSplitLogoPosition' => array(
+					'config'  => array(
+						'full-width' => true,
+						'name'       => __( 'Position when menu is Hamburger', 'thrive-cb' ),
+						'buttons'    => array(
+							array(
+								'text'  => __( 'Left', 'thrive-cb' ),
+								'value' => 'left',
+							),
+							array(
+								'text'  => __( 'Right', 'thrive-cb' ),
+								'value' => 'right',
+							),
+						),
+					),
+					'extends' => 'ButtonGroup',
+				),
+				'ImageAltText'          => array(
 					'config'  => array(
 						'label' => __( 'Alt Text', 'thrive-cb' ),
 					),

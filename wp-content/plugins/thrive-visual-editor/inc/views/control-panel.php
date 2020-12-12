@@ -12,14 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** @var $data TCB_Editor */
 ?>
 
+<!-- used for palette colors in sidebar preview-->
+<style id="tve-elem-palettes"></style>
 <div id="tve_cpanel" class="state-default">
-
+	<div class="tve-cpanel-top-content">
+		<?php do_action( 'tcb_cpanel_top_content' ); ?>
+	</div>
 	<div class="tve-active-element no-states" data-default="<?php echo __( 'No Element Selected', 'thrive-cb' ); ?>">
 		<div class="element-name"><?php echo __( 'No Element Selected', 'thrive-cb' ); ?></div>
 		<div class="element-states"></div>
 	</div>
 
-	<div id="tve-scroll-panel">
+	<div id="tve-scroll-panel" class="trigger">
 		<div class="tve-panel">
 			<?php /* information at the top of components that we are currently in Edit Mode */ ?>
 			<div id="component-edit-mode" class="info-text grey-text orange border white-bg bigger m-5 tcb-hide">

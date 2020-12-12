@@ -73,7 +73,7 @@ class Thrive_Dash_Api_GetResponseV3 {
 	 * @return mixed
 	 */
 	public function getCampaigns() {
-		return $this->call( 'campaigns' );
+		return $this->call( 'campaigns', 'GET', array( 'perPage' => 1000 ) );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Thrive_Dash_Api_GetResponseV3 {
 	 * @return mixed
 	 */
 	public function searchContacts( $params = null ) {
-		return $this->call( 'search-contacts?' . $this->setParams( $params ) );
+		return $this->call( 'contacts?' . $this->setParams( $params ) );
 	}
 
 	/**
@@ -372,7 +372,6 @@ class Thrive_Dash_Api_GetResponseV3 {
 
 		$url = $this->api_url . '/' . $api_method;
 
-
 		$headers = array(
 			'X-Auth-Token' => 'api-key ' . $this->api_key,
 			'Content-Type' => 'application/json',
@@ -392,12 +391,15 @@ class Thrive_Dash_Api_GetResponseV3 {
 				break;
 		}
 
-		$response = $fn( $url, array(
-			'body'      => $params,
-			'timeout'   => 15,
-			'headers'   => $headers,
-			'sslverify' => false,
-		) );
+		$response = $fn(
+			$url,
+			array(
+				'body'      => $params,
+				'timeout'   => 15,
+				'headers'   => $headers,
+				'sslverify' => false,
+			)
+		);
 
 		$response_code = wp_remote_retrieve_response_code( $response );
 

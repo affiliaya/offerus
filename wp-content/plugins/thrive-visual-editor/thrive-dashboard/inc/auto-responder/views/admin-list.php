@@ -1,6 +1,8 @@
 <?php
+unset( $available_apis['zoom'] );
 $json_connected_apis = Thrive_Dash_List_Manager::toJSON( $connected_apis );
 $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
+
 ?>
 <script type="text/javascript">
 	TVE_Dash.API.ConnectedAPIs = new TVE_Dash.API.collections.Connections(<?php echo $json_connected_apis ?>);
@@ -17,15 +19,21 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 	<div class="tvd-row tvd-api-list"></div>
 
 	<div class="tvd-row">
+		<div class="tvd-col tvd-s12">
+			<div style="height: 100px"></div>
+		</div>
+	</div>
+
+	<div class="tvd-row">
 		<div class="tvd-col tvd-s12 tvd-m6">
 			<a href="<?php echo admin_url( 'admin.php?page=tve_dash_section' ); ?>"
-			   class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-gray">
+					class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-gray">
 				<?php echo __( "Back To Dashboard", TVE_DASH_TRANSLATE_DOMAIN ); ?>
 			</a>
 		</div>
 		<div class="tvd-col tvd-s12 tvd-m6">
 			<a href="<?php echo admin_url( 'admin.php?page=tve_dash_api_error_log' ); ?>"
-			   class="tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-dark tvd-waves-effect tvd-right tvd-btn-small">
+					class="tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-dark tvd-waves-effect tvd-right tvd-btn-small">
 				<?php echo __( "View Error Logs", TVE_DASH_TRANSLATE_DOMAIN ); ?>
 			</a>
 		</div>
@@ -45,19 +53,26 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 					</h4>
 				</div>
 				<div class="tvd-col tvd-s12 tvd-m6">
-					<div class="tvd-right">
+					<div class="tvd-right tvd-flex-mid">
+						<# if ( item.get('can_test') ) { #>
 						<a class="tvd-api-test tvd-btn tvd-btn-green tvd-btn-toggle">
 							<i class="tvd-icon-exchange tvd-left"></i>
 							<span class="tvd-btn-text"><?php echo __( "Test", TVE_DASH_TRANSLATE_DOMAIN ) ?></span>
 						</a>
+						<# } #>
+						<# if ( item.get('can_edit') ) { #>
 						<a class="tvd-api-edit tvd-btn tvd-btn-blue tvd-btn-toggle">
 							<i class="tvd-icon-pencil tvd-left"></i>
 							<span class="tvd-btn-text"><?php echo __( "Edit", TVE_DASH_TRANSLATE_DOMAIN ) ?></span>
 						</a>
+						<# } #>
+						<# if ( item.get('can_delete') ) { #>
 						<a class="tvd-api-delete tvd-btn tvd-btn-red tvd-btn-toggle">
 							<i class="tvd-icon-trash-o tvd-left"></i>
 							<span class="tvd-btn-text"><?php echo __( "Delete", TVE_DASH_TRANSLATE_DOMAIN ) ?></span>
 						</a>
+						<# } #>
+						<#= item.get('status_icon') || '' #>
 					</div>
 				</div>
 			</div>
@@ -70,9 +85,6 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 		<div class="tvd-card-content tvd-valign tvd-center-align tvd-pointer">
 			<i class="tvd-icon-plus tvd-icon-rounded tvd-icon-medium"></i>
 			<h4><?php echo __( "Add new Connection", TVE_DASH_TRANSLATE_DOMAIN ) ?></h4>
-			<a class="tvd-request-api" href="https://thrivethemes.com/request-a-new-api-integration/" target="_blank">
-				<?php echo __( 'Request a new integration', TVE_DASH_TRANSLATE_DOMAIN ) ?>
-			</a>
 		</div>
 	</div>
 </script>
@@ -92,10 +104,6 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 					</div>
 				</div>
 			</div>
-			<h4 class="tvd-dark-text"><?php echo __( "Add new Connection", TVE_DASH_TRANSLATE_DOMAIN ) ?></h4>
-			<a href="https://thrivethemes.com/request-a-new-api-integration/" target="_blank">
-				<?php echo __( 'Request a new integration', TVE_DASH_TRANSLATE_DOMAIN ) ?>
-			</a>
 		</div>
 	</div>
 </script>
@@ -133,7 +141,7 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 </script>
 
 <script type="text/template" id="tvd-api-state-success">
-	<div class="tvd-card tvd-green tvd-medium">
+	<div class="tvd-card tvd-green">
 		<div class="tvd-card-content tvd-center-align">
 			<i class="tvd-icon-check tvd-icon-big tvd-icon-border tvd-icon-rounded"></i>
 			<h3 class="tvd-modal-title">
@@ -149,7 +157,14 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 				<# } else { #>
 				<?php echo __( "You can now connect your opt-in forms to ", TVE_DASH_TRANSLATE_DOMAIN ) ?>
 				<#= item.get('title') #>.
-				<a class="wistia-popover[height=450,playerColor=2bb914,width=800]" href="//fast.wistia.net/embed/iframe/7sv6uvfshp?popover=true"><?php echo __( "See how it's done.", TVE_DASH_TRANSLATE_DOMAIN ) ?></a>
+
+				<# if ( item.get('type') !== 'storage' ) { #>
+					<a class="wistia-popover[height=450,playerColor=2bb914,width=800]"
+							href="//fast.wistia.net/embed/iframe/7sv6uvfshp?popover=true">
+						<?php echo __( "See how it's done.", TVE_DASH_TRANSLATE_DOMAIN ) ?>
+					</a>
+				<# } #>
+
 				<# } #>
 
 
@@ -158,7 +173,7 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 			<div class="tvd-row">
 				<div class="tvd-col tvd-s12 tvd-m6 tvd-offset-m3">
 					<a href="javascript:void(0)"
-					   class="tvd-api-done tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-light tvd-full-btn tvd-btn-margin-top tvd-waves-effect"><?php echo __( "Done", TVE_DASH_TRANSLATE_DOMAIN ) ?></a>
+							class="tvd-api-done tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-light tvd-full-btn tvd-btn-margin-top tvd-waves-effect"><?php echo __( "Done", TVE_DASH_TRANSLATE_DOMAIN ) ?></a>
 				</div>
 			</div>
 		</div>
@@ -226,7 +241,7 @@ $json_available_apis = Thrive_Dash_List_Manager::toJSON( $available_apis );
 			<div class="tvd-row">
 				<div class="tvd-col tvd-s12 tvd-m6">
 					<a class="tvd-api-delete-yes tvd-btn-flat tvd-btn-flat-secondary tvd-btn-flat-light tvd-left tvd-waves-effect"
-					   href="javascript:void(0)">
+							href="javascript:void(0)">
 						<?php echo __( "Yes, delete", TVE_DASH_TRANSLATE_DOMAIN ) ?>
 					</a>
 				</div>

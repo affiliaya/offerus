@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TCB_Lead_Generation_Radio_Option_Element extends TCB_Element_Abstract {
 
 	public function name() {
-		return __( 'Lead Generation Radio Option', 'thrive-cb' );
+		return __( 'Radio Option', 'thrive-cb' );
 	}
 
 	public function identifier() {
@@ -50,6 +50,11 @@ class TCB_Lead_Generation_Radio_Option_Element extends TCB_Element_Abstract {
 		return array(
 			'lead_generation_radio_option' => array(
 				'config' => array(
+					'RadioPalettes' => array(
+						'config'  => array(),
+						'extends' => 'Palettes',
+						'important'  => apply_filters( 'tcb_lg_color_inputs_important', true ),
+					),
 					'LabelAsValue'     => array(
 						'config'  => array(
 							'name'    => '',
@@ -97,24 +102,23 @@ class TCB_Lead_Generation_Radio_Option_Element extends TCB_Element_Abstract {
 						'config' => array(
 							'label'   => __( 'Choose radio style', 'thrive-cb' ),
 							'items'   => array(
-								'default'     => __( 'Default', 'thrive-cb' ),
-								'style-1'     => __( 'Style 1', 'thrive-cb' ),
-								'fill-round'  => __( 'Fill Round', 'thrive-cb' ),
-								'square-fill' => __( 'Square Fill', 'thrive-cb' ),
+								'default'    => __( 'Default', 'thrive-cb' ),
+								'style-1'    => __( 'Style 1', 'thrive-cb' ),
+								'style-2'    => __( 'Style 2', 'thrive-cb' ),
+								'style-3'    => __( 'Style 3', 'thrive-cb' ),
+								'gradient-1' => __( 'Gradient 1', 'thrive-cb' ),
+								'gradient-2' => __( 'Gradient 2', 'thrive-cb' ),
+								'gradient-3' => __( 'Gradient 3', 'thrive-cb' ),
+								'gradient-4' => __( 'Gradient 4', 'thrive-cb' ),
 							),
 							'default' => 'no_style',
 						),
 					),
-					'RadioStyleColor'  => array(
+					'CustomAnswerInput' => array(
 						'config'  => array(
-							'label'   => __( 'Style Color', 'thrive-cb' ),
-							'options' => array(
-								'output'     => 'object',
-								'showAlpha'  => false,
-								'allowEmpty' => false,
-							),
+							'full-width'  => true,
 						),
-						'extends' => 'ColorPicker',
+						'extends' => 'LabelInput',
 					),
 				),
 			),

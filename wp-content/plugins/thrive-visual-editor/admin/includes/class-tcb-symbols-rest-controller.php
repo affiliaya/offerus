@@ -275,6 +275,12 @@ class TCB_REST_Symbols_Controller extends WP_REST_Posts_Controller {
 			if ( ! $this->copy_thumb( $request['old_id'], $post->ID ) ) {
 				return new WP_Error( 'could_not_generate_file', __( 'We were not able to copy the symbol', 'thrive-cb' ), array( 'status' => 500 ) );
 			};
+
+			$old_global_data = get_post_meta( $request['old_id'], 'tve_globals', true );
+
+			if ( ! empty( $old_global_data ) ) {
+				update_post_meta( $post->ID, 'tve_globals', $old_global_data );
+			}
 		}
 
 		update_post_meta( $post->ID, 'export_id', base_convert( time(), 10, 36 ) );
@@ -427,18 +433,20 @@ class TCB_REST_Symbols_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Update symbols css from meta
 	 *
-	 * @param string          $meta_value
+	 * @param string          $css existing css
 	 * @param WP_Post         $post_obj
 	 * @param string          $meta_key
 	 * @param WP_Rest_Request $request
 	 *
 	 * @return bool|int
 	 */
-	public function update_symbol_css( $meta_value, $post_obj, $meta_key, $request ) {
+	public function update_symbol_css( $css, $post_obj, $meta_key, $request ) {
 		//if old_id is sent -> we are in the duplicate cas, and we need to replace the id from the css with the new one
-		$new_css = ( isset( $request['old_id'] ) ) ? str_replace( $request['old_id'], $post_obj->ID, $meta_value ) : $meta_value;
+		if ( isset( $request['old_id'] ) ) {
+			$css = str_replace( "_{$request['old_id']}", "_{$post_obj->ID}", $css );
+		}
 
-		return update_post_meta( $post_obj->ID, $meta_key, $new_css );
+		return update_post_meta( $post_obj->ID, $meta_key, $css );
 	}
 
 	/**

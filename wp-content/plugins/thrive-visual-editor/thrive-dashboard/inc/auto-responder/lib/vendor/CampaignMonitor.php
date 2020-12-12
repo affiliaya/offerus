@@ -63,6 +63,17 @@ class Thrive_Dash_Api_CampaignMonitor {
 	}
 
 	/**
+	 * @param $list_id
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	public function get_list_custom_fields( $list_id ) {
+
+		return $this->request( '/lists/' . $list_id . '/customfields', 'get' );
+	}
+
+	/**
 	 * Instantiate a Thrive_Dash_Api_CampaignMonitor_List and returns it
 	 *
 	 * @param $list_id

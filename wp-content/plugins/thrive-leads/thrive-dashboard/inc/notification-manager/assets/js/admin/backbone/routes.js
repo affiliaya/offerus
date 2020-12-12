@@ -2,8 +2,6 @@
  * Created by dan bilauca on 7/11/2016.
  */
 
-var TD_NM = TD_NM || {};
-
 /**
  * Settings for the underscore templates
  * Enables <##> tags instead of <%%>

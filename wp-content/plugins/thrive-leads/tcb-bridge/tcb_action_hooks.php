@@ -222,7 +222,7 @@ add_action( 'tcb_settings_links', 'tve_leads_templates_menu' );
 add_action( 'tcb_modal_templates', 'tve_leads_modal_templates' );
 add_action( 'tcb_can_use_page_events', 'tve_leads_can_use_page_events' );
 add_action( 'tcb_lead_generation_menu', 'tve_leads_insert_asset_delivery_control' );
-add_action( 'tcb_element_lead_generation_config', 'tve_leads_lead_generation_config' );
+add_action( 'tcb_elements_localize', 'tve_leads_forms_config' );
 
 /**
  *  Modify TCB Close Url For Leads Editor
@@ -251,6 +251,11 @@ add_filter( 'preview_post_link', 'tve_leads_preview_post_link', 10, 2 );
  * called when trying to edit a post to check TL capability with TA deactivated
  */
 add_filter( 'tcb_user_has_plugin_edit_cap', 'tve_leads_user_can_use_plugin' );
+
+/**
+ * Adds Thrive Leads data to the hook that fetched data for the 3rd party developers
+ */
+add_filter( 'tcb_parse_lead_gen_form_data', 'tve_leads_parse_lead_gen_form_data', 10, 1 );
 
 /**
  * Check if the post can be edited by checking access and post type
@@ -1043,7 +1048,7 @@ function tve_leads_save_editor_content() {
  *
  * @return string the content
  */
-function tve_leads_get_editor_template_content( & $variation, $template_key = null ) {
+function tve_leads_get_editor_template_content( &$variation, $template_key = null ) {
 	if ( $template_key === null && ! empty( $variation ) && ! empty( $variation[ TVE_LEADS_FIELD_TEMPLATE ] ) ) {
 		$template_key = $variation[ TVE_LEADS_FIELD_TEMPLATE ];
 	}
@@ -1501,10 +1506,10 @@ function tve_leads_editor_actions( $action_tabs ) {
 		'order' => 20,
 	);
 
-	$parent_form_type = get_post_meta( $current_variation['post_parent'], 'tve_form_type', true );
-	$parent_form_type = Thrive_Leads_Template_Manager::tpl_type_map( $parent_form_type );
-
 	if ( tve_leads_post_type_editable( $post_id ) ) {
+		$parent_form_type = get_post_meta( $current_variation['post_parent'], 'tve_form_type', true );
+		$parent_form_type = Thrive_Leads_Template_Manager::tpl_type_map( $parent_form_type );
+
 		$action_tabs['popup']['actions']['thrive_lightbox']['available']     = false;
 		$action_tabs['popup']['actions']['thrive_leads_2_step']['available'] = false;
 		if ( $parent_form_type == 'lightbox' || $current_variation['form_state'] == 'lightbox' ) {
@@ -1968,13 +1973,13 @@ function tve_leads_insert_asset_delivery_control() {
 }
 
 /**
- * Hook into Lead Generation Element Config
+ * Hook into Elements configuration and add asset group options for LG element and Registration form
  *
- * @param $config
+ * @param array $config
  *
  * @return mixed
  */
-function tve_leads_lead_generation_config( $config ) {
+function tve_leads_forms_config( $config ) {
 
 	if ( ! tve_leads_asset_delivery_setup_valid() ) {
 		return $config;
@@ -1989,19 +1994,23 @@ function tve_leads_lead_generation_config( $config ) {
 		$options[] = $option;
 	}
 
-	$config['components']['lead_generation']['config']['AssetDelivery'] = array(
-		'config' => array(
-			'label' => __( 'Enable Asset Delivery', 'thrive-leads' ),
-		),
-	);
-	$config['components']['lead_generation']['config']['AssetGroup']    = array(
-		'config' => array(
-			'name'          => __( 'Asset Group', 'thrive-leads' ),
-			'label_col_x'   => 5,
-			'options'       => $options,
-			'consent_label' => __( 'Send asset "{asset_name}" to email address', 'thrive-leads' ),
-		),
-	);
+	foreach ( array( 'lead_generation', 'registration_form' ) as $key ) {
+		if ( isset( $config[ $key ] ) ) {
+			$config[ $key ]['components'][ $key ]['config']['AssetDelivery'] = array(
+				'config' => array(
+					'label' => __( 'Enable asset delivery', 'thrive-leads' ),
+				),
+			);
+			$config[ $key ]['components'][ $key ]['config']['AssetGroup']    = array(
+				'config' => array(
+					'name'          => __( 'Asset group', 'thrive-leads' ),
+					'label_col_x'   => 5,
+					'options'       => $options,
+					'consent_label' => __( 'Asset delivery "{asset_name}"', 'thrive-leads' ),
+				),
+			);
+		}
+	}
 
 	return $config;
 }
@@ -2021,4 +2030,34 @@ function tve_leads_architect_branding( $logo_url ) {
 
 function tve_leads_output_froala_container() {
 	echo '<div class="fr-dropdown-holder"></div>';
+}
+
+/**
+ * Adds Thrive Leads data to the hook that fetched data for the 3rd party developers
+ *
+ * @param array $data
+ *
+ * @return array
+ */
+function tve_leads_parse_lead_gen_form_data( $data = array() ) {
+
+	if ( ! empty( $data['thrive_leads'] ) && ! empty( $data['thrive_leads']['tl_data'] ) ) {
+		$extra_data = $data['thrive_leads']['tl_data'];
+
+		$data['external_plugin_fields'] = array();
+
+		$data['external_plugin_fields']['form_id']         = $extra_data['_key'];
+		$data['external_plugin_fields']['form_name']       = $extra_data['form_name'];
+		$data['external_plugin_fields']['lead_group_id']   = $extra_data['main_group_id'];
+		$data['external_plugin_fields']['lead_group_name'] = $extra_data['main_group_name'];
+
+		if ( ! empty( $extra_data['active_test_data'] ) ) {
+			$data['external_plugin_fields']['split_test_id']   = $extra_data['active_test_data']['id'];
+			$data['external_plugin_fields']['split_test_name'] = $extra_data['active_test_data']['title'];
+		}
+
+		unset( $data['thrive_leads'] );
+	}
+
+	return $data;
 }

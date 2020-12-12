@@ -50,6 +50,27 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasTags() {
+
+		return true;
+	}
+
+	/**
+	 * @param array|string $tags
+	 * @param array        $data
+	 *
+	 * @return array
+	 */
+	public function pushTags( $tags, $data = array() ) {
+
+		$data['tqb_tags'] = implode( ', ', $tags );
+
+		return $data;
+	}
+
+	/**
 	 * output the setup form html
 	 *
 	 * @return void
@@ -502,7 +523,10 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 			);
 
 			if ( ! empty( $response ) && is_array( $response ) ) {
-				$custom_fields = array_merge( $custom_fields, array_map( array( $this, 'normalize_custom_field' ), $response ) );
+				$custom_fields = array_merge( $custom_fields, array_map( array(
+					$this,
+					'normalize_custom_field',
+				), $response ) );
 			}
 			$page ++;
 		} while ( count( $response ) === $limit );
@@ -541,21 +565,6 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 		$fields = array_merge( parent::get_custom_fields(), $this->_mapped_custom_fields );
 
 		return $fields;
-	}
-
-	/**
-	 * Get mapped custom fields names based on the allowed $_mapped_custom_fields array()
-	 *
-	 * @return array
-	 */
-	public function getMappedCFNames() {
-
-		return array_map(
-			function ( $field ) {
-				return $field['id'];
-			},
-			$this->_mapped_custom_fields
-		);
 	}
 
 	/**
@@ -610,7 +619,7 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 		if ( is_array( $mapped_form_data ) ) {
 
 			// Loop trough allowed custom fields names
-			foreach ( $this->getMappedCFNames() as $mapped_field_name ) {
+			foreach ( $this->getMappedFieldsIDs() as $mapped_field_name ) {
 
 				// Extract an array with all custom fields (siblings) names from the form data
 				// {ex: [mapping_url_0, .. mapping_url_n] / [mapping_text_0, .. mapping_text_n]}
@@ -627,6 +636,10 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 						}
 
 						$mapped_form_field_id = $mapped_form_data[ $cf_form_name ][ $this->_key ];
+						$cf_form_name         = str_replace( '[]', '', $cf_form_name );
+						if ( ! empty( $args[ $cf_form_name ] ) ) {
+							$args[ $cf_form_name ] = $this->processField( $args[ $cf_form_name ] );
+						}
 
 						// Build key => value pairs as the API needs
 						$custom_fields[ '_' . $mapped_form_field_id ] = sanitize_text_field( $args[ $cf_form_name ] );
@@ -636,21 +649,6 @@ class Thrive_Dash_List_Connection_Infusionsoft extends Thrive_Dash_List_Connecti
 		}
 
 		return $custom_fields;
-	}
-
-	/**
-	 * Create a simpler structure with [list_id] => [ field_id => field_name]
-	 *
-	 * @return array
-	 */
-	public function buildCustomFieldsList() {
-
-		return array_map(
-			function ( $field ) {
-				return $field['id'];
-			},
-			$this->_mapped_custom_fields
-		);
 	}
 }
 

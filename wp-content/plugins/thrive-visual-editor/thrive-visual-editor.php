@@ -3,7 +3,7 @@
 /*
 Plugin Name: Thrive Architect
 Plugin URI: http://www.thrivethemes.com
-Version: 2.5.2.2
+Version: 2.6.3.2
 Author: <a href="http://www.thrivethemes.com">Thrive Themes</a>
 Description: Live front end editor for your WordPress content
 */
@@ -66,11 +66,6 @@ add_action( 'plugins_loaded', 'tve_plugins_loaded_hook' );
 //after the plugin is loaded load the dashboard version file
 add_action( 'plugins_loaded', 'tve_load_dash_version' );
 
-/**
- * TCB-specific AJAX actions
- */
-add_action( 'wp_ajax_tve_lp_export', 'tve_ajax_landing_page_export' );
-add_action( 'wp_ajax_tve_lp_import', 'tve_ajax_landing_page_import' );
 /**
  * AJAX call to return the TCB-added content for a post
  */
@@ -208,61 +203,6 @@ function tve_genesis_get_post_excerpt( $output, $content, $link, $max_characters
 }
 
 /**
- * When a page is edited from admin -> we need to use the same title for the associated lightbox, if the page in question is a landing page
- * Copy post tve meta to revision meta
- *
- * This method is also called when a revision of a post is added
- *
- * @param $post_id
- *
- * @see defaults-filters.php for add_action("post_updated")
- *
- * @see wp_insert_post which is doing: "post_updated", "save_post"
- */
-function tve_save_post_callback( $post_id ) {
-	/**
-	 * If $post_id is an ID of a revision POST
-	 */
-	if ( $parent_id = wp_is_post_revision( $post_id ) ) {
-
-		$meta_keys = tve_get_used_meta_keys();
-
-		/**
-		 * copy post metas to its revision
-		 */
-		foreach ( $meta_keys as $meta_key ) {
-			if ( $meta_key === 'tve_landing_page' ) {
-				$meta_value = get_post_meta( $parent_id, $meta_key, true );
-			} else {
-				$meta_value = tve_get_post_meta( $parent_id, $meta_key );
-			}
-			add_metadata( 'post', $post_id, 'tve_revision_' . $meta_key, $meta_value );
-		}
-	}
-
-	$post_type = get_post_type( $post_id );
-	if ( $post_type != 'page' ) {
-		return;
-	}
-	$is_landing_page = tve_post_is_landing_page( $post_id );
-	$tve_globals     = tve_get_post_meta( $post_id, 'tve_globals' );
-
-	if ( ! $is_landing_page || empty( $tve_globals['lightbox_id'] ) ) {
-		return;
-	}
-	$lightbox = get_post( $tve_globals['lightbox_id'] );
-	if ( ! $lightbox || ! ( $lightbox instanceof WP_Post ) || $lightbox->post_type !== 'tcb_lightbox' ) {
-		return;
-	}
-
-	wp_update_post( array(
-		'ID'         => $tve_globals['lightbox_id'],
-		'post_title' => 'Lightbox - ' . get_the_title( $post_id ),
-	) );
-}
-
-
-/**
  * integration with Wordpress SEO for page analysis.
  *
  * @param string $content WP post_content
@@ -387,70 +327,6 @@ function tve_yoast_sitemap_images( $images, $post_id ) {
 	}
 
 	return $images;
-}
-
-/**
- * export a Landing Page as a Zip file
- */
-function tve_ajax_landing_page_export() {
-	$response = array(
-		'success' => true,
-	);
-
-	if ( empty( $_POST['template_name'] ) || empty( $_POST['post_id'] ) || ! is_numeric( $_POST['post_id'] ) || ! tve_post_is_landing_page( $_POST['post_id'] ) ) {
-		$response['success'] = false;
-		$response['message'] = __( 'Invalid request', 'thrive-cb' );
-		wp_send_json( $response );
-	}
-
-	$transfer = new TCB_Landing_Page_Transfer();
-
-	$thumb_attachment_id = empty( $_POST['thumb_id'] ) ? 0 : (int) $_POST['thumb_id'];
-
-	try {
-
-		$data                = $transfer->export( (int) $_POST['post_id'], $_POST['template_name'], $thumb_attachment_id );
-		$response['url']     = $data['url'];
-		$response['message'] = __( 'Landing Page exported successfully!', 'thrive-cb' );
-
-	} catch ( Exception $e ) {
-		$response['success'] = false;
-		$response['message'] = $e->getMessage();
-	}
-
-	wp_send_json( $response );
-}
-
-/**
- * import a landing page from an attachment ID received in POST
- * the attachment should be a .zip file created with the "Export Landing Page" functionality
- */
-function tve_ajax_landing_page_import() {
-	$response = array(
-		'success' => true,
-		'message' => '',
-	);
-
-	$is_post_type_allowed = apply_filters( 'tve_allowed_post_type', true, get_post_type( $_POST['page_id'] ) );
-	if ( empty( $_POST['attachment_id'] ) || ! is_numeric( $_POST['attachment_id'] ) || empty( $_POST['page_id'] ) || ! is_numeric( $_POST['page_id'] ) || ! $is_post_type_allowed ) {
-		$response['success'] = false;
-		$response['message'] = __( 'Invalid attachment id', 'thrive-cb' );
-		wp_send_json( $response );
-	}
-
-	$transfer = new TCB_Landing_Page_Transfer();
-	try {
-		$file                = get_attached_file( (int) $_POST['attachment_id'], true );
-		$landing_page_id     = $transfer->import( $file, (int) $_POST['page_id'] );
-		$response['url']     = tcb_get_editor_url( $landing_page_id );
-		$response['message'] = __( 'Landing Page imported successfully!', 'thrive-cb' );
-
-	} catch ( Exception $e ) {
-		$response['success'] = false;
-		$response['message'] = $e->getMessage();
-	}
-
-	wp_send_json( $response );
 }
 
 /**
@@ -671,3 +547,8 @@ add_filter( 'tve_dash_features', 'tar_enable_script_manager' );
  * always include TD script manager if TAr is active as a stand-alone plugin
  */
 add_filter( 'td_include_script_manager', '__return_true' );
+
+/**
+ * Show blocks only if TAR is activated
+ */
+add_action( 'init', 'TCB_Symbols_Block::init' );

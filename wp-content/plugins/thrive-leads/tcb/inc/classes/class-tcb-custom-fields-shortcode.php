@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class TCB_Custom_Fields_Shortcode
  */
 class TCB_Custom_Fields_Shortcode {
-	const GLOBAL_SHORTCODE_URL  = 'thrive_custom_fields_shortcode_url';
+	const GLOBAL_SHORTCODE_URL = 'thrive_custom_fields_shortcode_url';
 	const GLOBAL_SHORTCODE_DATA = 'thrive_custom_fields_shortcode_data';
 
 	private $pattern_replacement = array(
@@ -33,22 +33,24 @@ class TCB_Custom_Fields_Shortcode {
 	private $field_types = array(
 		'link'      => array( 'text', 'image', 'email', 'url', 'file', 'page_link', 'link' ),
 		'image'     => array( 'image', 'text' ),
-		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker' ),
-		'video'     => array( 'file' ),
+		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker', 'checkbox' ),
+		'video'     => array( 'file', 'url', 'text' ),
 		'audio'     => array( 'file', 'text' ),
 		'map'       => array( 'map', 'text' ),
 		'countdown' => array( 'date_time_picker' ),
 		'number'    => array( 'number', 'range' ),
+		'color'     => array( 'color_picker' ),
 	);
 
 	private $postlist_field_types = array(
-		'link'      => array( 'image', 'email', 'url', 'file', 'page_link', 'link' ),
+		'link'      => array( 'text', 'image', 'email', 'url', 'file', 'page_link', 'link' ),
 		'image'     => array( 'image', 'text' ),
-		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker' ),
+		'text'      => array( 'text', 'textarea', 'number', 'range', 'email', 'url', 'password', 'true_false', 'date_picker', 'date_time_picker', 'time_picker', 'checkbox' ),
 		'number'    => array( 'number', 'range' ),
 		'countdown' => array( 'date_time_picker' ),
-		'video'     => array( 'file' ),
+		'video'     => array( 'file', 'url', 'text' ),
 		'audio'     => array( 'file', 'text' ),
+		'color'     => array( 'color_picker' ),
 	);
 
 	/* some WooCommerce fields we're here, we've created a new category for them */
@@ -77,15 +79,18 @@ class TCB_Custom_Fields_Shortcode {
 		'tvo_',                 //Thrive Ovation metadata
 		'_tho',                 //Thrive Headline Optimiser metadata
 		'is_control',           //Thrive Optimize metadata
-
+		'sections',
+		'page_content_',        //some meta that might come from the clodu
+		'theme_skin',
 		/**  Protected Metadata for other plugins**/
 
 		'total_sales',          //WooCommerce metadata
 		'rank_math_',           //Rank Math SEO metadata
+		'pb_original_content',  //PageBuilder meta content breaks editor localization
 	);
 
 	private $video_regex = array(
-		'/https?:\/\/(.+)\.(cdn\.vooplayer\.com)\/publish\/(.+)/'                                                                               => 'vooplayer',
+		'/https?:\/\/(.+)\.(cdn\.(vooplayer|spotlightr)\.com)\/publish\/(.+)/'                                                                  => 'vooplayer',
 		'/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/'                => 'youtube',
 		'/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|list\/|playlist\?list=|playlist\?.+&list=))((\w|-){18})(?:\S+)?$/' => 'youtube',
 		'/(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/'                             => 'vimeo',
@@ -171,6 +176,135 @@ class TCB_Custom_Fields_Shortcode {
 		foreach ( $this->user_shortcodes as $key => $name ) {
 			add_shortcode( $key, array( $this, 'render_user_shortcode' ) );
 		}
+
+		add_action( 'tcb_get_extra_global_variables', array( $this, 'output_custom_fields_variables' ) );
+
+		add_filter( 'tcb_main_frame_localize', array( $this, 'custom_fields_localization' ) );
+
+		add_filter( 'tcb_get_post_list_variables', array( $this, 'output_post_list_variables' ), 10, 2 );
+
+		/** Added ACF script to solve error thrown by ACF 5.9 update */
+		add_action( 'tcb_main_frame_enqueue', static function () {
+			wp_enqueue_script( 'acf' );
+		} );
+	}
+
+	/**
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function custom_fields_localization( $data = array() ) {
+		if ( $this->has_external_fields_colors() ) {
+			$external_fields                 = $this->get_all_external_fields();
+			$data['colors']['custom_fields'] = $this->prepare_custom_fields_colors( get_the_ID(), $external_fields['color'] );
+			$data['has_acf_colors']          = 1;
+		}
+
+		$data['acf_is_active'] = tvd_has_external_fields_plugins() ? 1 : 0;
+
+		return $data;
+	}
+
+	/**
+	 * Prepares the Custom Fields Colors for TAR
+	 *
+	 * @param       $post_id
+	 * @param array $colors
+	 *
+	 * @return array
+	 */
+	public function prepare_custom_fields_colors( $post_id, $colors = array() ) {
+		$return = array();
+
+		/**
+		 * For Post List Element the $id_suffix is empty because it needs to be propagated along all posts
+		 */
+		$id_suffix = ( empty ( $post_id ) ? '' : '_' . $post_id );
+
+		foreach ( $colors as $field_id => $field_value ) {
+			$return[] = array(
+				'active'      => 1,
+				'custom_name' => 1,
+				'color'       => $field_value['value'],
+				'id'          => sanitize_title( $field_id ) . $id_suffix,
+				'name'        => sanitize_title( $field_value['label'] ),
+				'label'       => $field_value['label'],
+			);
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Outputs the post list variables inside the post list dynamic style
+	 *
+	 * @param string $variables
+	 * @param int    $post_id
+	 *
+	 * @return string
+	 */
+	public function output_post_list_variables( $variables, $post_id ) {
+		$post_list_fields = $this->get_all_external_postlist_fields( $post_id );
+
+		$variables .= $this->get_custom_fields_variables( $post_list_fields );
+
+		return $variables;
+	}
+
+	/**
+	 * Output the custom fields - color variables
+	 */
+	public function output_custom_fields_variables() {
+		$external_fields = $this->get_all_external_fields();
+		$suffix          = '_' . get_the_ID();
+
+		echo $this->get_custom_fields_variables( $external_fields, $suffix );
+	}
+
+	/**
+	 * Used for getting custom fields variables
+	 *
+	 * Used for PostList Element and general content
+	 *
+	 * @param array  $external_fields
+	 * @param string $suffix
+	 *
+	 * @return string
+	 */
+	private function get_custom_fields_variables( $external_fields = array(), $suffix = '' ) {
+		$variables = '';
+
+		if ( ! empty( $external_fields['color'] ) && is_array( $external_fields['color'] ) ) {
+			foreach ( $external_fields['color'] as $field_id => $field_value ) {
+				/* fallback for the dynamic color */
+				$fallback = 'hsl(var(--tcb-main-master-h,0), var(--tcb-main-master-s,0%),var(--tcb-main-master-l,4%))';
+
+				if ( empty( $field_value['value'] ) ) {
+					$field_value['value'] = $fallback;
+				}
+
+				$variables .= TVE_DYNAMIC_COLOR_VAR_CSS_PREFIX . sanitize_title( $field_id ) . $suffix . ':' . $field_value['value'] . ';';
+				$variables .= TVE_DYNAMIC_COLOR_VAR_CSS_PREFIX . sanitize_title( $field_id ) . $suffix . '-default' . ':' . $fallback . ';';
+			}
+		}
+
+		return $variables;
+	}
+
+	/**
+	 * Check if the user has saved colors as external fields
+	 *
+	 * @return bool
+	 */
+	public function has_external_fields_colors() {
+		if ( ! tvd_has_external_fields_plugins() ) {
+			return false;
+		}
+
+		$external_fields = $this->get_all_external_fields();
+
+		return ! empty( $external_fields['color'] );
 	}
 
 	/**
@@ -197,7 +331,7 @@ class TCB_Custom_Fields_Shortcode {
 	 *
 	 * @return string
 	 */
-	public function render_dynamic_field( $args = array(), $content, $tag ) {
+	public function render_dynamic_field( $args, $content, $tag ) {
 
 		if ( TCB_Post_List::is_outside_post_list_render() && isset( $args['post_list'] ) ) {
 
@@ -228,12 +362,14 @@ class TCB_Custom_Fields_Shortcode {
 		$post_title  = the_title_attribute( array( 'echo' => 0 ) );
 		$post_author = get_post_field( 'post_author', get_the_ID() );
 
-		$args['alt']          = ! empty($args['alt']) ? $args['alt'] : $post_title;
-		$args['title']        = ! empty($args['title']) ? $args['title'] : $post_title;
-		$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image';
+		$args['alt']          = ! empty( $args['alt'] ) ? $args['alt'] : $post_title;
+		$args['title']        = ! empty( $args['title'] ) ? $args['title'] : $post_title;
+		$args['data-classes'] = ! empty( $args['data-classes'] ) ? $args['data-classes'] : 'tve_image';
+		$args['data-css']     = ! empty( $args['data-css'] ) ? $args['data-css'] : '';
+
 		return get_avatar( $post_author, 256, '', $args['alt'], array(
 			'class'      => $args['data-classes'],
-			'extra_attr' => 'loading="lazy" data-d-f="author" title="' . $args['title'] . '" width="500" height="500"',
+			'extra_attr' => 'loading="lazy" data-d-f="author" title="' . $args['title'] . '" width="500" height="500" data-css="' . $args['data-css'] . '"',
 		) );
 	}
 
@@ -246,11 +382,13 @@ class TCB_Custom_Fields_Shortcode {
 		$featured_image_url = tve_editor_url( 'editor/css/images/featured_image.png' );
 		$post_title         = the_title_attribute( array( 'echo' => 0 ) );
 
-		$args['alt']   = ! empty($args['alt']) ? $args['alt'] : $post_title;
-		$args['title'] = ! empty($args['title']) ? $args['title'] : $post_title;
+		$args['alt']      = ! empty( $args['alt'] ) ? $args['alt'] : $post_title;
+		$args['title']    = ! empty( $args['title'] ) ? $args['title'] : $post_title;
+		$args['data-css'] = ! empty( $args['data-css'] ) ? $args['data-css'] : '';
 		if ( has_post_thumbnail() ) {
 			$thumbnail_id         = get_post_thumbnail_id();
-			$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image wp-image-' . $thumbnail_id;
+			$args['data-classes'] = ! empty( $args['data-classes'] ) ? $args['data-classes'] : 'tve_image wp-image-' . $thumbnail_id;
+
 			return wp_get_attachment_image( $thumbnail_id, 'full', false, array(
 				'class'    => $args['data-classes'],
 				'title'    => $args['title'],
@@ -258,10 +396,12 @@ class TCB_Custom_Fields_Shortcode {
 				'data-id'  => $thumbnail_id,
 				'data-d-f' => 'featured',
 				'loading'  => 'lazy',
+				'data-css' => $args['data-css'],
 			) );
 		}
-		$args['data-classes'] = ! empty($args['data-classes']) ? $args['data-classes'] : 'tve_image';
-		return '<img loading="lazy" class="' . $args['data-classes'] . '" alt="' . $args['alt'] . '" data-id="' . 0 . '" data-d-f="featured" width="500" height="500" title="' . $args['title'] . '" src="' . $featured_image_url . '" >';
+		$args['data-classes'] = ! empty( $args['data-classes'] ) ? $args['data-classes'] : 'tve_image';
+
+		return '<img loading="lazy" class="' . $args['data-classes'] . '" alt="' . $args['alt'] . '" data-id="' . 0 . '" data-d-f="featured" width="500" height="500" title="' . $args['title'] . '" src="' . $featured_image_url . '" data-css="' . $args['data-css'] . '">';
 	}
 
 	/**
@@ -353,7 +493,7 @@ class TCB_Custom_Fields_Shortcode {
 			}
 		}
 
-		$params['extra']  = '';
+		$params['extra'] = '';
 		$params['extra'] .= isset( $args[ 'loop' . '' ] ) && $args['loop'] === '1' ? 'loop="1"' : '';
 		$params['extra'] .= isset( $args['no_download'] ) && $args['no_download'] === '1' ? 'controlslist="nodownload" ' : '';
 		$params['extra'] .= isset( $args['autoplay'] ) && $args['autoplay'] === '1' ? 'data-autoplay="1" ' : '';
@@ -362,9 +502,11 @@ class TCB_Custom_Fields_Shortcode {
 		return tcb_template( 'custom-fields-elements/audio.phtml', $params, true );
 	}
 
-	private function get_video_params( $args, $params ) {
+	private function get_video_params( $args, $params, $set_source = false ) {
 		$params['value']    = empty( $params['value'] ) ? '' : $params['value'];
 		$params['video_id'] = $this->verify_video_url( $params['value'], true );
+		$args['data-type']  = $set_source ? $params['video_id'] : $args['data-type'];
+
 		switch ( $args['data-type'] ) {
 			case 'youtube':
 				$params['video_id']    = empty( $params['video_id'] ) ? '' : $params['video_id'][1];
@@ -389,19 +531,38 @@ class TCB_Custom_Fields_Shortcode {
 	public function render_custom_fields_video( $args = array(), $param = null ) {
 
 		$params = empty( $args['in_postlist'] ) ? $this->get_custom_fields_shortcode_params( $args['data-id'], 'video' ) : $param;
-
-		if ( empty( $params ) ) {
-
-			$params = array_merge( $params, array(
+		if ( ! empty( $params ) ) {
+			if ( empty( $params['extra'] ) ) {
+				$params['extra'] = '';
+			}
+			$params['value'] = empty( $params['value'] ) ? $params['url'] : $params['value'];
+			$video_provider  = ( $this->verify_video_url( $params['value'] ) );
+			//Update the mime type for external cf videos
+			isset( $video_provider['mime_type'] ) && $params['mime_type'] = $video_provider['mime_type'];
+			$params['extra'] .= empty( $args['in_postlist'] ) ? '' : ' data-post-list="1" ';
+			$params['extra'] .= empty( $args['data-query'] ) ? '' : $args['data-query'];
+		}
+		/** Set placeholder data  for (empty links) and (videos with diff source in postlist)*/
+		if ( empty( $params ) || ( ! empty( $args['data-type'] ) && $video_provider['video_src'] !== $args['data-type'] && ! empty( $args['in_postlist'] ) ) ) {
+			$params                      = array_merge( $params, array(
 				'mime_type' => 'video/mp4',
 				'id'        => '0',
 				'title'     => 'Placeholder',
 				'url'       => '',
 				'name'      => $args['data-id'],
 			) );
-
+			$video_provider['video_src'] = 'external';
 			if ( isset( $args['data-placeholder'] ) ) {
-				$params['url'] = wp_get_attachment_url( $args['data-placeholder'] );
+				//Check if placeholder is of external type
+				if ( is_numeric( $args['data-placeholder'] ) ) {
+					$params['url']      = wp_get_attachment_url( $args['data-placeholder'] );
+					$params['extra']    = 'controls="controls"';
+					$args['data-query'] = '';
+				} else {
+					$params['value'] = $args['data-placeholder'];
+					$params          = $this->get_video_params( $args, $params, true );
+					$video_provider  = ( $this->verify_video_url( $params['value'] ) );
+				}
 			}
 
 			if ( ! is_editor_page_raw( true ) && ! isset( $args['data-placeholder'] ) ) {
@@ -409,31 +570,26 @@ class TCB_Custom_Fields_Shortcode {
 			}
 		}
 
-		$params['extra']  = empty( $args['data-query'] ) ? '' : $args['data-query'];
-		$params['extra'] .= empty( $args['in_postlist'] ) ? '' : 'data-post-list="1" ';
-
 		$template = tcb_template( 'custom-fields-elements/video.phtml', $params, true );
 
-		$args['data-type'] = empty( $args['data-type'] ) ? 'external' : $args['data-type'];
+		$args['data-type'] = empty( $args['data-type'] ) ? 'external' : $video_provider['video_src'];
 		switch ( $args['data-type'] ) {
 			case 'youtube':
 			case 'vimeo':
 			case 'wistia':
 				$params   = $this->get_video_params( $args, $params );
-				$template = '<iframe class="tcb-responsive-video" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" src="' . $params['embeded_url'] . '" data-src="' . $params['embeded_url'] . '" frameborder="0" allowfullscreen data-c-f-id="' . $args['data-id'] . '"></iframe>';
+				$template = '<iframe class="tcb-responsive-video" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" src="' . $params['embeded_url'] . '" data-src="' . $params['embeded_url'] . '" frameborder="0" allowfullscreen data-c-f-id="' . $args['data-id'] . '"' . $params['extra'] . '"></iframe>';
 				break;
 			case 'vooplayer':
 				$params   = $this->get_video_params( $args, $params );
-				$template = '<iframe allow="autoplay" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" class="video-player-container vooplayer tcb-responsive-video" data-playerId="' . $params['video_id'] . '" url-params="" allowtransparency="true"  name="vooplayerframe" frameborder="0" allowfullscreen="true" scrolling="no" src="" style="max-width: 100%; position:relative; opacity: 1; min-width: 100%; height:100% !important; width: auto; top: auto;" data-c-f-id="' . $args['data-id'] . '"> </iframe>';
+				$template = '<iframe allow="autoplay" data-code="' . $params['video_id'] . '" data-provider="' . $args['data-type'] . '" class="video-player-container vooplayer tcb-responsive-video" data-playerId="' . $params['video_id'] . '" url-params="" allowtransparency="true"  name="vooplayerframe" frameborder="0" allowfullscreen="true" scrolling="no" data-src="' . $params['value'] . '" src="" style="max-width: 100%; position:relative; opacity: 1; min-width: 100%; height:100% !important; width: auto; top: auto;" data-c-f-id="' . $args['data-id'] . '"' . $params['extra'] . '"></iframe>';
 				break;
 		}
 
 		return $template;
 	}
 
-	public function render_custom_fields_image( $args = array(), $param ) {
-
-		$html = '';
+	public function render_custom_fields_image( $args, $param ) {
 
 		$params = empty( $args['in_postlist'] ) ? $this->get_custom_fields_shortcode_params( $args['data-id'], 'image' ) : $param;
 
@@ -633,7 +789,10 @@ class TCB_Custom_Fields_Shortcode {
 		$global_links = array_values( $this->global_custom_links( get_the_ID() ) );
 
 		if ( ! empty( $global_links ) ) {
-			$links['Custom Fields Global'] = array( 'links' => array( $global_links ), 'shortcode' => static::GLOBAL_SHORTCODE_URL );
+			$links['Custom Fields Global'] = array(
+				'links'     => array( $global_links ),
+				'shortcode' => static::GLOBAL_SHORTCODE_URL,
+			);
 		}
 
 		return $links;
@@ -700,7 +859,7 @@ class TCB_Custom_Fields_Shortcode {
 		$post_id = $post_id === null ? get_the_ID() : intval( $post_id );
 		$custom  = get_post_custom( $post_id );
 		//Get all the keys that are not protected meta and not links
-		$custom_keys = array_filter( ( array ) get_post_custom_keys( $post_id ), function ( $meta ) use ( $custom ) {
+		$custom_keys = array_filter( (array) get_post_custom_keys( $post_id ), function ( $meta ) use ( $custom ) {
 			return apply_filters( 'is_protected_meta', filter_var( $custom[ $meta ][0], FILTER_VALIDATE_URL ), $meta, null ) === false;
 		} );
 
@@ -732,7 +891,6 @@ class TCB_Custom_Fields_Shortcode {
 				$labels[ $k ] = $v['label'];
 			}
 		}
-
 
 		return array(
 			'real_data'  => $real_data,
@@ -861,7 +1019,6 @@ class TCB_Custom_Fields_Shortcode {
 		return $data;
 	}
 
-
 	/**
 	 * Replace the shortcode with its content
 	 *
@@ -922,7 +1079,12 @@ class TCB_Custom_Fields_Shortcode {
 			}
 		}
 
-		if ( preg_match( '/.+\.(wmv|avi|mov|mpg|mp4|m4v|ogv|3gp|3g2)$/', $url, $aux ) ) {
+		if ( preg_match( '/.+\.(wmv|avi|mov|mpg|mp4|m4v|ogv|3gp|3g2|webm)$/', $url, $aux ) ) {
+			//Exception for mov file types
+			if ( $aux[1] == 'mov' ) {
+				$aux[1] = 'mp4';
+			}
+
 			return $get_regex ? $aux : array(
 				'value'     => $url,
 				'video_src' => 'external',
@@ -1036,6 +1198,8 @@ class TCB_Custom_Fields_Shortcode {
 							$aux = get_field_object( $field_key );
 							if ( ! empty( $aux['display_format'] ) ) {     //Render Date, Date-Time, Time in display format selected by user
 								$field = array( 'value' => date_format( DateTime::createFromFormat( $aux['return_format'], $aux['value'] ), $aux['display_format'] ) );
+							} else if ( $value['type'] === 'checkbox' ) {  //Convert from Checkbox array to string
+								$field = array( 'value' => implode( ', ', $value['value'] ) );
 							} else {
 								$value['value'] = preg_replace( '(\n)', '<br>', $value['value'] ); //replace \n from text/textarea
 								$field          = array( 'value' => $value['value'] );
@@ -1081,11 +1245,9 @@ class TCB_Custom_Fields_Shortcode {
 		}
 
 		$this->external_fields = array();
-
-		if ( is_plugin_active( 'advanced-custom-fields/acf.php' ) ) {
+		if ( tvd_has_external_fields_plugins() ) {
 			$this->external_fields = array_merge_recursive( $this->get_acf_fields( false, $this->field_types ), $this->external_fields );
 		}
-
 
 		return $this->external_fields;
 	}
@@ -1101,7 +1263,7 @@ class TCB_Custom_Fields_Shortcode {
 
 		$fields = array();
 
-		if ( is_plugin_active( 'advanced-custom-fields/acf.php' ) ) {
+		if ( tvd_has_external_fields_plugins() ) {
 			$fields = $this->get_acf_fields( $post_id, $this->postlist_field_types );
 		}
 

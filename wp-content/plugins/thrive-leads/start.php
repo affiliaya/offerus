@@ -226,3 +226,5 @@ add_filter( 'rocket_exclude_css', 'tve_leads_rocket_exclude_css' );
 add_filter( 'rocket_exclude_js', 'tve_leads_rocket_exclude_js' );
 
 add_filter( 'tve_dash_cache_known_plugins', 'tve_leads_detect_cache' );
+
+add_filter( 'tcb_post_visibility_options_availability', 'tve_leads_post_visibility_options' );

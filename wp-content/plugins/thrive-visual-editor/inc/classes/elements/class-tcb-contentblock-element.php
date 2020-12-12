@@ -30,9 +30,11 @@ class TCB_Contentblock_Element extends TCB_Cloud_Template_Element_Abstract {
 	}
 
 	/**
+	 * Either to display or not the element in the sidebar menu
+	 *
 	 * @return bool
 	 */
-	public function promoted() {
+	public function hide() {
 		return true;
 	}
 
@@ -130,12 +132,93 @@ class TCB_Contentblock_Element extends TCB_Cloud_Template_Element_Abstract {
 	}
 
 	/**
+	 * Return all combined blocks
+	 *
+	 * @param bool $nocache
+	 *
+	 * @return array
+	 */
+	public function get_blocks( $nocache = false ) {
+		$blocks = array(
+			'packs' => array(),
+			'tpls'  => array(),
+		);
+
+		$special_block_set = apply_filters( 'tcb_get_special_blocks_set', '' );
+
+		if ( ! empty( $special_block_set ) ) {
+			$special_blocks = $this->get_lp_cloud_templates( array(
+				'nocache' => $nocache,
+				'lp_set'  => $special_block_set,
+			) );
+
+			if ( ! empty( $special_blocks ) && is_array( $special_blocks ) && ! empty( $special_blocks['packs'] ) && ! empty( $special_blocks['tpls'] ) ) {
+				$blocks['packs'] = array_merge( $blocks['packs'], $special_blocks['packs'] );
+				$blocks['tpls']  = array_merge( $blocks['tpls'], $special_blocks['tpls'] );
+			}
+		}
+
+		$content_blocks = $this->get_all_contentblocks_templates( array(
+			'nocache' => $nocache,
+		) );
+
+		if ( is_wp_error( $content_blocks ) ) {
+			/**
+			 * TODO: REVISE THIS
+			 */
+			$content_blocks = array();
+		}
+
+		$blocks['tpls'] = array_merge( $blocks['tpls'], $content_blocks );
+		if ( empty( $blocks['packs'] ) ) {
+			$blocks['packs'][] = array( 'name' => 'Content Blocks' );
+		}
+
+		return $blocks;
+	}
+
+	/**
+	 * Returns all contentblocks templates
+	 * Used for improved LP BLocks + Content Templates Lightbox
+	 *
+	 * @param array $args
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_all_contentblocks_templates( $args = array() ) {
+		$args = wp_parse_args( $args, array(
+			'nocache' => false,
+		) );
+
+		$do_not_use_cache    = ( defined( 'TCB_TEMPLATE_DEBUG' ) && TCB_TEMPLATE_DEBUG ) || $args['nocache'];
+		$templates_transient = 'tcb_cloud_templates_' . $this->tag() . '_all_templates';
+
+		$templates = get_transient( $templates_transient );
+
+		if ( $do_not_use_cache || empty( $templates ) ) {
+
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'content-templates/class-tcb-content-templates-api.php';
+
+			try {
+				$templates = tcb_content_templates_api()->get_all( $this->tag(), array( 'pack' => 'tcb.get.all.c.blocks.templates' ) );
+
+				set_transient( $templates_transient, $templates, 8 * HOUR_IN_SECONDS );
+			} catch ( Exception $exception ) {
+				return new WP_Error( 'tcb_error', $exception->getMessage(), 501 );
+			}
+		}
+
+		return $templates;
+	}
+
+	/**
 	 * Fetches a list of cloud templates for an element
 	 *
 	 * @param array $args allows controlling aspects of the method:
 	 *                    $nocache - do not use caching (transients)
 	 *
 	 * @return array|WP_Error
+	 * @deprecated available only for backwards compatible: people who have content blocks saved in the content
 	 */
 	public function get_cloud_templates( $args = array() ) {
 		$args = wp_parse_args( $args, array(

@@ -332,6 +332,7 @@ abstract class TCB_Element_Abstract {
 						'config' => array(
 							'icon'      => true,
 							'important' => true,
+							'options'   => array( 'noBeforeInit' => false ),
 						),
 					),
 					'PreviewFilterList' => array(
@@ -392,19 +393,20 @@ abstract class TCB_Element_Abstract {
 	public function config() {
 
 		$config = array(
-			'components'           => $this->components(),
-			'identifier'           => $this->identifier(),
-			'name'                 => $this->name(),
-			'icon'                 => $this->icon(),
-			'hide'                 => $this->hide(),
-			'tag'                  => $this->tag(),
-			'is_placeholder'       => $this->is_placeholder(),
-			'hover'                => $this->has_hover_state(),
-			'active'               => $this->active_state_config(),
-			'expanded'             => $this->expanded_state_config(),
-			'expanded_state_label' => $this->expanded_state_label(),
-			'has_group'            => $this->has_group_editing(),
-			'category'             => $this->category(),
+			'components'                  => $this->components(),
+			'identifier'                  => $this->identifier(),
+			'name'                        => $this->name(),
+			'icon'                        => $this->icon(),
+			'hide'                        => $this->hide(),
+			'tag'                         => $this->tag(),
+			'is_placeholder'              => $this->is_placeholder(),
+			'hover'                       => $this->has_hover_state(),
+			'active'                      => $this->active_state_config(),
+			'expanded'                    => $this->expanded_state_config(),
+			'expanded_state_label'        => $this->expanded_state_label(),
+			'expanded_state_apply_inline' => $this->expanded_state_apply_inline(),
+			'has_group'                   => $this->has_group_editing(),
+			'category'                    => $this->category(),
 		);
 		if ( ( $inherit_from = $this->inherit_components_from() ) ) {
 			$config['inherit_from'] = $inherit_from;
@@ -527,17 +529,20 @@ abstract class TCB_Element_Abstract {
 	 * @return array
 	 */
 	public function get_custom_sidebars() {
-		$sidebar = $this->get_sidebar_extra_state();
-		if ( $sidebar ) {
-			return array(
+		$extra_state = $this->get_sidebar_extra_state();
+
+		if ( empty( $extra_state ) ) {
+			$sidebars = array();
+		} else {
+			$sidebars = array(
 				$this->_tag => array(
-					'template' => $sidebar,
+					'template' => $extra_state,
 					'title'    => $this->name(),
 				),
 			);
 		}
 
-		return array();
+		return $sidebars;
 	}
 
 	/**
@@ -546,7 +551,7 @@ abstract class TCB_Element_Abstract {
 	 * @return string|null
 	 */
 	public function get_sidebar_extra_state() {
-
+		return '';
 	}
 
 	/**
@@ -595,6 +600,16 @@ abstract class TCB_Element_Abstract {
 	 */
 	public function expanded_state_label() {
 		return __( 'Expanded', 'thrive-cb' );
+	}
+
+	/**
+	 * Whether or not we can apply inline css too on element
+	 * e.g for tabs/toggle we cant because elements can be in two states at the time
+	 *
+	 * @return bool | string
+	 */
+	public function expanded_state_apply_inline() {
+		return false;
 	}
 
 	/**

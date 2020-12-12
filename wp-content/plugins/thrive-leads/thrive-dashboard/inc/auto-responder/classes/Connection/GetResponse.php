@@ -119,9 +119,10 @@ class Thrive_Dash_List_Connection_GetResponse extends Thrive_Dash_List_Connectio
 	/**
 	 * get all Subscriber Lists from this API service
 	 *
-	 * @return array
+	 * @return array|false
 	 */
 	protected function _getLists() {
+
 		/** @var Thrive_Dash_Api_GetResponse $gr */
 		$gr = $this->getApi();
 
@@ -169,7 +170,6 @@ class Thrive_Dash_List_Connection_GetResponse extends Thrive_Dash_List_Connectio
 		$credentials = $this->getCredentials();
 		$return      = true;
 		$version     = empty( $credentials['version'] ) ? 2 : (int) $credentials['version'];
-		$contact_id  = false;
 
 		try {
 			if ( 2 === $version ) {
@@ -206,10 +206,37 @@ class Thrive_Dash_List_Connection_GetResponse extends Thrive_Dash_List_Connectio
 					$params = array_merge( $params, $mapped_custom_fields );
 				}
 
-				// Removed update contact due to API limitations:
-				// "If campaign is updated then contact will be moved from old campaign to new while retaining it's activity history and statistics from previous campaign."
-				// https://apidocs.getresponse.com/v3/resources/contacts#contacts.update
-				$api->addContact( $params );
+				try {
+					/**
+					 * this contact may be in other list but try to add it in the current on
+					 */
+					$api->addContact( $params );
+				} catch ( Exception $e ) {
+
+				}
+
+				/**
+				 * we're talking about the same email but
+				 * it is the same contact in multiple list
+				 */
+				$contacts = $api->searchContacts(
+					array(
+						'query' => array(
+							'email' => $params['email'],
+						),
+					)
+				);
+
+				if ( ! empty( $contacts ) ) {
+					foreach ( $contacts as $contact ) {
+						/**
+						 * Update the subscriber only in current list
+						 */
+						if ( $contact->campaign->campaignId === $params['campaign']['campaignId'] ) {
+							$api->updateContact( $contact->contactId, $params );
+						}
+					}
+				}
 			}
 		} catch ( Exception $e ) {
 			$return = $e->getMessage();
@@ -237,12 +264,7 @@ class Thrive_Dash_List_Connection_GetResponse extends Thrive_Dash_List_Connectio
 
 		if ( is_array( $form_data ) ) {
 
-			$mapped_fields = array_map(
-				function ( $field ) {
-					return $field['id'];
-				},
-				$this->_mapped_custom_fields
-			);
+			$mapped_fields = $this->getMappedFieldsIDs();
 
 			foreach ( $mapped_fields as $mapped_field_name ) {
 
@@ -261,6 +283,11 @@ class Thrive_Dash_List_Connection_GetResponse extends Thrive_Dash_List_Connectio
 						}
 
 						$mapped_api_id = $form_data[ $cf_form_name ][ $this->_key ];
+						$cf_form_name  = str_replace( '[]', '', $cf_form_name );
+						if ( ! empty( $args[ $cf_form_name ] ) ) {
+							$args[ $cf_form_name ] = $this->processField( $args[ $cf_form_name ] );
+						}
+
 						array_push(
 							$mapped_data,
 							array(

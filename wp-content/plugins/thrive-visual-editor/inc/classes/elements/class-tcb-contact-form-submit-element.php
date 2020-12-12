@@ -97,15 +97,6 @@ class TCB_Contact_Form_Submit_Element extends TCB_Element_Abstract {
 						),
 						'extends' => 'ButtonGroup',
 					),
-//					'style'       => array(
-//						'css_suffix' => ' button',
-//						'css_prefix' => $prefix,
-//						'config'     => array(
-//							'label'   => __( 'Style', 'thrive-cb' ),
-//							'items'   => array(),
-//							'default' => 'default',
-//						),
-//					),
 				),
 			),
 			'typography'          => array(

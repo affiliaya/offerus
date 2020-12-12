@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TCB_Lead_Generation_Radio_Element extends TCB_Element_Abstract {
 
 	public function name() {
-		return __( 'Lead Generation Radio', 'thrive-cb' );
+		return __( 'Radio Field', 'thrive-cb' );
 	}
 
 	public function identifier() {
@@ -24,20 +24,6 @@ class TCB_Lead_Generation_Radio_Element extends TCB_Element_Abstract {
 	}
 
 	public function own_components() {
-		$controls_default_config = array(
-			'css_suffix' => ' p',
-			'css_prefix' => tcb_selection_root() . ' ',
-		);
-
-		$columns = array();
-		for ( $i = 1; $i <= 10; $i ++ ) {
-			$col = array(
-				'value' => $i,
-				'name'  => $i,
-			);
-
-			$columns[] = $col;
-		}
 
 		$components = array(
 			'lead_generation_radio' => array(
@@ -45,6 +31,13 @@ class TCB_Lead_Generation_Radio_Element extends TCB_Element_Abstract {
 					'ShowLabel'       => array(
 						'config'  => array(
 							'label' => __( 'Show Label', 'thrive-cb' ),
+						),
+						'extends' => 'Switch',
+					),
+					'Required'        => array(
+						'config'  => array(
+							'default' => false,
+							'label'   => __( 'Required field' ),
 						),
 						'extends' => 'Switch',
 					),
@@ -94,20 +87,18 @@ class TCB_Lead_Generation_Radio_Element extends TCB_Element_Abstract {
 							'marked_field'  => 'default',
 						),
 					),
+					'AnswerTag'        => array(
+						'config'  => array(
+							'default' => false,
+							'label'   => __( 'Send answer as tag', 'thrive-cb' ),
+							'info'    => true,
+						),
+						'extends' => 'Switch',
+					),
 				),
 			),
 			'typography'            => array(
-				'disabled_controls' => array( 'TextAlign' ),
-				'config'            => array(
-					'FontSize'      => $controls_default_config,
-					'FontColor'     => $controls_default_config,
-					'FontFace'      => $controls_default_config,
-					'LetterSpacing' => $controls_default_config,
-					'LineHeight'    => $controls_default_config,
-					'TextAlign'     => $controls_default_config,
-					'TextStyle'     => $controls_default_config,
-					'TextTransform' => $controls_default_config,
-				),
+				'hidden' => true,
 			),
 			'layout'                => array(
 				'disabled_controls' => array(
@@ -142,21 +133,4 @@ class TCB_Lead_Generation_Radio_Element extends TCB_Element_Abstract {
 		return array_merge( $components, $this->group_component() );
 	}
 
-	/**
-	 * Group Edit Properties
-	 *
-	 * @return array|bool
-	 */
-	public function has_group_editing() {
-		return array(
-			'select_values' => array(
-				array(
-					'value'    => 'radio_options',
-					'selector' => '.tve_lg_radio_wrapper',
-					'name'     => __( 'Grouped Option Labels', 'thrive-cb' ),
-					'singular' => __( '-- Option Label %s', 'thrive-cb' ),
-				),
-			),
-		);
-	}
 }

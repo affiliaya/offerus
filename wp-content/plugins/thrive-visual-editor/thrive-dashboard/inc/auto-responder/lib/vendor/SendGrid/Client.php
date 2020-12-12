@@ -193,13 +193,16 @@ class Thrive_Dash_Api_SendGrid_Client {
 			return $this->_();
 		}
 
-		if ( in_array( $name, $this->methods ) ) {
-			$query_params    = ( ( count( $args ) >= 2 ) ? $args[1] : null );
-			$url             = $this->_build_url( $query_params );
-			$request_body    = ( $args ? $args[0] : null );
-			$request_headers = ( ( count( $args ) == 3 ) ? $args[2] : null );
+		try {
+			if ( in_array( $name, $this->methods ) ) {
+				$query_params    = ( ( count( $args ) >= 2 ) ? $args[1] : null );
+				$url             = $this->_build_url( $query_params );
+				$request_body    = ( $args ? $args[0] : null );
+				$request_headers = ( ( count( $args ) == 3 ) ? $args[2] : null );
 
-			return $this->make_request( $name, $url, $request_body, $request_headers );
+				return $this->make_request( $name, $url, $request_body, $request_headers );
+			}
+		} catch ( Exception $e ) {
 		}
 
 		return $this->_( $name );

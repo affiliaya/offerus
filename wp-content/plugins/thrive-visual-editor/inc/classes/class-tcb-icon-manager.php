@@ -36,6 +36,47 @@ class TCB_Icon_Manager {
 	}
 
 	/**
+	 * Get retina icons from dashboard and also if the imported page had retina icons too
+	 *
+	 * @param null $post_id - edited page id
+	 *
+	 * @return array
+	 */
+	public static function get_custom_icons( $post_id = null ) {
+		if ( empty( $post_id ) ) {
+			$post_id = get_the_ID();
+		}
+		$icon_data = get_option( 'thrive_icon_pack' );
+		if ( empty( $icon_data['icons'] ) ) {
+			$icon_data['icons'] = array();
+		}
+		$icon_data['icons'] = apply_filters( 'tcb_get_extra_icons', $icon_data['icons'], $post_id ); //
+
+		$data = array(
+			'style'  => 'icomoon',
+			'prefix' => 'icon',
+			'icons'  => $icon_data['icons'],
+		);
+
+		return $data;
+	}
+
+	/**
+	 * Enqueue Fontawesome and Material icons css styles
+	 * Needed for icon modal to use fonts instead of svgs
+	 */
+	public static function enqueue_fontawesome_styles() {
+		$license = 'use';
+		if ( get_option( 'tve_fa_kit', '' ) ) {
+			$license = 'pro';
+		}
+
+		tve_enqueue_style( 'tve_material', '//fonts.googleapis.com/css?family=Material+Icons+Two+Tone' );
+		tve_enqueue_style( 'tve_material_community', '//cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css' );
+		tve_enqueue_style( 'tve_fa', "//$license.fontawesome.com/releases/v5.13.1/css/all.css" );
+	}
+
+	/**
 	 * Enqueue the CSS for the icon pack used by the user
 	 *
 	 * @return false|string url

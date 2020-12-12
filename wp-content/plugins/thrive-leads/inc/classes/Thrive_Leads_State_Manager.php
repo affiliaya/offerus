@@ -203,8 +203,9 @@ class Thrive_Leads_State_Manager extends Thrive_Leads_Request_Handler {
 			'needs_tt_wrapper'    => in_array( $form_type, array( 'lightbox', 'in_content', 'post_footer', 'widget', 'shortcode' ) ),
 			'main_page_content'   => trim( $this->render_ajax_content( $current_variation ) ),
 			'custom_css'          => $custom_css,
+			'global_css'          => tve_get_shared_styles( '', '', false ),
 			'css'                 => $asset_links,
-			'body_class'          => $type == 'lightbox' ? 'tve-l-open tve-o-hidden tve-lightbox-page' : '',
+			'body_class'          => $type === 'lightbox' ? 'tve-l-open tve-o-hidden tve-lightbox-page' : '',
 			'tve_path_params'     => $javascript_data,
 			'tve_leads_page_data' => $editor_js,
 			'preview_link'        => $preview_link,
@@ -414,7 +415,7 @@ class Thrive_Leads_State_Manager extends Thrive_Leads_Request_Handler {
 	 *
 	 * @param array $variation
 	 */
-	public function regenerate_css_ids( & $variation ) {
+	public function regenerate_css_ids( &$variation ) {
 
 		if ( empty( $variation[ TVE_LEADS_FIELD_SAVED_CONTENT ] ) || empty( $variation[ TVE_LEADS_FIELD_INLINE_CSS ] ) ) {
 			return;

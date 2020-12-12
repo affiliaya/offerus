@@ -527,14 +527,26 @@ ThriveGlobal.$j( function () {
 
 			event.post_data = event.post_data || {};
 			event.post_data.thrive_leads = ajax_data;
-		} ).on( 'lead_conversion_success.tcb', '.tve_lead_lock_shortcode form', function ( event ) {
+		} ).on( 'lead_conversion_success.tcb', '.tve_lead_lock_shortcode form, .tve_post_lightbox form', function ( event ) {
 			var $form = ThriveGlobal.$j( this ),
 				$container = $form.parents( '.tve_content_lock' );
 
-			$container.removeClass( 'tve_lead_lock' ).find( '.tve_lead_lock_shortcode' ).remove();
-			$container.find( '.tve_lead_locked_overlay' ).remove();
+			if ( $form.closest( '.tve_post_lightbox' ).length ) {
+				/* case: lightbox state of a content-lock shortcode */
+				var formType = $form.closest( '.tve-leads-conversion-object' ).attr( 'data-tl-type' );
 
-			event.content_unlocked = true;
+				/* find out if the lightbox is connected to the shortcode */
+				if ( TL_Front.parent_state && TL_Front.parent_state.parent().hasClass( 'tve-leads-track-' + formType ) ) {
+					$container = TL_Front.parent_state.closest( '.tve_content_lock' );
+				}
+			}
+
+			if ( $container.length && $container.hasClass( 'tve_content_lock' ) ) {
+				$container.removeClass( 'tve_lead_lock' ).find( '.tve_lead_lock_shortcode' ).remove();
+				$container.find( '.tve_lead_locked_overlay' ).remove();
+
+				event.content_unlocked = true;
+			}
 		} ).on( 'leads_states.tcb', '.tve-leads-conversion-object form', function ( event, content ) {
 			var $form = ThriveGlobal.$j( this ),
 				_form_type = $form.find( '#_form_type' ).val();
@@ -945,7 +957,9 @@ TL_Front.open_ribbon = function ( $target ) {
 	 */
 	function open_it() {
 		$target.addClass( 'tve-leads-triggered' );
-		var position = $target.attr( 'data-position' ) || 'top';
+		var $editor = $target.find( '.tve_shortcode_editor' ),
+			editorHeight = $editor.length ? $editor.outerHeight() : 0,
+			position = $target.attr( 'data-position' ) || 'top';
 		if ( position === 'top' ) {
 			$target.css( 'top', ThriveGlobal.$j( '#wpadminbar' ).length ? '32px' : '0px' );
 		} else if ( position === 'bottom' ) {
@@ -957,10 +971,10 @@ TL_Front.open_ribbon = function ( $target ) {
 		 * Mozilla is really slow at applying the loaded css. we need this workaround to have it work in mozilla.
 		 */
 		var iterations = 0,
-			initial_height = $target.outerHeight(),
+			initial_height = Math.max( $target.outerHeight(), editorHeight ),
 			ii = setInterval( function () {
 				iterations ++;
-				var _h = $target.outerHeight();
+				var _h = Math.max( $target.outerHeight(), editorHeight );
 				if ( _h != initial_height || iterations == 10 ) {
 					clearInterval( ii );
 				}
@@ -1167,10 +1181,7 @@ TL_Front.slide_in_position = function ( $lContent ) {
 		elHeight = $lContent.outerHeight();
 	if ( $window.width() <= 782 || $window.height() < elHeight ) {
 		$lContent.parents( '.tve-leads-slide-in' ).addClass( 'tve-lb' ); // display it as a lightbox
-		var overflow_hidden = 'tve-o-hidden tve-l-open tve-hide-overflow',
-			wHeight = $window.height(),
-			$body = ThriveGlobal.$j( 'body' ),
-			$html = ThriveGlobal.$j( 'html' );
+		var wHeight = $window.height();
 
 		setTimeout( function () {
 			var top = (
@@ -1181,8 +1192,6 @@ TL_Front.slide_in_position = function ( $lContent ) {
 			         .data( 'doc-scroll-top', document.documentElement.scrollTop )
 			         .data( 'bdy-scroll-top', document.body.scrollTop );
 
-			$body.addClass( overflow_hidden );
-			$html.addClass( overflow_hidden );
 			$lContent.parents( '.tve-leads-conversion-object' ).first().css( {
 				height: (
 				        elHeight + 80
