@@ -68,7 +68,7 @@
         input[type="text"] {
             &.select2-search__field {
                 min-height: 17px;
-            }   
+            }
         }
     }
 }
@@ -79,13 +79,19 @@ input[type="text"] {
     }
 }
 
+/* CSS for a Description as a Notice. */
+.ast-customizer-notice {
+    margin: 0 -12px;
+    padding: 12px;
+}
+
 /* CSS to show popups without scroll */
 #customize-theme-controls .control-section.open {
     height: 100%;
 }
 
 /* Safari Browser specific CSS */
-@media not all and (min-resolution:.001dpcm) { 
+@media not all and (min-resolution:.001dpcm) {
     @supports (-webkit-appearance:none) {
         #customize-control-astra-settings-ast-header-responsive-logo-width .wrapper {
             display: inline-block;
@@ -97,7 +103,13 @@ input[type="text"] {
         }
         .ast-field-settings-modal .customize-control-ast-responsive .input-wrapper .ast-responsive-input.active + .ast-responsive-select {
             width: 20%;
-        }
+		}
+		.ast-reset-btn {
+			&.components-button svg {
+				padding: 0px;
+    			height: 13px;
+			}
+		}
     }
 }
 
