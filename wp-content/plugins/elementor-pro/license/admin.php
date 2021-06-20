@@ -1,6 +1,7 @@
 <?php
 namespace ElementorPro\License;
 
+use Elementor\Core\Admin\Admin_Notices;
 use Elementor\Settings;
 use ElementorPro\Core\Connect\Apps\Activate;
 use ElementorPro\Plugin;
@@ -8,11 +9,14 @@ use ElementorPro\Plugin;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
-update_option( 'elementor_pro_license_key','fb451f05958872E193feb37a405a84be');
 
 class Admin {
 
 	const PAGE_ID = 'elementor-license';
+
+	const LICENSE_KEY_OPTION_NAME = 'elementor_pro_license_key';
+	const LICENSE_DATA_OPTION_NAME = '_elementor_pro_license_data';
+	const LICENSE_DATA_FALLBACK_OPTION_NAME = self::LICENSE_DATA_OPTION_NAME . '_fallback';
 
 	public static $updater = null;
 
@@ -50,33 +54,9 @@ class Admin {
 	public static function deactivate() {
 		API::deactivate_license();
 
-		delete_option( 'elementor_pro_license_key' );
-		delete_transient( 'elementor_pro_license_data' );
-	}
-
-	private function print_admin_message( $title, $description, $button_text = '', $button_url = '', $button_class = '' ) {
-		?>
-		<div class="notice elementor-message">
-			<div class="elementor-message-inner">
-				<div class="elementor-message-icon">
-					<div class="e-logo-wrapper">
-						<i class="eicon-elementor" aria-hidden="true"></i>
-					</div>
-				</div>
-
-				<div class="elementor-message-content">
-					<strong><?php echo $title; ?></strong>
-					<p><?php echo $description; ?></p>
-				</div>
-
-				<?php if ( ! empty( $button_text ) ) : ?>
-					<div class="elementor-message-action">
-						<a class="elementor-button <?php echo $button_class; ?>" href="<?php echo esc_url( $button_url ); ?>"><?php echo $button_text; ?></a>
-					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php
+		delete_option( self::LICENSE_KEY_OPTION_NAME );
+		delete_option( self::LICENSE_DATA_OPTION_NAME );
+		delete_option( self::LICENSE_DATA_FALLBACK_OPTION_NAME );
 	}
 
 	private static function get_hidden_license_key() {
@@ -101,11 +81,11 @@ class Admin {
 	}
 
 	public static function get_license_key() {
-		return trim( get_option( 'elementor_pro_license_key' ) );
+		return trim( get_option( self::LICENSE_KEY_OPTION_NAME ) );
 	}
 
 	public static function set_license_key( $license_key ) {
-		return update_option( 'elementor_pro_license_key', $license_key );
+		return update_option( self::LICENSE_KEY_OPTION_NAME, $license_key );
 	}
 
 	public function action_activate_license() {
@@ -170,7 +150,7 @@ class Admin {
 	public function display_page() {
 		$license_key = self::get_license_key();
 
-		$is_manual_mode = ( isset( $_GET['mode'] ) && 'manually' === $_GET['mode'] );
+		$is_manual_mode = true;
 
 		if ( $is_manual_mode ) {
 			$this->render_manually_activation_widget( $license_key );
@@ -196,14 +176,7 @@ class Admin {
 						</a>
 					</div>
 				<?php else :
-					$license_data = ['license' => 'valid',
-		            			'payment_id' => '10230',
-		            			'license_limit' => '0',
-		            			'site_count' => '1',
-		            			'activations_left' => '999990',
-                    	    			'expires','lifetime',
-                    	    			'subscriptions','enable'];
-					?>
+					$license_data = API::get_license_data( true ); ?>
 					<h3><?php _e( 'Status', 'elementor-pro' ); ?>:
 						<?php if ( API::STATUS_EXPIRED === $license_data['license'] ) : ?>
 							<span style="color: #ff0000; font-style: italic;"><?php _e( 'Expired', 'elementor-pro' ); ?></span>
@@ -301,44 +274,66 @@ class Admin {
 
 		$license_key = self::get_license_key();
 
+		/**
+		 * @var Admin_Notices $admin_notices
+		 */
+		$admin_notices = Plugin::elementor()->admin->get_component( 'admin-notices' );
+
 		if ( empty( $license_key ) ) {
-			?>
-			<div class="notice elementor-message">
-				<div class="elementor-message-inner">
-					<div class="elementor-message-icon">
-						<div class="e-logo-wrapper">
-							<i class="eicon-elementor" aria-hidden="true"></i>
-						</div>
-					</div>
+			$admin_notices->print_admin_notice( [
+				'title' => __( 'Welcome to Elementor Pro!', 'elementor-pro' ),
+				'description' => $this->get_activate_message(),
+				'button' => [
+					'text' => '<i class="dashicons dashicons-update" aria-hidden="true"></i>' . __( 'Connect & Activate', 'elementor-pro' ),
+					'url' => $this->get_connect_url(),
+				],
+			] );
 
-					<div class="elementor-message-content">
-						<strong><?php echo __( 'Welcome to Elementor Pro!', 'elementor-pro' ); ?></strong>
-						<p><?php echo $this->get_activate_message(); ?></p>
-					</div>
-
-					<div class="elementor-message-action">
-						<a class="elementor-button" href="<?php echo esc_url( $this->get_connect_url() ); ?>">
-							<i class="dashicons dashicons-update" aria-hidden="true"></i>
-							<?php echo __( 'Connect & Activate', 'elementor-pro' ); ?>
-						</a>
-					</div>
-
-				</div>
-			</div>
-			<?php
 			return;
 		}
-		
-		$license_data = ['license' => 'valid',
-		 'payment_id' => '10230',
-		 'license_limit' => '0',
-		 'site_count' => '1',
-		 'activations_left' => '999990',
-         	 'expires','lifetime',
-         	 'subscriptions','enable'];
-		
-		$errors = '';
-			
+
+		$license_data = API::get_license_data();
+		if ( empty( $license_data['license'] ) ) {
+			return;
+		}
+
+		$errors = self::get_errors_details();
+
+		if ( isset( $errors[ $license_data['license'] ] ) ) {
+			$error_data = $errors[ $license_data['license'] ];
+
+			$admin_notices->print_admin_notice( [
+				'title' => $error_data['title'],
+				'description' => $error_data['description'],
+				'button' => [
+					'text' => $error_data['button_text'],
+					'url' => $error_data['button_url'],
+				],
+			] );
+
+			return;
+		}
+
+		if ( API::is_license_active() ) {
+			if ( API::is_license_about_to_expire() ) {
+				$title = sprintf( __( 'Your License Will Expire in %s.', 'elementor-pro' ), human_time_diff( current_time( 'timestamp' ), strtotime( $license_data['expires'] ) ) );
+
+				if ( isset( $license_data['renewal_discount'] ) && 0 < $license_data['renewal_discount'] ) {
+					$description = sprintf( __( '<a href="%1$s" target="_blank">Renew your license today</a>, and get an exclusive, time-limited %2$s discount.', 'elementor-pro' ), $renew_url, $license_data['renewal_discount'] . '%' );
+				} else {
+					$description = sprintf( __( '<a href="%s" target="_blank">Renew now and enjoy updates</a>, support and Pro templates for another year.', 'elementor-pro' ), $renew_url );
+				}
+
+				$admin_notices->print_admin_notice( [
+					'title' => $title,
+					'description' => $description,
+					'button' => [
+						'text' => __( 'Renew License', 'elementor-pro' ),
+						'url' => $renew_url,
+					],
+				] );
+			}
+		}
 	}
 
 	public function filter_library_get_templates_args( $body_args ) {
@@ -402,6 +397,11 @@ class Admin {
 		add_filter( 'elementor/admin/dashboard_overview_widget/footer_actions', function( $additions_actions ) {
 			unset( $additions_actions['go-pro'] );
 
+			// Keep Visible to administrator role or for the Pro license owner, remove for non-owner lower-level user types.
+			if ( ! current_user_can( 'manage_options' ) && isset( $additions_actions['find_an_expert'] ) ) {
+				unset( $additions_actions['find_an_expert'] );
+			}
+
 			return $additions_actions;
 		}, 550 );
 	}
@@ -452,19 +452,10 @@ class Admin {
 
 					<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Activate', 'elementor-pro' ); ?>"/>
 
-					<p class="description"><?php printf( __( 'Your license key should look something like this: %s', 'elementor-pro' ), '<code>fb351f05958872E193feb37a505a84be</code>' ); ?></p>
+					<p class="description"><?php printf( __( 'Your license key should look something like this: %s', 'elementor-pro' ), '<code>GWP7514519919615182316RL</code>' ); ?></p>
 
 				<?php else :
-					
-					$license_data = ['license' => 'valid',
-		            		'payment_id' => '10230',
-		            		'license_limit' => '0',
-		            		'site_count' => '1',
-		            		'activations_left' => '999990',
-                     			'expires','lifetime',
-                     			'subscriptions','enable'];
-
-					?>
+					$license_data = API::get_license_data( true ); ?>
 					<input type="hidden" name="action" value="elementor_pro_deactivate_license"/>
 
 					<label for="elementor-pro-license-key"><?php _e( 'Your License Key', 'elementor-pro' ); ?>:</label>
@@ -520,7 +511,7 @@ class Admin {
 	}
 
 	private function is_connected() {
-		return true;
+		return $this->get_app()->is_connected();
 	}
 
 	public function get_connect_url( $params = [] ) {

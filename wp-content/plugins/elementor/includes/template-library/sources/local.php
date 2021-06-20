@@ -6,9 +6,9 @@ use Elementor\Core\Editor\Editor;
 use Elementor\DB;
 use Elementor\Core\Settings\Manager as SettingsManager;
 use Elementor\Core\Settings\Page\Model;
+use Elementor\Modules\LandingPages\Module as Landing_Page_Module;
 use Elementor\Modules\Library\Documents\Library_Document;
 use Elementor\Plugin;
-use Elementor\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -279,7 +279,9 @@ class Source_Local extends Source_Base {
 		 */
 		$args = apply_filters( 'elementor/template_library/sources/local/register_taxonomy_args', $args );
 
-		register_taxonomy( self::TAXONOMY_TYPE_SLUG, self::CPT, $args );
+		$cpts_to_associate = apply_filters( 'elementor/template_library/sources/local/register_taxonomy_cpts', [ self::CPT ] );
+
+		register_taxonomy( self::TAXONOMY_TYPE_SLUG, $cpts_to_associate, $args );
 
 		/**
 		 * Categories
@@ -401,23 +403,26 @@ class Source_Local extends Source_Base {
 
 		if ( ! empty( $args['type'] ) ) {
 			$template_types = $args['type'];
+			unset( $args['type'] );
 		}
 
-		$templates_query = new \WP_Query(
-			[
-				'post_type' => self::CPT,
-				'post_status' => 'publish',
-				'posts_per_page' => -1,
-				'orderby' => 'title',
-				'order' => 'ASC',
-				'meta_query' => [
-					[
-						'key' => Document::TYPE_META_KEY,
-						'value' => $template_types,
-					],
+		$defaults = [
+			'post_type' => self::CPT,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			'order' => 'ASC',
+			'meta_query' => [
+				[
+					'key' => Document::TYPE_META_KEY,
+					'value' => $template_types,
 				],
-			]
-		);
+			],
+		];
+
+		$query_args = wp_parse_args( $args, $defaults );
+
+		$templates_query = new \WP_Query( $query_args );
 
 		$templates = [];
 
@@ -582,7 +587,9 @@ class Source_Local extends Source_Base {
 			'thumbnail' => get_the_post_thumbnail_url( $post ),
 			'date' => $date,
 			'human_date' => date_i18n( get_option( 'date_format' ), $date ),
+			'human_modified_date' => date_i18n( get_option( 'date_format' ), strtotime( $post->post_modified ) ),
 			'author' => $user->display_name,
+			'status' => $post->post_status,
 			'hasPageSettings' => ! empty( $page_settings ),
 			'tags' => [],
 			'export_link' => $this->get_export_link( $template_id ),
@@ -617,20 +624,22 @@ class Source_Local extends Source_Base {
 	 * @return array Local template data.
 	 */
 	public function get_data( array $args ) {
-		$db = Plugin::$instance->db;
-
 		$template_id = $args['template_id'];
 
-		// TODO: Validate the data (in JS too!).
-		if ( ! empty( $args['display'] ) ) {
-			$content = $db->get_builder( $template_id );
-		} else {
-			$document = Plugin::$instance->documents->get( $template_id );
-			$content = $document ? $document->get_elements_data() : [];
-		}
+		$document = Plugin::$instance->documents->get( $template_id );
+		$content = [];
 
-		if ( ! empty( $content ) ) {
-			$content = $this->replace_elements_ids( $content );
+		if ( $document ) {
+			// TODO: Validate the data (in JS too!).
+			if ( ! empty( $args['display'] ) ) {
+				$content = $document->get_elements_raw_data( null, true );
+			} else {
+				$content = $document->get_elements_data();
+			}
+
+			if ( ! empty( $content ) ) {
+				$content = $this->replace_elements_ids( $content );
+			}
 		}
 
 		$data = [
@@ -778,6 +787,44 @@ class Source_Local extends Source_Base {
 	}
 
 	/**
+	 * Find temporary files.
+	 *
+	 * Recursively finds a list of temporary files from the extracted zip file.
+	 *
+	 * Example return data:
+	 *
+	 * [
+	 *  0 => '/www/wp-content/uploads/elementor/tmp/5eb3a7a411d44/templates/block-2-col-marble-title.json',
+	 *  1 => '/www/wp-content/uploads/elementor/tmp/5eb3a7a411d44/templates/block-2-col-text-and-photo.json',
+	 * ]
+	 *
+	 * @since 2.9.8
+	 * @access private
+	 *
+	 * @param string $temp_path - The temporary file path to scan for template files
+	 *
+	 * @return array An array of temporary files on the filesystem
+	 */
+	private function find_temp_files( $temp_path ) {
+
+		$file_names = [];
+
+		$possible_file_names = array_diff( scandir( $temp_path ), [ '.', '..' ] );
+
+		// Find nested files in the unzipped path. This happens for example when the user imports a Template Kit.
+		foreach ( $possible_file_names as $possible_file_name ) {
+			$full_possible_file_name = $temp_path . '/' . $possible_file_name;
+			if ( is_dir( $full_possible_file_name ) ) {
+				$file_names = $file_names + $this->find_temp_files( $full_possible_file_name );
+			} else {
+				$file_names[] = $full_possible_file_name;
+			}
+		}
+
+		return $file_names;
+	}
+
+	/**
 	 * Import local template.
 	 *
 	 * Import template from a file.
@@ -818,7 +865,8 @@ class Source_Local extends Source_Base {
 			for ( $i = 0; $i < $zip->numFiles; $i++ ) {
 				$zipped_file_name = $zip->getNameIndex( $i );
 				$zipped_extension = pathinfo( $zipped_file_name, PATHINFO_EXTENSION );
-				if ( 'json' === $zipped_extension ) {
+				// Template Kit zip files contain a `manifest.json` file, this is not a valid Elementor template so ensure we skip it.
+				if ( 'json' === $zipped_extension && 'manifest.json' !== $zipped_file_name ) {
 					$valid_entries[] = $zipped_file_name;
 				}
 			}
@@ -829,11 +877,9 @@ class Source_Local extends Source_Base {
 
 			$zip->close();
 
-			$file_names = array_diff( scandir( $temp_path ), [ '.', '..' ] );
+			$file_names = $this->find_temp_files( $temp_path );
 
-			foreach ( $file_names as $file_name ) {
-				$full_file_name = $temp_path . '/' . $file_name;
-
+			foreach ( $file_names as $full_file_name ) {
 				$import_result = $this->import_single_template( $full_file_name );
 
 				unlink( $full_file_name );
@@ -1208,11 +1254,17 @@ class Source_Local extends Source_Base {
 	 * @access public
 	 *
 	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+	 * @param array $args
 	 */
-	public function maybe_render_blank_state( $which ) {
+	public function maybe_render_blank_state( $which, array $args = [] ) {
 		global $post_type;
 
-		if ( self::CPT !== $post_type || 'bottom' !== $which ) {
+		$args = wp_parse_args( $args, [
+			'cpt' => self::CPT,
+			'post_type' => get_query_var( 'elementor_library_type' ),
+		] );
+
+		if ( $args['cpt'] !== $post_type || 'bottom' !== $which ) {
 			return;
 		}
 
@@ -1224,9 +1276,7 @@ class Source_Local extends Source_Base {
 			return;
 		}
 
-		$inline_style = '#posts-filter .wp-list-table, #posts-filter .tablenav.top, .tablenav.bottom .actions, .wrap .subsubsub { display:none;}';
-
-		$current_type = get_query_var( 'elementor_library_type' );
+		$current_type = $args['post_type'];
 
 		$document_types = Plugin::instance()->documents->get_document_types();
 
@@ -1239,6 +1289,7 @@ class Source_Local extends Source_Base {
 			return;
 		}
 
+		// TODO: This code maybe unreachable see if above `if ( empty( $document_types[ $current_type ] ) )`.
 		if ( empty( $current_type ) ) {
 			$counts = (array) wp_count_posts( self::CPT );
 			unset( $counts['auto-draft'] );
@@ -1250,13 +1301,47 @@ class Source_Local extends Source_Base {
 
 			$current_type = 'template';
 
-			$inline_style .= '#elementor-template-library-tabs-wrapper {display: none;}';
+			$args['additional_inline_style'] = '#elementor-template-library-tabs-wrapper {display: none;}';
 		}
 
+		$this->render_blank_state( $current_type, $args );
+	}
+
+	private function render_blank_state( $current_type, array $args = [] ) {
 		$current_type_label = $this->get_template_label_by_type( $current_type );
+		$inline_style = '#posts-filter .wp-list-table, #posts-filter .tablenav.top, .tablenav.bottom .actions, .wrap .subsubsub { display:none;}';
+
+		$args = wp_parse_args( $args, [
+			'additional_inline_style' => '',
+			'href' => '',
+			'description' => __( 'Add templates and reuse them across your website. Easily export and import them to any other project, for an optimized workflow.', 'elementor' ),
+		] );
+		$inline_style .= $args['additional_inline_style'];
 		?>
 		<style type="text/css"><?php echo $inline_style; ?></style>
 		<div class="elementor-template_library-blank_state">
+			<?php $this->print_blank_state_template( $current_type_label, $args['href'], $args['description'] ); ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Print Blank State Template
+	 *
+	 * When the an entity (CPT, Taxonomy...etc) has no saved items, print a blank admin page offering
+	 * to create the very first item.
+	 *
+	 * This method is public because it needs to be accessed from outside the Source_Local
+	 *
+	 * @since 3.1.0
+	 * @access public
+	 *
+	 * @param string $current_type_label The Entity title
+	 * @param string $href The URL for the 'Add New' button
+	 * @param string $description The sub title describing the Entity (Post Type, Taxonomy, etc.)
+	 */
+	public function print_blank_state_template( $current_type_label, $href, $description ) {
+		?>
 			<div class="elementor-blank_state">
 				<i class="eicon-folder"></i>
 				<h2>
@@ -1265,15 +1350,14 @@ class Source_Local extends Source_Base {
 					printf( __( 'Create Your First %s', 'elementor' ), $current_type_label );
 					?>
 				</h2>
-				<p><?php echo __( 'Add templates and reuse them across your website. Easily export and import them to any other project, for an optimized workflow.', 'elementor' ); ?></p>
-				<a id="elementor-template-library-add-new" class="elementor-button elementor-button-success" href="<?php esc_url( Utils::get_pro_link( 'https://elementor.com/pro/?utm_source=wp-custom-fonts&utm_campaign=gopro&utm_medium=wp-dash' ) ); ?>">
+				<p><?php echo $description; ?></p>
+				<a id="elementor-template-library-add-new" class="elementor-button elementor-button-success" href="<?php echo $href; ?>">
 					<?php
 					/* translators: %s: Template type label. */
 					printf( __( 'Add New %s', 'elementor' ), $current_type_label );
 					?>
 				</a>
 			</div>
-		</div>
 		<?php
 	}
 
@@ -1324,7 +1408,7 @@ class Source_Local extends Source_Base {
 		$content = $data['content'];
 
 		if ( ! is_array( $content ) ) {
-			return new \WP_Error( 'file_error', 'Invalid File' );
+			return new \WP_Error( 'file_error', 'Invalid Content In File' );
 		}
 
 		$content = $this->process_export_import_content( $content, 'on_import' );
@@ -1570,7 +1654,7 @@ class Source_Local extends Source_Base {
 		return $posts_columns;
 	}
 
-	private function get_current_tab_group( $default = '' ) {
+	public function get_current_tab_group( $default = '' ) {
 		$current_tabs_group = $default;
 
 		if ( ! empty( $_REQUEST[ self::TAXONOMY_TYPE_SLUG ] ) ) {
