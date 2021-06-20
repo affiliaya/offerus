@@ -9,21 +9,21 @@
 
 <channel>
 	<title>I Can Do So You Can Do</title>
-	<atom:link href="http://offerus.fastlyact.top/feed/" rel="self" type="application/rss+xml" />
-	<link>http://offerus.fastlyact.top/</link>
+	<atom:link href="./index.html" rel="self" type="application/rss+xml" />
+	<link>./../index.html</link>
 	<description>Just another WordPress site</description>
-	<lastBuildDate>Sat, 19 Jun 2021 18:51:01 +0000</lastBuildDate>
+	<lastBuildDate>Sun, 20 Jun 2021 03:36:23 +0000</lastBuildDate>
 	<language>en-US</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
 	<sy:updateFrequency>
 	1	</sy:updateFrequency>
-	<generator>https://wordpress.org/?v=5.6</generator>
+	<generator>https://wordpress.org/?v=5.7.2</generator>
 
 <image>
-	<url>http://offerus.fastlyact.top/wp-content/uploads/2020/05/favicon-16x16-1.png</url>
+	<url>./../wp-content/uploads/2020/05/favicon-16x16-1.png</url>
 	<title>I Can Do So You Can Do</title>
-	<link>http://offerus.fastlyact.top/</link>
+	<link>./../index.html</link>
 	<width>32</width>
 	<height>32</height>
 </image> 
