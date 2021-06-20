@@ -8,10 +8,10 @@
 <channel>
 	<title>
 	Comments for I Can Do So You Can Do	</title>
-	<atom:link href="./index.html" rel="self" type="application/rss+xml" />
-	<link>./../../index.html</link>
+	<atom:link href="http://offerus.fastlyact.top/comments/feed/" rel="self" type="application/rss+xml" />
+	<link>http://offerus.fastlyact.top</link>
 	<description>Just another WordPress site</description>
-	<lastBuildDate>Sun, 20 Jun 2021 03:36:23 +0000</lastBuildDate>
+	<lastBuildDate>Sun, 20 Jun 2021 20:13:45 +0000</lastBuildDate>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
 	<sy:updateFrequency>
