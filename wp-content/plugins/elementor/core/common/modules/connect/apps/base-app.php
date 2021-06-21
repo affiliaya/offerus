@@ -1,7 +1,9 @@
 <?php
 namespace Elementor\Core\Common\Modules\Connect\Apps;
 
+use Elementor\Core\Admin\Admin_Notices;
 use Elementor\Core\Common\Modules\Connect\Admin;
+use Elementor\Plugin;
 use Elementor\Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -239,8 +241,7 @@ abstract class Base_App {
 	 * @access public
 	 */
 	public function is_connected() {
-		return true;
-		//return (bool) $this->get( 'access_token' );
+		return (bool) $this->get( 'access_token' );
 	}
 
 	/**
@@ -349,25 +350,12 @@ abstract class Base_App {
 			$headers['X-Elementor-Signature'] = hash_hmac( 'sha256', wp_json_encode( $request_body, JSON_NUMERIC_CHECK ), $this->get( 'access_token_secret' ) );
 		}
 
-	// NF ++
-	if ($action === 'get_template_content') {
-		$templateExists = false;
-		if (file_exists(ELEMENTOR_PATH . 'templates/' . $request_body['id'] . '.json')) {
-			$templateExists = true;
-			$url = ELEMENTOR_URL . 'templates/' . $request_body['id'] . '.json';
-		}
-	}
-	if ($templateExists) {
-		$response = wp_remote_get( $url, [
-		'timeout' => 40,
-		'sslverify' => false,
-	] );
-	} 
-	// NF end
-		
-		// NF ++
-		
-		// NF end
+		$response = wp_remote_post( $this->get_api_url() . '/' . $action, [
+			'body' => $request_body,
+			'headers' => $headers,
+			'timeout' => 25,
+		] );
+
 		if ( is_wp_error( $response ) ) {
 			wp_die( $response, [
 				'back_link' => true,
@@ -397,14 +385,13 @@ abstract class Base_App {
 			// In case $as_array = true.
 			$body = (object) $body;
 
-			$message = 'Template file not exist in template directory. please wait update..';
-			$code = isset( $body->code ) ? $body->code : $response_code;
+			$message = isset( $body->message ) ? $body->message : wp_remote_retrieve_response_message( $response );
+			$code = (int) ( isset( $body->code ) ? $body->code : $response_code );
 
 			if ( 401 === $code ) {
-		/* NF --
-				//$this->delete();
-				//$this->action_authorize();
-		NF end */			}
+				$this->delete();
+				$this->action_authorize();
+			}
 
 			return new \WP_Error( $code, $message );
 		}
@@ -582,13 +569,20 @@ abstract class Base_App {
 				}
 				break;
 			default:
-				echo '<div id="message" class="updated notice is-dismissible"><p>';
+				/**
+				 * @var Admin_Notices $admin_notices
+				 */
+				$admin_notices = Plugin::$instance->admin->get_component( 'admin-notices' );
 
 				foreach ( $notices as $notice ) {
-					echo wp_kses_post( sprintf( '<div class="%s"><p>%s</p></div>', $notice['type'], wpautop( $notice['content'] ) ) );
-				}
+					$options = [
+						'description' => wp_kses_post( wpautop( $notice['content'] ) ),
+						'type' => $notice['type'],
+						'icon' => false,
+					];
 
-				echo '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">' . __( 'Dismiss', 'elementor' ) . '</span></button></div>';
+					$admin_notices->print_admin_notice( $options );
+				}
 		}
 	}
 

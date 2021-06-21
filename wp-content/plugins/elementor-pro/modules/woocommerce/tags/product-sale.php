@@ -16,7 +16,7 @@ class Product_Sale extends Base_Tag {
 		return __( 'Product Sale', 'elementor-pro' );
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control( 'text', [
 			'label' => __( 'Text', 'elementor-pro' ),
 			'type' => Controls_Manager::TEXT,

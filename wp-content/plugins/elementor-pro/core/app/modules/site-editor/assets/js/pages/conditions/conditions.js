@@ -13,7 +13,6 @@ export default function Conditions( props ) {
 	if ( ! template ) {
 		return <div>{ __( 'Not Found', 'elementor-pro' ) }</div>;
 	}
-
 	return (
 		<section className="e-site-editor-conditions">
 			<BackButton/>
@@ -33,7 +32,7 @@ export default function Conditions( props ) {
 				</Text>
 			</div>
 			<ConditionsProvider currentTemplate={ template } onConditionsSaved={ updateTemplateItemState }>
-				<ConditionsRows onAfterSave={() => history.back()} />
+				<ConditionsRows/>
 			</ConditionsProvider>
 		</section>
 	);

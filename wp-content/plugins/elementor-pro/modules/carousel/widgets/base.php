@@ -24,7 +24,7 @@ abstract class Base extends Base_Widget {
 
 	abstract protected function print_slide( array $slide, array $settings, $element_key );
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_slides',
 			[
@@ -185,7 +185,6 @@ abstract class Base extends Base_Widget {
 				'label' => __( 'Transition Duration', 'elementor-pro' ),
 				'type' => Controls_Manager::NUMBER,
 				'default' => 500,
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -197,7 +196,6 @@ abstract class Base extends Base_Widget {
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 				'separator' => 'before',
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -211,7 +209,6 @@ abstract class Base extends Base_Widget {
 				'condition' => [
 					'autoplay' => 'yes',
 				],
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -235,7 +232,6 @@ abstract class Base extends Base_Widget {
 				'condition' => [
 					'autoplay' => 'yes',
 				],
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -249,7 +245,6 @@ abstract class Base extends Base_Widget {
 				'condition' => [
 					'autoplay' => 'yes',
 				],
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -488,10 +483,6 @@ abstract class Base extends Base_Widget {
 		$settings = array_merge( $default_settings, $settings );
 
 		$slides_count = count( $settings['slides'] );
-
-		$is_rtl = is_rtl();
-		$prev_arrow_direction = $is_rtl ? 'right' : 'left';
-		$next_arrow_direction = $is_rtl ? 'left' : 'right';
 		?>
 		<div class="elementor-swiper">
 			<div class="<?php echo esc_attr( $settings['container_class'] ); ?> swiper-container">
@@ -511,11 +502,11 @@ abstract class Base extends Base_Widget {
 					<?php endif; ?>
 					<?php if ( $settings['show_arrows'] ) : ?>
 						<div class="elementor-swiper-button elementor-swiper-button-prev">
-							<i class="eicon-chevron-<?php echo $prev_arrow_direction; ?>" aria-hidden="true"></i>
+							<i class="eicon-chevron-left" aria-hidden="true"></i>
 							<span class="elementor-screen-only"><?php _e( 'Previous', 'elementor-pro' ); ?></span>
 						</div>
 						<div class="elementor-swiper-button elementor-swiper-button-next">
-							<i class="eicon-chevron-<?php echo $next_arrow_direction; ?>" aria-hidden="true"></i>
+							<i class="eicon-chevron-right" aria-hidden="true"></i>
 							<span class="elementor-screen-only"><?php _e( 'Next', 'elementor-pro' ); ?></span>
 						</div>
 					<?php endif; ?>

@@ -440,15 +440,15 @@ class Fonts_Manager {
 	 *
 	 * @return array|bool|mixed
 	 */
-	public function get_fonts() {
+	public function get_fonts( $force = false ) {
 		static $fonts = false;
-
-		if ( false !== $fonts ) {
+		if ( false !== $fonts && ! $force ) {
 			return $fonts;
 		}
 
-		$fonts = $this->generate_fonts_list();
-
+		if ( $force ) {
+			$fonts = $this->generate_fonts_list();
+		}
 		$fonts = get_option( self::FONTS_OPTION_NAME, false );
 
 		return $fonts;

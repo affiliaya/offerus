@@ -28,21 +28,21 @@ class Posts extends Posts_Base {
 	}
 
 	public function on_import( $element ) {
-		if ( isset( $element['settings']['posts_post_type'] ) && ! get_post_type_object( $element['settings']['posts_post_type'] ) ) {
+		if ( ! get_post_type_object( $element['settings']['posts_post_type'] ) ) {
 			$element['settings']['posts_post_type'] = 'post';
 		}
 
 		return $element;
 	}
 
-	protected function register_skins() {
+	protected function _register_skins() {
 		$this->add_skin( new Skins\Skin_Classic( $this ) );
 		$this->add_skin( new Skins\Skin_Cards( $this ) );
 		$this->add_skin( new Skins\Skin_Full_Content( $this ) );
 	}
 
-	protected function register_controls() {
-		parent::register_controls();
+	protected function _register_controls() {
+		parent::_register_controls();
 
 		$this->register_query_section_controls();
 		$this->register_pagination_section_controls();

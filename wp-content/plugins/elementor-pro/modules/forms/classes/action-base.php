@@ -1,7 +1,7 @@
 <?php
 namespace ElementorPro\Modules\Forms\Classes;
 
-use ElementorPro\Modules\Forms\Widgets\Form;
+use Elementor\Widget_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -20,9 +20,9 @@ abstract class Action_Base {
 	abstract public function run( $record, $ajax_handler );
 
 	/**
-	 * @param Form $form
+	 * @param Widget_Base $widget
 	 */
-	abstract public function register_settings_section( $form );
+	abstract public function register_settings_section( $widget );
 
 	/**
 	 * @param array $element

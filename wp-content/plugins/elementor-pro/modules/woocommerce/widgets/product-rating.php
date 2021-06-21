@@ -26,7 +26,7 @@ class Product_Rating extends Base_Widget {
 		return [ 'woocommerce', 'shop', 'store', 'rating', 'review', 'comments', 'stars', 'product' ];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 
 		$this->start_controls_section(
 			'section_product_rating_style',

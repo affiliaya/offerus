@@ -79,7 +79,7 @@ class ACF_Image extends Data_Tag {
 		return $image_data;
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		Module::add_key_control( $this );
 
 		$this->add_control(

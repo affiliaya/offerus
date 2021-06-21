@@ -4,7 +4,6 @@ namespace ElementorPro\Modules\ThemeElements\Widgets;
 use Elementor\Controls_Manager;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Group_Control_Typography;
-use ElementorPro\Core\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -47,7 +46,7 @@ class Breadcrumbs extends Base {
 		return $breadcrumbs_enabled;
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_breadcrumbs_content',
 			[
@@ -198,7 +197,7 @@ class Breadcrumbs extends Base {
 			$html_tag = 'p';
 		}
 
-		return Utils::validate_html_tag( $html_tag );
+		return $html_tag;
 	}
 
 	protected function render() {

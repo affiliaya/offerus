@@ -44,7 +44,7 @@ class Slides extends Base_Widget {
 		];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_slides',
 			[
@@ -545,7 +545,6 @@ class Slides extends Base_Widget {
 				'label' => __( 'Pause on Hover', 'elementor-pro' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
-				'render_type' => 'none',
 				'frontend_available' => true,
 				'condition' => [
 					'autoplay!' => '',
@@ -559,7 +558,6 @@ class Slides extends Base_Widget {
 				'label' => __( 'Pause on Interaction', 'elementor-pro' ),
 				'type' => Controls_Manager::SWITCHER,
 				'default' => 'yes',
-				'render_type' => 'none',
 				'frontend_available' => true,
 				'condition' => [
 					'autoplay!' => '',
@@ -579,7 +577,6 @@ class Slides extends Base_Widget {
 				'selectors' => [
 					'{{WRAPPER}} .swiper-slide' => 'transition-duration: calc({{VALUE}}ms*1.2)',
 				],
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -614,7 +611,6 @@ class Slides extends Base_Widget {
 				'label' => __( 'Transition Speed', 'elementor-pro' ) . ' (ms)',
 				'type' => Controls_Manager::NUMBER,
 				'default' => 500,
-				'render_type' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -892,6 +888,17 @@ class Slides extends Base_Widget {
 			]
 		);
 
+		$this->add_control( 'button_color',
+			[
+				'label' => __( 'Text Color', 'elementor-pro' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .elementor-slide-button' => 'color: {{VALUE}}; border-color: {{VALUE}}',
+
+				],
+			]
+		);
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -934,6 +941,7 @@ class Slides extends Base_Widget {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-slide-button' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
+				'separator' => 'after',
 			]
 		);
 

@@ -75,7 +75,7 @@ class Post extends Condition_Base {
 
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control(
 			'post_id',
 			[

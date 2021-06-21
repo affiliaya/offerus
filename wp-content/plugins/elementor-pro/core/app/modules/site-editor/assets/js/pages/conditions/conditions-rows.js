@@ -6,7 +6,7 @@ import ConditionSub from './condition-sub';
 import ConditionSubId from './condition-sub-id';
 import ConditionConflicts from './condition-conflicts';
 
-export default function ConditionsRows( props ) {
+export default function ConditionsRows() {
 	const {
 		conditions,
 		createConditionItemInState: create,
@@ -59,17 +59,18 @@ export default function ConditionsRows( props ) {
 			}
 			<div className="e-site-editor-conditions__rows">
 				{ rows }
+
+				<div className="e-site-editor-conditions__add-button-container">
+					<Button
+						className="e-site-editor-conditions__add-button"
+						variant="contained"
+						size="lg"
+						text={ __( 'ADD CONDITION', 'elementor-pro' ) }
+						onClick={ create }port
+					/>
+				</div>
 			</div>
-			<div className="e-site-editor-conditions__add-button-container">
-				<Button
-					className="e-site-editor-conditions__add-button"
-					variant="contained"
-					size="lg"
-					text={ __( 'Add Condition', 'elementor-pro' ) }
-					onClick={ create }
-				/>
-			</div>
-			<div className="e-site-editor-conditions__footer">
+			<div className="e-site-editor-conditions__save-button-container">
 				<Button
 					variant="contained"
 					color="primary"
@@ -77,13 +78,9 @@ export default function ConditionsRows( props ) {
 					hideText={ isSaving }
 					icon={ isSaving ? 'eicon-loading eicon-animation-spin' : '' }
 					text={ __( 'Save & Close', 'elementor-pro' ) }
-					onClick={ () => save().then( props.onAfterSave ) }
+					onClick={ () => save().then( () => history.back() ) }
 				/>
 			</div>
 		</>
 	);
 }
-
-ConditionsRows.propTypes = {
-	onAfterSave: PropTypes.func,
-};

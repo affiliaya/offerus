@@ -89,7 +89,7 @@ class ACF_Text extends Tag {
 		return 'key';
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		Module::add_key_control( $this );
 	}
 

@@ -3,13 +3,14 @@ namespace ElementorPro\Modules\Forms\Actions;
 
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\Forms\Classes\Form_Record;
-use ElementorPro\Modules\Forms\Classes\Integration_Base;
+use ElementorPro\Modules\Forms\Controls\Fields_Map;
+use ElementorPro\Modules\Forms\Classes\Action_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-class Mailpoet extends Integration_Base {
+class Mailpoet extends Action_Base {
 
 	public function get_name() {
 		return 'mailpoet';
@@ -50,7 +51,44 @@ class Mailpoet extends Integration_Base {
 			]
 		);
 
-		$this->register_fields_map_control( $widget );
+		$widget->add_control(
+			'mailpoet_fields_map',
+			[
+				'label' => __( 'Field Mapping', 'elementor-pro' ),
+				'type' => Fields_Map::CONTROL_TYPE,
+				'default' => [
+					[
+						'remote_id' => 'firstname',
+						'remote_label' => __( 'First Name', 'elementor-pro' ),
+						'remote_type' => 'text',
+					],
+					[
+						'remote_id' => 'lastname',
+						'remote_label' => __( 'Last Name', 'elementor-pro' ),
+						'remote_type' => 'text',
+					],
+					[
+						'remote_id' => 'email',
+						'remote_label' => __( 'Email', 'elementor-pro' ),
+						'remote_type' => 'email',
+						'remote_required' => true,
+					],
+				],
+				'fields' => [
+					[
+						'name' => 'remote_id',
+						'type' => Controls_Manager::HIDDEN,
+					],
+					[
+						'name' => 'local_id',
+						'type' => Controls_Manager::SELECT,
+					],
+				],
+				'condition' => [
+					'mailpoet_lists!' => '',
+				],
+			]
+		);
 
 		$widget->end_controls_section();
 	}
@@ -64,9 +102,13 @@ class Mailpoet extends Integration_Base {
 	public function run( $record, $ajax_handler ) {
 		$subscriber = $this->map_fields( $record );
 
-		/** @var \WYSIJA_help_user $helper_user */
-		$helper_user = \WYSIJA::get( 'user', 'helper' );
-		$helper_user->addSubscriber( $subscriber );
+		try {
+			/** @var \WYSIJA_help_user $helper_user */
+			$helper_user = \WYSIJA::get( 'user', 'helper' );
+			$helper_user->addSubscriber( $subscriber );
+		} catch ( \Exception $exception ) {
+			$ajax_handler->add_admin_error_message( 'MailPoet ' . $exception->getMessage() );
+		}
 	}
 
 	/**
@@ -99,31 +141,5 @@ class Mailpoet extends Integration_Base {
 		}
 
 		return $subscriber;
-	}
-
-	protected function get_fields_map_control_options() {
-		return [
-			'default' => [
-				[
-					'remote_id' => 'firstname',
-					'remote_label' => __( 'First Name', 'elementor-pro' ),
-					'remote_type' => 'text',
-				],
-				[
-					'remote_id' => 'lastname',
-					'remote_label' => __( 'Last Name', 'elementor-pro' ),
-					'remote_type' => 'text',
-				],
-				[
-					'remote_id' => 'email',
-					'remote_label' => __( 'Email', 'elementor-pro' ),
-					'remote_type' => 'email',
-					'remote_required' => true,
-				],
-			],
-			'condition' => [
-				'mailpoet_lists!' => '',
-			],
-		];
 	}
 }

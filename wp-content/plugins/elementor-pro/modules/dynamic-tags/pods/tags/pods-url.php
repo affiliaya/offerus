@@ -71,7 +71,7 @@ class Pods_URL extends Data_Tag {
 		return wp_kses_post( $value );
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control(
 			'key',
 			[

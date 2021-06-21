@@ -176,7 +176,7 @@ class Discord extends Action_Base {
 		]);
 
 		if ( 204 !== (int) wp_remote_retrieve_response_code( $response ) ) {
-			throw new \Exception( __( 'Webhook Error', 'elementor-pro' ) );
+			$ajax_handler->add_admin_error_message( 'Discord Webhook Error' );
 		}
 	}
 }

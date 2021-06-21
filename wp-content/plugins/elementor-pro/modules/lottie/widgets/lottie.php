@@ -45,7 +45,7 @@ class Lottie extends Base_Widget {
 		return 'eicon-lottie';
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section( 'lottie', [
 			'label' => __( 'Lottie', 'elementor-pro' ),
 		] );

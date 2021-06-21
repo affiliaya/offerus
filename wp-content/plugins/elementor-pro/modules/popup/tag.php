@@ -29,7 +29,7 @@ class Tag extends DynamicTagsTag {
 		return [ DynamicTagsModule::URL_CATEGORY ];
 	}
 
-	public function register_controls() {
+	public function _register_controls() {
 		$this->add_control(
 			'action',
 			[

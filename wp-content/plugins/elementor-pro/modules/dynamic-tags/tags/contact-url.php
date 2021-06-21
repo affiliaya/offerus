@@ -27,7 +27,7 @@ class Contact_URL extends Tag {
 		return [ Module::URL_CATEGORY ];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control(
 			'link_type',
 			[

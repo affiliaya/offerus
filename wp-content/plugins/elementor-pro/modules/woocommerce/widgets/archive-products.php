@@ -27,8 +27,8 @@ class Archive_Products extends Products {
 		];
 	}
 
-	protected function register_controls() {
-		parent::register_controls();
+	protected function _register_controls() {
+		parent::_register_controls();
 
 		$this->remove_responsive_control( 'columns' );
 		$this->remove_responsive_control( 'rows' );

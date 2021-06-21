@@ -22,7 +22,7 @@ abstract class Toolset_Base extends Tag {
 		];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control(
 			'key',
 			[

@@ -72,8 +72,8 @@ class Toolset_Date extends Toolset_Base {
 		return 'key';
 	}
 
-	protected function register_controls() {
-		parent::register_controls();
+	protected function _register_controls() {
+		parent::_register_controls();
 
 		$this->add_control(
 			'format',

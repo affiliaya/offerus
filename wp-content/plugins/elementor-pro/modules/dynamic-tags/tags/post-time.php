@@ -26,7 +26,7 @@ class Post_Time extends Tag {
 		return [ Module::TEXT_CATEGORY ];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->add_control(
 			'type',
 			[

@@ -13,8 +13,8 @@ class Template_Conditions extends Controls_Stack {
 		return 'template-conditions';
 	}
 
-	protected function register_controls() {
-		parent::register_controls();
+	protected function _register_controls() {
+		parent::_register_controls();
 
 		$this->add_control(
 			'conditions',

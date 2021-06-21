@@ -9,7 +9,6 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Icons_Manager;
 use ElementorPro\Base\Base_Widget;
-use ElementorPro\Core\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -37,7 +36,7 @@ class Table_Of_Contents extends Base_Widget {
 		return [ 'toc' ];
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'table_of_contents',
 			[
@@ -491,24 +490,6 @@ class Table_Of_Contents extends Base_Widget {
 			]
 		);
 
-		$this->add_responsive_control(
-			'max_height',
-			[
-				'label' => __( 'Max Height', 'elementor-pro' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'vh' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 1000,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}}' => '--toc-body-max-height: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -682,11 +663,9 @@ class Table_Of_Contents extends Base_Widget {
 		if ( $settings['collapse_subitems'] ) {
 			$this->add_render_attribute( 'body', 'class', 'elementor-toc__list-items--collapsible' );
 		}
-
-		$html_tag = Utils::validate_html_tag( $settings['html_tag'] );
 		?>
 		<div class="elementor-toc__header">
-			<?php echo '<' . $html_tag . ' class="elementor-toc__header-title">' . $settings['title'] . '</' . $html_tag . '>'; ?>
+			<?php echo '<' . $settings['html_tag'] . ' class="elementor-toc__header-title">' . $settings['title'] . '</' . $settings['html_tag'] . '>'; ?>
 			<?php if ( 'yes' === $settings['minimize_box'] ) : ?>
 				<div class="elementor-toc__toggle-button elementor-toc__toggle-button--expand"><?php Icons_Manager::render_icon( $settings['expand_icon'] ); ?></div>
 				<div class="elementor-toc__toggle-button elementor-toc__toggle-button--collapse"><?php Icons_Manager::render_icon( $settings['collapse_icon'] ); ?></div>

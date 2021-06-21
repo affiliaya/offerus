@@ -32,7 +32,7 @@ class Template extends Base_Widget {
 		return false;
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_template',
 			[

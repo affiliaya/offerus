@@ -57,11 +57,11 @@ class Products_Deprecated extends Products_Base {
 		return $this->query;
 	}
 
-	protected function register_skins() {
+	protected function _register_skins() {
 		$this->add_skin( new Skins\Skin_Classic( $this ) );
 	}
 
-	protected function register_controls() {
+	protected function _register_controls() {
 		$this->deprecated_notice( Plugin::get_title(), '2.0.10', '', __( 'Products', 'elementor-pro' ) );
 
 		$this->start_controls_section(
@@ -156,7 +156,7 @@ class Products_Deprecated extends Products_Base {
 
 		$this->end_controls_section();
 
-		parent::register_controls();
+		parent::_register_controls();
 	}
 
 	public function query_posts() {
