@@ -156,13 +156,6 @@ Yes, you cam build custom Product, Checkout and Cart pages with our WooCommerce 
 
 
 == Changelog ==
-= 6.6.0 =
-
-* Added - Column Alignment Controls
-* Added - Divice Visibility Controls
-* Added - Full Length Template Previews
-* Tweak - Version Sync with Pro
-
 = 6.2.1 =
 
 * Tweak - Clarify External Service is used for license upgrades.
@@ -248,12 +241,6 @@ Yes, you cam build custom Product, Checkout and Cart pages with our WooCommerce 
 * New - Custom 404 Pages
 
 == Upgrade Notice ==
-
-= 6.6.0 =
-
-* Added - Column Alignment Controls
-* Added - Divice Visibility Controls
-
 = 6.2.0 =
 
 * Added - WooCommerce Blocks Pro Version

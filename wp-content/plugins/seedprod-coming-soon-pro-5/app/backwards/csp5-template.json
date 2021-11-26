@@ -877,8 +877,6 @@
             "customCss": "",
             "headCss": "#sp-page{color:#000000} #sp-page .sp-header-tag-h1,#sp-page .sp-header-tag-h2,#sp-page .sp-header-tag-h3,#sp-page .sp-header-tag-h4,#sp-page .sp-header-tag-h5,#sp-page .sp-header-tag-h6{color:#000000}#sp-page h1,#sp-page h2,#sp-page h3,#sp-page h4,#sp-page h5,#sp-page h6{color:#000000; font-family:'Open Sans';font-weight:700;font-style:normal} #sp-page a{color:#0078FF} #sp-page a:hover{color:#0060cc}#sp-page .btn{background-color:#000000}body{background-color:#FFFFFF; background-image:;}",
             "mobileCss": "",
-            "mobileVisibilityCss":"",
-            "desktopVisibilityCss":"",
             "placeholderCss": "#sp-wexx4b input::placeholder {color:rgba(68, 68, 68, 0.7) }",
             "useVideoBg": false,
             "useVideoBgUrl":""

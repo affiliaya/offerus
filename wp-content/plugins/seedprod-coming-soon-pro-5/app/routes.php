@@ -346,8 +346,6 @@ if ( defined( 'DOING_AJAX' ) ) {
 	add_action( 'wp_ajax_seedprod_pro_get_rafflepress', 'seedprod_pro_get_rafflepress' );
 	add_action( 'wp_ajax_seedprod_pro_get_rafflepress_code', 'seedprod_pro_get_rafflepress_code' );
 
-	add_action( 'wp_ajax_seedprod_pro_get_widget_wpforms', 'seedprod_pro_get_widget_wpforms' );
-	add_action( 'wp_ajax_seedprod_pro_get_widget_wpresults', 'seedprod_pro_get_widget_wpresults' );
 
 	add_action( 'wp_ajax_seedprod_pro_dismiss_upsell', 'seedprod_pro_dismiss_upsell' );
 
@@ -366,7 +364,6 @@ if ( defined( 'DOING_AJAX' ) ) {
 	
 	add_action( 'wp_ajax_seedprod_pro_get_domain_mapping_domain', 'seedprod_pro_get_domain_mapping_domain' );
 	
-
 
 }
 
@@ -403,89 +400,6 @@ function seedprod_pro_get_wpforms() {
 
 		wp_send_json( $forms );
 	}
-}
-
-function seedprod_pro_get_widget_wpforms(){
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		
-		$block_type = filter_input( INPUT_GET, 'block_type' );
-		$base_id = 	 filter_input( INPUT_GET, 'base_id' );		
-		$widget_name = str_replace('wpwidgetblock-','',$block_type );
-		
-		global $wp_widget_factory;
-		$inst = $wp_widget_factory->widgets[$widget_name];
-
-		$component_json = file_get_contents('php://input');
-		$component 		= json_decode( $component_json, true );
-		$options 		= $component["options"];
-
-		$instance = array();
-		if ( is_array( $options ) ) {
-			$wp_options = array();
-			foreach($options as $t=> $value){
-				$wp_options[$t] = sanitize_text_field($value);
-			}
-			$instance = $wp_options;
-		}
-		
-		echo '<div class="widget-inside media-widget-control"><div class="form wp-core-ui">';
-		
-		echo '<input type="hidden" class="id_base" value="'.$base_id.'">';
-		$random_data = rand(1000,9999);
-		echo '<input type="hidden" class="widget-id" value="widget-c'.$random_data.'" />';
-
-		echo '<div class="widget-content">';
-
-		$updated_instance = $inst->update( $instance , array() );	
-		$ins_form = $inst->form( $updated_instance );
-		echo $ins_form;
-
-		echo '</div></div></div>';
-
-		die("");
-
-	}
-}
-
-function seedprod_pro_get_widget_wpresults(){
-
-	if ( check_ajax_referer( 'seedprod_nonce' ) ) {
-		
-		//print_r($_REQUEST);
-		$block_type = filter_input( INPUT_GET, 'block_type' );
-		//print_r($block_type);
-
-		$widget_name = str_replace('wpwidgetblock-','',$block_type );
-		
-		global $wp_widget_factory;
-		$inst = $wp_widget_factory->widgets[$widget_name];
-
-
-		$component_json = file_get_contents('php://input');
-		$component 		= json_decode( $component_json, true );
-		$options 		= $component["options"];
-
-		$instance = array();
-		if ( is_array( $options ) ) {
-			$wp_options = array();
-			foreach($options as $t=> $value){
-				if($widget_name == 'WP_Widget_Custom_HTML' && $t == 'content'){
-					$wp_options[$t] = $value;
-				}else{
-					$wp_options[$t] = sanitize_text_field($value);
-				}
-				
-			}
-			$instance = $wp_options;
-		}
-		$updated_instance = $inst->update( $instance , array() );
-		the_widget( $widget_name , $instance );
-
-		die("");
-		//return $widget_name;
-
-	}
-
 }
 
 function seedprod_pro_get_wpform() {

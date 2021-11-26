@@ -24,16 +24,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	);
 }
 // get settings
-if ( !empty($settings) && isset($settings->no_conflict_mode)) {
-	$google_fonts_str = seedprod_pro_construct_font_str( $settings );
-	$content          = $page->post_content;
-	$lpage_uuid       = get_post_meta( $page->ID, '_seedprod_page_uuid', true );
-} else{
+if ( empty( $settings ) ) {
 	global $wpdb, $post;
 	$settings         = json_decode( $post->post_content_filtered );
 	$google_fonts_str = seedprod_pro_construct_font_str( json_decode( $post->post_content_filtered, true ) );
 	$content          = $post->post_content;
 	$lpage_uuid       = get_post_meta( $post->ID, '_seedprod_page_uuid', true );
+} else {
+	$google_fonts_str = seedprod_pro_construct_font_str( $settings );
+	$content          = $page->post_content;
+	$lpage_uuid       = get_post_meta( $page->ID, '_seedprod_page_uuid', true );
 }
 
 // remove vue comment bug
@@ -226,43 +226,15 @@ if ( ! empty( $settings->enable_recaptcha ) ) { ?>
 		<?php echo $settings->document->settings->placeholderCss; ?>
 <?php } ?>
 
-	<?php // Replace classnames for device visibility like below ?>
-
-	@media only screen and (max-width: 480px) {
-		<?php if ( ! empty( $settings->document->settings->mobileCss ) ) { ?>
-			<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileCss ); ?>
-		<?php } ?>
-
-		<?php if ( ! empty( $settings->document->settings->mobileVisibilityCss ) ) { ?>
-			<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileVisibilityCss ); ?>
-		<?php } ?>
-	}
-
-	@media only screen and (min-width: 480px) {
-		<?php if ( ! empty( $settings->document->settings->desktopVisibilityCss ) ) { ?>
-			<?php echo $settings->document->settings->desktopVisibilityCss; ?>
-		<?php } ?>
-	}
+	<?php if ( ! empty( $settings->document->settings->mobileCss ) ) { ?>
+@media only screen and (max-width: 480px) {
+		<?php echo str_replace( '.sp-mobile-view', '', $settings->document->settings->mobileCss ); ?>
+}
+<?php } ?>
 
 	<?php
-	// Get mobile css & Remove inline data attributes.
+	// get mobile css
 	preg_match_all( '/data-mobile-css="([^"]*)"/', $content, $matches );
-	if ( ! empty( $matches ) ) {
-		// remove inline data attributes
-		foreach ( $matches[0] as $v ) {
-			$content = str_replace( $v, '', $content );
-		}
-	}
-
-	preg_match_all( '/data-mobile-visibility="([^"]*)"/', $content, $matches );
-	if ( ! empty( $matches ) ) {
-		// remove inline data attributes
-		foreach ( $matches[0] as $v ) {
-			$content = str_replace( $v, '', $content );
-		}
-	}
-
-	preg_match_all( '/data-desktop-visibility="([^"]*)"/', $content, $matches );
 	if ( ! empty( $matches ) ) {
 		// remove inline data attributes
 		foreach ( $matches[0] as $v ) {
@@ -389,15 +361,7 @@ var seeprod_enable_recaptcha = <?php echo $settings->enable_recaptcha; ?>;
 	
 	?>
 
-	<script>
-		window.twttr = (function (d,s,id) {
-			var t, js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
-			js.src="https://platform.twitter.com/widgets.js";
-			fjs.parentNode.insertBefore(js, fjs);
-			return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
-		}(document, "script", "twitter-wjs"));
-	</script>
+
 
 	<?php
 	$actual_link = urlencode( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" );
@@ -430,7 +394,15 @@ var seeprod_enable_recaptcha = <?php echo $settings->enable_recaptcha; ?>;
 	
 	var sp_subscriber_callback_url = '<?php echo $seedprod_subscribe_callback_ajax_url; ?>';
 	
-	 <?php if ( wp_is_mobile() ) { echo 'var sp_is_mobile = true;';} else {echo 'var sp_is_mobile = false;';}?>
+	var sp_is_mobile = 
+	<?php
+	if ( wp_is_mobile() ) {
+		echo 'true';
+	} else {
+		echo 'false';
+	}
+	?>
+	;
 	<?php 
 	
 	if ( ! empty( $settings->document->settings->useVideoBg ) ) { ?>

@@ -59,8 +59,6 @@ $seedprod_basic_lpage = '
            "customCss":"",
            "headCss":"",
            "mobileCss":"",
-           "mobileVisibilityCss":"",
-           "desktopVisibilityCss":"",
            "placeholderCss":"",
            "useVideoBg":false,
            "useVideoBgUrl":"",
@@ -126,9 +124,7 @@ $seedprod_basic_lpage = '
       "borderLeft": "0",
       "borderRight": "0",
       "borderSync": true,
-      "borderStyle":"solid",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "borderStyle":"solid"
    },
    "section":{
       "bgStyle": "s",
@@ -181,12 +177,7 @@ $seedprod_basic_lpage = '
     "borderLeft": "0",
     "borderRight": "0",
     "borderSync": true,
-    "borderStyle":"solid",
-    "alignType":"s",
-    "display":"",
-    "flexDirection":"column",
-    "justifyContent":"",
-    "alignItems":""
+    "borderStyle":"solid"
  },
    "icon":{
      "icon":"fas fa-angle-double-down",
@@ -199,9 +190,7 @@ $seedprod_basic_lpage = '
      "paddingBottom": "",
      "paddingLeft": "",
      "paddingRight": "",
-     "paddingSync": true,
-     "hideOnDesktop": false,
-     "hideOnMobile": false
+     "paddingSync": true
    },
    "starrating":{
     "label":"",
@@ -230,9 +219,7 @@ $seedprod_basic_lpage = '
     "paddingBottom": "",
     "paddingLeft": "",
     "paddingRight": "",
-    "paddingSync": true,
-    "hideOnDesktop": false,
-    "hideOnMobile": false
+    "paddingSync": true
   },
   "testimonial":{
     "items": [{ "img": "", "txt": "\"This is the greatest thing since sliced bread!\"","name": "John Smith", "title": "CEO" }],
@@ -272,9 +259,7 @@ $seedprod_basic_lpage = '
     "nametypographyBold": "",
     "nametypographyItalic": "",
     "nametypographyUnderline": "",
-    "nametypographyLetterCase": "",
-    "hideOnDesktop": false,
-    "hideOnMobile": false
+    "nametypographyLetterCase": ""
    },
    "imagecarousel":{
     "items": [{ "img": "", "name": "", "title": "CEO" }],
@@ -313,9 +298,7 @@ $seedprod_basic_lpage = '
     "imageBorderSync": true,
     "imageBorderStyle":"solid",
     "imageBorderColor": "",
-    "blockTemplateId": false,
-    "hideOnDesktop": false,
-    "hideOnMobile": false
+    "blockTemplateId":false    
    },
    "feature":{
     "tag": "h2",
@@ -362,9 +345,7 @@ $seedprod_basic_lpage = '
     "headertypographyBold": "",
     "headertypographyItalic": "",
     "headertypographyUnderline": "",
-    "headertypographyLetterCase": "",
-    "hideOnDesktop": false,
-    "hideOnMobile": false
+    "headertypographyLetterCase": ""
    },
    "iconfeature":{
     "tag": "h2",
@@ -411,9 +392,7 @@ $seedprod_basic_lpage = '
     "headertypographyBold": "",
     "headertypographyItalic": "",
     "headertypographyUnderline": "",
-    "headertypographyLetterCase": "",
-    "hideOnDesktop": false,
-    "hideOnMobile": false
+    "headertypographyLetterCase": ""
    },
    "header":{
       "headerTxt": "' . __( 'My Awesome Headline', 'seedprod-pro' ) . '",
@@ -447,9 +426,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "animatedheadline":{
       "beforeHeaderTxt": "' . __( 'Before text', 'seedprod-pro' ) . '",
@@ -493,9 +470,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "button":{
       "action": "link",
@@ -538,9 +513,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "text":{
       "txt": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam commodo velit ex, non ultrices leo auctor at. Integer blandit ex velit, vel aliquam sem tempor eu. Pellentesque sem tortor, elementum et nisi sed, convallis pharetra lorem. Aenean rhoncus rhoncus ex, in dictum massa dictum et. Morbi at nisl fermentum, condimentum tortor a, laoreet leo. Curabitur laoreet diam a metus tincidunt, sed dapibus orci venenatis.",
@@ -573,9 +546,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "facebooklike":{
       "buttonType":"like",
@@ -591,9 +562,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "facebookcomments":{
       "orderBy" :"social",
@@ -609,9 +578,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "facebookpage":{
       "layoutPage":"timeline",
@@ -628,9 +595,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "facebookembed":{
       "embedType":"post",
@@ -649,71 +614,6 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
-    },
-    "twitterembedtweet":{    
-      "align": "left",
-      "tweeterid":"1385250840898850816",
-      "colorScheme":"light",
-      "width":"350",
-      "marginTop": "0",
-      "paddingTop": "",
-      "paddingBottom": "",
-      "paddingLeft": "",
-      "paddingRight": "",
-      "lang":"en",
-      "paddingSync": true
-    },
-    "twitterembedtimeline":{    
-      "align": "left",
-      "tweeterid":"seedprod",
-      "colorScheme":"light",
-      "width":"350",
-      "height":"350",
-      "hideHeader": false,
-      "hideFooter": true,
-      "hideBorders": false,
-      "transparent": false,
-      "hideScrollbar": false,
-      "showReplies":false,
-      "marginTop": "0",
-      "paddingTop": "",
-      "paddingBottom": "",
-      "paddingLeft": "",
-      "paddingRight": "",
-      "lang":"en",
-      "paddingSync": true
-    },
-    "twittertweetbutton":{
-      "tweetUrl":"https://twitter.com/seedprod",
-      "buttonSize":"small",
-      "tweetText":"",
-      "tweetHashTag":"", 
-      "viaHandle":"", 
-      "relatedTweet":"",   
-      "align": "left",
-      "marginTop": "0",
-      "paddingTop": "",
-      "paddingBottom": "",
-      "paddingLeft": "",
-      "paddingRight": "",
-      "lang":"en",
-      "paddingSync": true
-    },
-    "twitterfollowbutton":{
-      "screenName":"seedprod",
-      "buttonSize":"small",
-      "showScreenName":true,
-      "showCount":false, 
-      "align": "left",
-      "marginTop": "0",
-      "paddingTop": "",
-      "paddingBottom": "",
-      "paddingLeft": "",
-      "paddingRight": "",
-      "lang":"en",
       "paddingSync": true
     },
     "contactform":{
@@ -738,9 +638,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "giveaway":{
       "giveawayId":"",
@@ -750,9 +648,7 @@ $seedprod_basic_lpage = '
       "paddingLeft": "",
       "paddingRight": "",
       "paddingSync": true,
-      "align": "center",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "align": "center"
     },
     "image":{
       "link": "",
@@ -781,9 +677,7 @@ $seedprod_basic_lpage = '
       "imageBorderSync": true,
       "imageBorderStyle":"solid",
       "imageBorderColor": "",
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "divider":{
       "style": "solid",
@@ -797,9 +691,7 @@ $seedprod_basic_lpage = '
       "paddingLeft": "0",
       "paddingRight": "0",
       "paddingSync": false,
-      "shadow": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "shadow": ""
     },
     "spacer": {
       "height": 60
@@ -853,26 +745,10 @@ $seedprod_basic_lpage = '
       "headertypographyBold": "",
       "headertypographyItalic": "",
       "headertypographyUnderline": "",
-      "headertypographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "headertypographyLetterCase": ""
     },
     "anchor": {
       "name": ""
-    },
-    "searchform": {
-      "align": "center",
-      "buttonType":"icon",
-      "buttonIconType":"icon1",
-      "placeholder":"Search...",
-      "buttonText":"Search",
-      "size":36,
-      "bgColor":"",
-      "searchColor":"",
-      "buttonBgColor":"",
-      "buttonColor":"",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
     },
     "googlemaps": {
       "location": "West Palm Beach, FL",
@@ -885,9 +761,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "customhtml":{
       "code": "",
@@ -896,9 +770,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "shortcode":{
       "shortcode": "",
@@ -907,9 +779,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "login":{
       "align": "left",
@@ -959,9 +829,7 @@ $seedprod_basic_lpage = '
       "btnBgColor": "",
       "btnPaddingVertical": "8",
       "btnPaddingHorizontal": "12",
-      "btnBorderRadius": "3",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "btnBorderRadius": "3"
     },
     "video":{
       "type":"youtube",
@@ -975,9 +843,7 @@ $seedprod_basic_lpage = '
       "paddingBottom": "",
       "paddingLeft": "",
       "paddingRight": "",
-      "paddingSync": true,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paddingSync": true
     },
     "countdown":{
       "countdownType":"",
@@ -1024,9 +890,7 @@ $seedprod_basic_lpage = '
       "typographyUnderline": "",
       "align": "center",
       "typographyLetterCase": "uppercase",
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "bulletlist":{
       "layout": "v",
@@ -1062,16 +926,12 @@ $seedprod_basic_lpage = '
       "typographyUnderline": "",
       "align": "left",
       "typographyLetterCase": "",
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "nav":{
       "layout": "h",
-      "mobileMenu":false,
-      "navmenu":"",
       "spaceBetween":"20",
-      "items": "",
+      "items": [{ "url": "", "txt": "About","openNewWindow":"","noFollow":"" },{ "url": "", "txt": "Contact","openNewWindow":"","noFollow":"" }],
       "textColor": "",
       "marginTop": "0",
       "paddingTop": "",
@@ -1098,9 +958,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "left",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "form":{
       "items": []
@@ -1156,9 +1014,7 @@ $seedprod_basic_lpage = '
       "paddingRight": "",
       "paddingSync": true,
       "gap": false,
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "progressbar":{
       "txt": "My Text",
@@ -1187,9 +1043,7 @@ $seedprod_basic_lpage = '
       "paddingLeft": "",
       "paddingRight": "",
       "paddingSync": true,
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "socialprofiles":{
       "iconStyle":"1",
@@ -1212,9 +1066,7 @@ $seedprod_basic_lpage = '
       "borderColor": "",
       "shadow": "",
       "align": "center",
-      "blockTemplateId":false,
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockTemplateId":false
     },
     "socialsharing":{
       "size": "sm",
@@ -1232,9 +1084,7 @@ $seedprod_basic_lpage = '
       "borderSize": "",
       "borderColor": "",
       "shadow": "",
-      "align": "center",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "align": "center"
     },
     "pricingtable":{
       "planName": "Enter Your Plan Name",
@@ -1415,9 +1265,7 @@ $seedprod_basic_lpage = '
       "blockBorderRight": "1",
       "blockBorderSync": true,
       "blockBorderStyle":"solid",
-      "blockBorderColor": "#f3f3f3",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "blockBorderColor": "#f3f3f3"
     },
     "wcaddtocart":{
       "productId": "",
@@ -1458,9 +1306,7 @@ $seedprod_basic_lpage = '
       "typographyItalic": "",
       "typographyUnderline": "",
       "align": "center",
-      "typographyLetterCase": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "typographyLetterCase": ""
     },
     "wccart":{
       "marginTop": "0",
@@ -1513,9 +1359,7 @@ $seedprod_basic_lpage = '
       "cartHeaderBgColor": "",
       "cartHeaderFont": "",
       "cartHeaderFontVariant": "",
-      "cartHeaderColor": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "cartHeaderColor": ""
     },
   "wccheckout":{
       "css": "",
@@ -1584,9 +1428,7 @@ $seedprod_basic_lpage = '
       "paymentBgColor": "",
       "paymentTextColor": "#333",
       "paymentFont": "",
-      "paymentFontVariant": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "paymentFontVariant": ""
     },
 
  "wccustomproductsgrid":{
@@ -1690,9 +1532,7 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "imagePadding": ""
     },
     "wcfeaturedproductsgrid":{
       "columns": "4",
@@ -1794,9 +1634,7 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "imagePadding": ""
     },
     "wcsaleproductsgrid":{
       "columns": "4",
@@ -1898,9 +1736,7 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "imagePadding": ""
     },
     "wcbestsellingproductsgrid":{
       "columns": "4",
@@ -2002,9 +1838,7 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "imagePadding": ""
     },
     "wcrecentproductsgrid":{
       "columns": "4",
@@ -2106,9 +1940,7 @@ $seedprod_basic_lpage = '
       "imageBorderLeft": "1",
       "imageBorderRight": "1",
       "imageBorderSync": true,
-      "imagePadding": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
+      "imagePadding": ""
     },
     "wctopratedproductsgrid":{
       "columns": "4",
@@ -2211,163 +2043,7 @@ $seedprod_basic_lpage = '
       "imageBorderRight": "1",
       "imageBorderSync": true,
       "imagePadding": ""
-    },
-    "wpwidgetblock":{
-      "hideOnDesktop": false,
-      "hideOnMobile": false,
-      "widgetdataoptions": "",
-      "widgetresult": "",
-      "widgetdata": "",
-      "columns": "4",
-      "titleColor":"",
-      "titleBottomMargin":"16",
-      "contentColor":"",
-      "fontSize": "",
-      "fontSize_mobile": "",
-      "contentalign": "",
-      "contentfont": "",
-      "contentfontVariant": "",
-      "contentfontSize": "",
-      "contentfontSize_mobile": "",
-      "contentlineHeight": "",
-      "contentlineHeight_mobile": "",
-      "contentletterSpacing": "",
-      "contentletterSpacing_mobile": "",
-      "contenttypographyBold": "",
-      "contenttypographyItalic": "",
-      "contenttypographyUnderline": "",
-      "contenttypographyLetterCase": ""
-    },
-    "posts":{
-      "columns": "1",
-      "pagination": false,
-      "queryType": "custom",
-      "queryByPostType": true,
-      "queryPostType": [],
-      "queryByCategory": false,
-      "queryCategory": [],
-      "queryByTags": false,
-      "queryTags": [],
-      "queryByAuthors": false,
-      "queryAuthors": [],
-      "queryOrderBy": [],
-      "queryOrder": "ASC",
-      "manualQuery": "post_type=post",
-      "numberPerPages": 10,
-      "showFeaturedImage": false,
-      "showTitle": true,
-      "titleHtmlTag": "h4",
-      "showMetaOptions": false,
-      "showDateModifiedMeta": true,
-      "showAuthorMeta": true,
-      "showDateMeta": true,
-      "showTimeMeta": true,
-      "showCommentCountMeta": true,
-      "metaSeparator": ",",
-      "showExcerpt": true,
-      "excerptLength": 20,
-      "showReadMore": true,
-      "readMoreText": "Continue Reading →",
-      "marginTop": "",
-      "paddingTop": "",
-      "paddingBottom": "",
-      "paddingLeft": "",
-      "paddingRight": "",
-      "paddingSync": true,
-      "blockBorderRadius": "",
-      "blockBorderTop": "",
-      "blockBorderBottom": "",
-      "blockBorderLeft": "",
-      "blockBorderRight": "",
-      "blockBorderSync": true,
-      "blockBorderStyle":"solid",
-      "blockBorderColor": "",
-      "imageShadow": "",
-      "imageBorderRadiusSync": true,
-      "imageBorderRadiusTopRight": "",
-      "imageBorderRadiusTopLeft": "",
-      "imageBorderRadiusBottomRight": "",
-      "imageBorderRadiusBottomLeft": "",
-      "imageBorderStyle": "solid",
-      "imageBorderColor": "",
-      "imageBorderTop": "",
-      "imageBorderBottom": "",
-      "imageBorderLeft": "",
-      "imageBorderRight": "",
-      "imageBorderSync": true,
-      "imagePadding": "",
-      "titlealign": "left",
-      "titlefont": "",
-      "titlefontVariant": "",
-      "titlefontSize": "",
-      "titlefontSize_mobile": "",
-      "titlelineHeight": "",
-      "titlelineHeight_mobile": "",
-      "titleletterSpacing": "",
-      "titleletterSpacing_mobile": "",
-      "titletypographyBold": true,
-      "titletypographyItalic": "",
-      "titletypographyUnderline": "",
-      "titletypographyLetterCase": "",
-      "titleTextColor": "",
-      "metatextalign": "left",
-      "metatextfont": "",
-      "metatextfontVariant": "",
-      "metatextfontSize": "",
-      "metatextfontSize_mobile": "",
-      "metatextlineHeight": "",
-      "metatextlineHeight_mobile": "",
-      "metatextletterSpacing": "",
-      "metatextletterSpacing_mobile": "",
-      "metatexttypographyBold": "",
-      "metatexttypographyItalic": "",
-      "metatexttypographyUnderline": "",
-      "metatexttypographyLetterCase": "",
-      "metatextTextColor": "",
-      "excerptalign": "left",
-      "excerptfont": "",
-      "excerptfontVariant": "",
-      "excerptfontSize": "",
-      "excerptfontSize_mobile": "",
-      "excerptlineHeight": "",
-      "excerptlineHeight_mobile": "",
-      "excerptletterSpacing": "",
-      "excerptletterSpacing_mobile": "",
-      "excerpttypographyBold": "",
-      "excerpttypographyItalic": "",
-      "excerpttypographyUnderline": "",
-      "excerpttypographyLetterCase": "",
-      "excerptTextColor": "",
-      "readmoretextalign": "left",
-      "readmoretextfont": "",
-      "readmoretextfontVariant": "",
-      "readmoretextfontSize": "",
-      "readmoretextfontSize_mobile": "",
-      "readmoretextlineHeight": "",
-      "readmoretextlineHeight_mobile": "",
-      "readmoretextletterSpacing": "",
-      "readmoretextletterSpacing_mobile": "",
-      "readmoretexttypographyBold": "",
-      "readmoretexttypographyItalic": "",
-      "readmoretexttypographyUnderline": "",
-      "readmoretexttypographyLetterCase": "",
-      "readmoreTextColor": "",
-      "paginationalign": "left",
-      "paginationfont": "",
-      "paginationfontVariant": "",
-      "paginationfontSize": "",
-      "paginationfontSize_mobile": "",
-      "paginationlineHeight": "",
-      "paginationlineHeight_mobile": "",
-      "paginationletterSpacing": "",
-      "paginationletterSpacing_mobile": "",
-      "paginationtypographyBold": "",
-      "paginationtypographyItalic": "",
-      "paginationtypographyUnderline": "",
-      "paginationtypographyLetterCase": "",
-      "paginationTextColor": "",
-      "hideOnDesktop": false,
-      "hideOnMobile": false
     }
+
  }
-';
+ ';

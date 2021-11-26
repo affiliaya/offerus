@@ -11,7 +11,7 @@ function seedprod_pro_lppage_render( $template ) {
 	if ( ! empty( $post ) ) {
 		$has_settings = get_post_meta( $post->ID, '_seedprod_page', true );
 
-		if ( ! empty( $has_settings ) && ($post->post_type === 'page' || $post->post_type === 'seedprod') && !is_search() ) {
+		if ( ! empty( $has_settings ) && $post->post_type = 'page' ) {
 			
 			if ( ! is_preview() ) {
 				seedprod_pro_redirect_if_mapped( $post->ID );

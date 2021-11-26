@@ -305,22 +305,6 @@ if(current_user_can( 'unfiltered_html' )){
 }
 ?>
 
-<?php
-		
-	$seedprod_menus = wp_get_nav_menus();
-	$seedprod_options = [];
-	$seedprod_first_menu = "";
-	if(count($seedprod_menus)>0){
-		$menu_counter = 0;
-		foreach ( $seedprod_menus as $menu ) {
-			if($menu_counter==0){ $seedprod_first_menu = $menu->slug; }
-			$menu_counter++;
-			$seedprod_options[ $menu->slug ] = $menu->name;
-		}
-	}
-	//print_r($seedprod_options);
-?>
-
 var seedprod_data = 
 <?php
 $seedprod_data = array(
@@ -331,8 +315,6 @@ $seedprod_data = array(
 	'placeholder_image'           => SEEDPROD_PRO_PLUGIN_URL . 'public/img/img-placeholder.png',
 	'placeholder_sm_image'        => SEEDPROD_PRO_PLUGIN_URL . 'public/img/img-placeholder-sm.png',
 	'block_templates'             => json_decode( $seedprod_pro_block_templates ),
-	'seedprod_menus'			  => $seedprod_options,
-	'seedprod_first_menu'		  => $seedprod_first_menu,
 	'expire_times'                => seedprod_pro_get_expire_times(),
 	'roles'                       => seedprod_pro_get_roles(),
 	'my_ip'                       => seedprod_pro_get_ip(),

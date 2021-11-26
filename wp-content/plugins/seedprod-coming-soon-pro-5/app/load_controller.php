@@ -8,9 +8,6 @@ require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/notifications.php';
 require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/render-lp.php';
 require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/render-csp-mm.php';
 
-require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/nestednavmenu.php';
-
-
 require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/render-404.php';
 // require_once(SEEDPROD_PRO_PLUGIN_PATH.'app/render-loginp.php');
 require_once SEEDPROD_PRO_PLUGIN_PATH . 'app/render-domain-mapping.php';

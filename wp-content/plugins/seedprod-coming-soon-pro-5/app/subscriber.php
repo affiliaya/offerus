@@ -256,177 +256,74 @@ function seedprod_pro_delete_subscribers() {
 * Export Contestants
 */
 function seedprod_pro_export_subscribers() {
-        if (! empty($_REQUEST['action']) && $_REQUEST['action'] == 'seedprod_pro_export_subscribers' && current_user_can('export')) {
-            if (! empty($_REQUEST['_wpnonce']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'seedprod_pro_export_subscribers') !== false) {
-                $data = array();
+	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'seedprod_pro_export_subscribers' ) {
+		if ( ! empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'seedprod_pro_export_subscribers' ) !== false ) {
 
-                $filename = sprintf('%1$s-%2$s-%3$s', 'subscribers', date('Ymd'), date('His'));
+			global $wpdb;
+			if ( ! empty( $_REQUEST['id'] ) ) {
+				$tablename = $wpdb->prefix . 'csp3_subscribers';
+				$sql       = "SELECT fname, lname, email, created, page_uuid from $tablename where page_id = %d";
+				$safe_sql  = $wpdb->prepare( $sql, absint( $_REQUEST['id'] ) );
+				$data      = $wpdb->get_results( $safe_sql );
+			} else {
+				$tablename = $wpdb->prefix . 'csp3_subscribers';
+				$sql       = "SELECT fname, lname, email, created, page_uuid from $tablename";
+				$data      = $wpdb->get_results( $sql );
+			}
 
-                $header = array(
-                'First Name',
-                'Last Name',
-                'Email',
-                'Created',
-                'Page ID',
-            );
+			$filename = sprintf( '%1$s-%2$s-%3$s', 'subscribers', date( 'Ymd' ), date( 'His' ) );
 
-                seedprod_pro_set_time_limit();
+			$header = array(
+				'First Name',
+				'Last Name',
+				'Email',
+				'Created',
+				'Page ID',
+			);
 
-                seedprod_pro_export_csv($header, $data, $filename);
-            }
-        }
-}
-
-function seedprod_pro_export_subscribers_entry( $args = array(), $count = false ){
-	
-	global $wpdb;
-	if ( true === $count ) {
-		if ( ! empty( $_REQUEST['id'] ) ) {
-			$tablename = $wpdb->prefix . 'csp3_subscribers';
-			$sql       = "SELECT COUNT(*) from $tablename where page_id = %d";
-			$safe_sql  = $wpdb->prepare( $sql, absint( $_REQUEST['id'] ) );
-			//$data      = $wpdb->get_results( $safe_sql );
-		} else {
-			$tablename = $wpdb->prefix . 'csp3_subscribers';
-			$sql       = "SELECT  COUNT(*) from $tablename";
-			$safe_sql  = $sql;
-			//$data      = $wpdb->get_results( $safe_sql );
+			seedprod_pro_export_csv( $header, $data, $filename );
 		}
-		return absint( $wpdb->get_var(
-			$safe_sql
-		));
-	}else{
-		$offset = $args['offset'];
-		$limit_number = $args['number'];
-		
-		if ( ! empty( $_REQUEST['id'] ) ) {
-			$tablename = $wpdb->prefix . 'csp3_subscribers';
-			$sql       = "SELECT fname, lname, email, created, page_uuid from $tablename where page_id = %d limit $offset , $limit_number";
-			$safe_sql  = $wpdb->prepare( $sql, absint( $_REQUEST['id'] ) );
-			$data      = $wpdb->get_results( $safe_sql );
-		} else {
-			$tablename = $wpdb->prefix . 'csp3_subscribers';
-			$sql       = "SELECT fname, lname, email, created, page_uuid from $tablename  limit $offset , $limit_number";
-			$data      = $wpdb->get_results( $sql );
-		}
-		
-		return $data;
-
 	}
-
-	
-}
-
-function seedprod_pro_set_time_limit( $limit = 0 ) {
-
-	if ( function_exists( 'set_time_limit' ) && false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) { // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
-		@set_time_limit( $limit ); // @codingStandardsIgnoreLine
-	}
-}
-
-
-function seedprod_pro_create_index_html_file( $path ) {
-
-	if ( ! is_dir( $path ) || is_link( $path ) ) {
-		return false;
-	}
-
-	$index_file = wp_normalize_path( trailingslashit( $path ) . 'index.html' );
-
-	// Do nothing if index.html exists in the directory.
-	if ( file_exists( $index_file ) ) {
-		return false;
-	}
-
-	// Create empty index.html.
-	return file_put_contents( $index_file, '' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-}
-
-
-function seedprod_pro_get_tmpdir(){
-
-	$upload_dir = wp_upload_dir();
-	$export_path = trailingslashit( realpath( $upload_dir['basedir'] ) ) . 'seedprodexport';
-
-	if ( ! file_exists( $export_path ) ) {
-		wp_mkdir_p( $export_path );
-	}
-	seedprod_pro_create_index_html_file( $export_path );
-
-	$export_path = wp_normalize_path( $export_path );
-	return $export_path;
-}
-
-function seedprod_pro_get_tmpfname( $tmpname ){
-	
-	if ( empty( $tmpname ) ) {
-		return '';
-	}
-
-	$export_dir  = seedprod_pro_get_tmpdir();
-	$export_file = $export_dir . '/' . sanitize_key( $tmpname );
-	touch( $export_file );
-
-	return $export_file;
-
 }
 
 function seedprod_pro_export_csv( $header, $data, $filename ) {
 	// No point in creating the export file on the file-system. We'll stream
 	// it straight to the browser. Much nicer.
 
-	$entries_per_step = 5000;
-	$db_args = [
-		'offset' => 0,
-		'number' => $entries_per_step
-	];
-	$count = seedprod_pro_export_subscribers_entry($db_args,true);
+	// Open the output stream
+	$fh = fopen( 'php://output', 'w' );
 
-	$request_data = [
-		'db_args' => $db_args,
-		'count' => $count,
-		'total_steps' => ceil( $count / $entries_per_step ),
-	];
+	// Start output buffering (to capture stream contents)
+	ob_start();
 
-	$tmpname = md5(strtotime("now"));
-	$export_file_data = seedprod_pro_get_tmpfname( $tmpname );
-	$export_file =  $export_file_data ;	
-	if ( empty( $export_file ) ) {
-		return;
+	// CSV Header
+	if ( is_array( $header ) ) {
+		fputcsv( $fh, $header );
 	}
 
-	
-	$csv       = new SplFileObject( $export_file, 'a' );
-	$enclosure = '"';
-	$csv->fputcsv( $header,",",$enclosure);	
-	
-	if($count>0){
-		for ( $i = 1; $i <= $request_data['total_steps']; $i ++ ) {
-
-			$data = seedprod_pro_export_subscribers_entry($request_data['db_args'],false);
-			foreach ( $data as $row ) {
-				$arow = array();
-				foreach ( $row as $k => $v ) {
-					$arow[ $k ] = $v;
-				}
-				$csv->fputcsv( $arow,",",$enclosure);
-			}
-			$request_data['db_args']['offset'] = $i * $entries_per_step;
+	// CSV Data
+	foreach ( $data as $row ) {
+		$arow = array();
+		foreach ( $row as $k => $v ) {
+			$arow[ $k ] = $v;
 		}
+		fputcsv( $fh, $arow );
 	}
 
-	clearstatcache( true, $export_file );
-	$file_name = $filename.".csv";
-	
-	header( 'Content-Description: File Transfer' );
-	header( 'Content-Type: text/csv' );
-	header( 'Content-Disposition: attachment; filename=' . $file_name );
+	// Get the contents of the output buffer
+	$string = ob_get_clean();
+
+	// Output CSV-specific headers
+	header( 'Pragma: public' );
+	header( 'Expires: 0' );
+	header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+	header( 'Cache-Control: private', false );
+	header( 'Content-Type: application/octet-stream' );
+	header( 'Content-Disposition: attachment; filename="' . $filename . '.csv";' );
 	header( 'Content-Transfer-Encoding: binary' );
 
-	readfile( $export_file ); // phpcs:ignore
-	
-	exit;
-
+	// Stream the CSV data
+	exit( $string );
 }
 
 

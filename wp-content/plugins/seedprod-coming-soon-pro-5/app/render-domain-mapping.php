@@ -1,6 +1,6 @@
 <?php
 try {
-	if ( ! is_admin() && seedprod_pro_cu( 'dm' ) && !defined( 'DOING_CRON' ) && !empty($_SERVER['HTTP_HOST']) ) {
+	if ( ! is_admin() && seedprod_pro_cu( 'dm' ) ) {
 			$seedprod_page_mapped_id  = null;
 			$seedprod_page_mapped_url = null;
 
@@ -9,22 +9,15 @@ try {
 								 $_SERVER['HTTPS'] === 'on' ?
 										 'https' :
 										 'http' )
-								 . "://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+								 . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 			$seedprod_url_parsed      = parse_url( $seedprod_page_mapped_url );
 
-			$seedprod_url_parsed_path = null;
-			$seedprod_url_parsed_host = null;
-			$seedprod_url_parsed_scheme = null;
-
-			if($seedprod_url_parsed !== false){
-
-				$seedprod_url_parsed_scheme = array_key_exists( 'scheme', $seedprod_url_parsed ) ?
-											$seedprod_url_parsed['scheme'] : '';
-				$seedprod_url_parsed_host   = array_key_exists( 'host', $seedprod_url_parsed ) ?
-											$seedprod_url_parsed['host'] : '';
-				$seedprod_url_parsed_path   = array_key_exists( 'path', $seedprod_url_parsed ) ?
-											$seedprod_url_parsed['path'] : '';
-			}
+			$seedprod_url_parsed_scheme = array_key_exists( 'scheme', $seedprod_url_parsed ) ?
+										$seedprod_url_parsed['scheme'] : '';
+			$seedprod_url_parsed_host   = array_key_exists( 'host', $seedprod_url_parsed ) ?
+										$seedprod_url_parsed['host'] : '';
+			$seedprod_url_parsed_path   = array_key_exists( 'path', $seedprod_url_parsed ) ?
+										$seedprod_url_parsed['path'] : '';
 
 			// Database Query
 			global $wpdb;

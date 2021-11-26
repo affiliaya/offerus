@@ -177,12 +177,12 @@ function countdown(type, ts, id, action, redirect) {
   var now = new Date().getTime();
 
   if (type == 'vt') {
-    ts = ts + now;
+    ts = ts + now; //console.log(ts);
+
     var seedprod_enddate = seedprodCookies.get('seedprod_enddate_' + id);
 
     if (seedprod_enddate != undefined) {
       ts = seedprod_enddate;
-    } else {
       seedprodCookies.set('seedprod_enddate_' + id, ts, {
         expires: 360
       });
@@ -312,23 +312,17 @@ jQuery(document).ready(function ($) {
     //console.log(paramdata);
 
 
-    var replaced = $("body").html().replace(re, seedprod_escapeHtml(def_val));
-    $("body").html(replaced); //$("body *").replaceText(re,def_val);
+    $("#sp-page *").replaceText(re, def_val);
   }
 
   $(".sp-dynamic-text").contents().unwrap();
 });
-
-function seedprod_escapeHtml(unsafe) {
-  return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
 /*!-----------------------------------------------------------------------------
  * seedprod_bg_slideshow()
  * ----------------------------------------------------------------------------
  * Example:
  * seedprod_bg_slideshow('body', ['IMG_URL', 'IMG_URL', 'IMG_URL'], 3000);
  * --------------------------------------------------------------------------*/
-
 
 function seedprod_bg_slideshow(selector, slides) {
   var delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
@@ -467,44 +461,7 @@ jQuery(".sp-testimonials-wrapper").mouseleave(function () {
     }, speed);
   }
 });
-/* start  of twitter timline js code */
-
-function seedprod_twitterembedtimeline(blockId, timelineid, showReplies, width, height, chrome, align, borderColors, colorScheme, lang) {
-  //jQuery("#sp-animated-head-"+blockId+' .preview-sp-title' ).seedprod_responsive_title_shortcode();
-  twttr.ready(function (twttr) {
-    window.twttr.widgets.createTimeline({
-      sourceType: "profile",
-      screenName: timelineid
-    }, document.getElementById('sp-twitterembedtimeline-preview-' + blockId), {
-      showReplies: showReplies,
-      width: width,
-      height: height,
-      chrome: chrome,
-      align: align,
-      borderColor: borderColors,
-      theme: colorScheme,
-      lang: lang
-    }).then(function (el) {//console.log('Tweet added.'); 
-    });
-  });
-}
-
-function seedprod_twittertweetbutton(blockId, tweetUrl, buttonSize, tweetText, tweetHashTag, viaHandle, relatedTweet, lang) {
-  twttr.ready(function (twttr) {
-    window.twttr.widgets.createShareButton(tweetUrl, document.getElementById('sp-twittertweetbutton-preview-' + blockId), {
-      size: buttonSize,
-      text: tweetText,
-      hashtags: tweetHashTag,
-      via: viaHandle,
-      related: relatedTweet,
-      lang: lang
-    });
-  });
-}
-/* end of twitter timline js code */
-
 /* this is image carousel block code */
-
 
 jQuery('.sp-imagecarousel-nav button').click(function () {
   var currentId = '#' + jQuery(this).parents('.sp-imagecarousels-wrapper').attr('id');
@@ -607,160 +564,4 @@ jQuery(".sp-imagecarousels-wrapper").mouseleave(function () {
       jQuery(currentId + ' .sp-imagecarousel-nav button:last-child').trigger('click');
     }, speed);
   }
-});
-
-function PureDropdown(dropdownParent) {
-  var PREFIX = 'seedprod-',
-      ACTIVE_CLASS_NAME = PREFIX + 'menu-active',
-      ARIA_ROLE = 'role',
-      ARIA_HIDDEN = 'aria-hidden',
-      MENU_OPEN = 0,
-      MENU_CLOSED = 1,
-      MENU_ACTIVE_SELECTOR = '.menu-item-active',
-      MENU_LINK_SELECTOR = '.menu-item a',
-      MENU_SELECTOR = '.sub-menu',
-      DISMISS_EVENT = window.hasOwnProperty && window.hasOwnProperty('ontouchstart') ? 'touchstart' : 'mousedown',
-      ARROW_KEYS_ENABLED = true,
-      ddm = this; // drop down menu
-
-  this._state = MENU_CLOSED;
-
-  this.show = function () {
-    if (this._state !== MENU_OPEN) {
-      this._dropdownParent.classList.add(ACTIVE_CLASS_NAME);
-
-      this._menu.setAttribute(ARIA_HIDDEN, false);
-
-      this._state = MENU_OPEN;
-    }
-  };
-
-  this.hide = function () {
-    if (this._state !== MENU_CLOSED) {
-      this._dropdownParent.classList.remove(ACTIVE_CLASS_NAME);
-
-      this._menu.setAttribute(ARIA_HIDDEN, true);
-
-      this._link.focus();
-
-      this._state = MENU_CLOSED;
-    }
-  };
-
-  this.toggle = function () {
-    this[this._state === MENU_CLOSED ? 'show' : 'hide']();
-  };
-
-  this.halt = function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
-  this._dropdownParent = dropdownParent;
-  this._link = this._dropdownParent.querySelector(MENU_LINK_SELECTOR);
-  this._menu = this._dropdownParent.querySelector(MENU_SELECTOR);
-  this._firstMenuLink = this._menu.querySelector(MENU_LINK_SELECTOR); // Set ARIA attributes
-
-  this._link.setAttribute('aria-haspopup', 'true');
-
-  this._menu.setAttribute(ARIA_ROLE, 'menu');
-
-  this._menu.setAttribute('aria-labelledby', this._link.getAttribute('id'));
-
-  this._menu.setAttribute('aria-hidden', 'true');
-
-  [].forEach.call(this._menu.querySelectorAll('li'), function (el) {
-    el.setAttribute(ARIA_ROLE, 'presentation');
-  });
-  [].forEach.call(this._menu.querySelectorAll('a'), function (el) {
-    el.setAttribute(ARIA_ROLE, 'menuitem');
-  }); // Toggle on click
-
-  this._link.addEventListener('click', function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    ddm.toggle();
-  }); // Keyboard navigation
-
-
-  document.addEventListener('keydown', function (e) {
-    var currentLink, previousSibling, nextSibling, previousLink, nextLink; // if the menu isn't active, ignore
-
-    if (ddm._state !== MENU_OPEN) {
-      return;
-    } // if the menu is the parent of an open, active submenu, ignore
-
-
-    if (ddm._menu.querySelector(MENU_ACTIVE_SELECTOR)) {
-      return;
-    }
-
-    currentLink = ddm._menu.querySelector(':focus'); // Dismiss an open menu on ESC
-
-    if (e.keyCode === 27) {
-      /* Esc */
-      ddm.halt(e);
-      ddm.hide();
-    } // Go to the next link on down arrow
-    else if (ARROW_KEYS_ENABLED && e.keyCode === 40) {
-        /* Down arrow */
-        ddm.halt(e); // get the nextSibling (an LI) of the current link's LI
-
-        nextSibling = currentLink ? currentLink.parentNode.nextSibling : null; // if the nextSibling is a text node (not an element), go to the next one
-
-        while (nextSibling && nextSibling.nodeType !== 1) {
-          nextSibling = nextSibling.nextSibling;
-        }
-
-        nextLink = nextSibling ? nextSibling.querySelector('.menu-item a') : null; // if there is no currently focused link, focus the first one
-
-        if (!currentLink) {
-          ddm._menu.querySelector('.menu-item a').focus();
-        } else if (nextLink) {
-          nextLink.focus();
-        }
-      } // Go to the previous link on up arrow
-      else if (ARROW_KEYS_ENABLED && e.keyCode === 38) {
-          /* Up arrow */
-          ddm.halt(e); // get the currently focused link
-
-          previousSibling = currentLink ? currentLink.parentNode.previousSibling : null;
-
-          while (previousSibling && previousSibling.nodeType !== 1) {
-            previousSibling = previousSibling.previousSibling;
-          }
-
-          previousLink = previousSibling ? previousSibling.querySelector('.menu-item a') : null; // if there is no currently focused link, focus the last link
-
-          if (!currentLink) {
-            ddm._menu.querySelector('.menu-item:last-child .menu-item a').focus();
-          } // else if there is a previous item, go to the previous item
-          else if (previousLink) {
-              previousLink.focus();
-            }
-        }
-  }); // Dismiss an open menu on outside event
-
-  document.addEventListener(DISMISS_EVENT, function (e) {
-    var target = e.target;
-
-    if (target !== ddm._link && !ddm._menu.contains(target)) {
-      ddm.hide();
-
-      ddm._link.blur();
-    }
-  });
-}
-
-function initDropdowns() {
-  var dropdownParents = document.querySelectorAll('.menu-item-has-children');
-
-  for (var i = 0; i < dropdownParents.length; i++) {
-    var ddm = new PureDropdown(dropdownParents[i]);
-  }
-}
-
-jQuery('.hamburger').click(function () {
-  jQuery(this).toggleClass("active");
-  jQuery(this).next('.nav-menu').toggleClass("active");
 });
